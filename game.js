@@ -51,11 +51,22 @@ function insSVG(r,f){
 /* ---- durum ---- */
 let S,ev,dragging=false,x0=0,y0=0,dx=0,raf=0,locked=true,POOL=[];
 const HIDDEN_FLOOR=11;
-function newGame(force,career,examScore){
+function initialStats(career,profile){
+  const stats={dis:56,sic:50,ast:50,fiz:62,ruh:60,tek:48,ope:45,lid:45,loj:45,kar:career==="nco"?32:38,iti:46,ail:62};
+  if(profile&&profile.modifiers)for(const k in profile.modifiers)
+    if(k in stats)stats[k]=Math.max(0,Math.min(100,stats[k]+profile.modifiers[k]));
+  return stats;
+}
+function newGame(force,career,examProfile){
+  const profile=examProfile&&typeof examProfile==="object"
+    ?examProfile:{total:Number(examProfile)||0,reaction:0,memory:0,logic:0,grade:"legacy",modifiers:{}};
+  career=career||profile.career||"officer";
   RANKS=career==="nco"?NCO_RANKS:OFFICER_RANKS;
-  S={f:force,career:career||"officer",examScore:examScore||0,r:0,cards:0,months:0,age:18,flags:new Set(),hist:[],grace:0,ended:false,
+  const flags=new Set();
+  if(profile.grade&&profile.grade!=="legacy")flags.add("sinav_"+profile.grade);
+  S={f:force,career,exam:profile,examScore:profile.total||0,r:0,cards:0,months:0,age:18,flags,hist:[],grace:0,ended:false,
      warnCd:{},seen:new Set(RANKS[0].vis),
-     st:{dis:56,sic:50,ast:50,fiz:62,ruh:60,tek:48,ope:45,lid:45,loj:45,kar:career==="nco"?32:38,iti:46,ail:62}};
+     st:initialStats(career,profile)};
   document.getElementById("exam").classList.add("hide");
   buildGauges();paintHUD();nextCard();
 }
@@ -371,8 +382,9 @@ function openFile(){
       '<div class="b"><i style="width:'+(seen?Math.max(2,v):0)+'%"></i></div><div class="v">'+txt+'</div>';
     rows.appendChild(d);
   });
+  const grade=S.exam?({ustun:"üstün başarı",basarili:"başarılı",sinirda:"sınırda kabul",saha:"saha ataması"}[S.exam.grade]||S.exam.grade):"kayıt yok";
   document.getElementById("fileNote").textContent=
-    "Bu rütbede sicilinde yalnızca dört unsur ölçülüyor. Daha önce ölçüldüğün unsurlar için yaklaşık bir kanaatin var; hiç ölçülmediklerin hakkında hiçbir fikrin yok — ama onlar işlemeye devam ediyor.";
+    "Aday sınavı: "+(S.exam?S.exam.total:"—")+" puan · "+grade+". Bu rütbede sicilinde yalnızca dört unsur ölçülüyor. Daha önce ölçüldüğün unsurlar için yaklaşık bir kanaatin var; hiç ölçülmediklerin hakkında hiçbir fikrin yok — ama onlar işlemeye devam ediyor.";
   document.getElementById("file").classList.remove("hide");
 }
 document.getElementById("fileBtn").onclick=openFile;
@@ -517,4 +529,3 @@ function warnPick(){
   const w=WARN[k][S.r<5?0:1];
   return {who:w[0],role:w[1],place:w[2],text:w[3],lt:w[4],la:w[5],rt:w[6],ra:w[7],warn:k};
 }
-
