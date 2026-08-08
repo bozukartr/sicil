@@ -283,3 +283,4 @@ function showExamResult(){
     list.appendChild(b);
   });
 })();
+refreshResumePanel();
