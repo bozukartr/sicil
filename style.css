@@ -54,6 +54,10 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans);
 #pips i.on{background:var(--green)} #pips i.now{background:var(--brass)}
 #pips span{flex:0 0 auto;font-family:var(--mono);font-size:7.5px;letter-spacing:.04em;color:var(--paper-2);
   text-transform:uppercase;margin-left:5px}
+#traitStrip{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;padding-top:7px;border-top:1px solid rgba(222,216,195,.07)}
+#traitStrip.hide{display:none}
+#traitStrip span{padding:2px 5px;border:1px solid rgba(201,163,73,.25);border-radius:3px;background:rgba(201,163,73,.055);color:#bdb48f;font-family:var(--mono);font-size:6.5px;letter-spacing:.06em;text-transform:uppercase}
+#traitStrip b{color:var(--brass);font-weight:600}
 
 #gauges{flex:0 0 auto;margin-top:8px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;position:relative;z-index:4}
 .g{position:relative;display:flex;flex-direction:column;gap:5px;min-width:0;padding:7px 9px 8px;border-radius:7px;
@@ -119,6 +123,8 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans);
   font-family:var(--sans);font-size:13px;line-height:1.34;text-align:left;
   display:flex;align-items:center;transition:border-color .15s,background .15s,transform .12s}
 .ch:active{transform:scale(.985)}
+.ch:disabled{cursor:not-allowed;opacity:.42;border-style:dashed;filter:saturate(.3)}
+.ch:disabled::after{content:attr(data-locked);position:absolute;left:8px;right:8px;bottom:5px;color:#c07866;font-family:var(--mono);font-size:6px;letter-spacing:.04em;text-align:center;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ch .k{position:absolute;top:6px;font-family:var(--mono);font-size:7.5px;letter-spacing:.14em;color:var(--dim-2)}
 #chL .k{left:10px} #chR .k{right:10px} #chR{text-align:right;justify-content:flex-end}
 #chL.hot,#chR.hot{border-color:rgba(154,165,138,.72);background:rgba(154,165,138,.12)}
@@ -146,6 +152,11 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans);
 .journalEntry h3{margin-top:4px;font-size:11px;letter-spacing:.035em;color:var(--paper)}
 .journalEntry p{margin-top:4px;font-size:9px;line-height:1.5;color:var(--dim)}
 .journalEmpty{padding:28px 12px;text-align:center;font-family:var(--mono);font-size:9px;color:var(--dim)}
+#fileTraits{padding:10px;border:1px solid rgba(201,163,73,.18);border-radius:6px;background:rgba(201,163,73,.035)}
+.traitFileTitle{margin-bottom:8px;color:var(--brass);font-family:var(--mono);font-size:7px;letter-spacing:.15em;text-transform:uppercase}
+.traitRow{display:grid;grid-template-columns:92px 1fr 22px;gap:7px;align-items:center;margin:5px 0}
+.traitRow span{font-size:9px;color:var(--paper-2)}.traitRow em{font-family:var(--mono);font-size:7px;font-style:normal;text-align:right;color:var(--dim)}
+.traitRow i{height:4px;overflow:hidden;border-radius:2px;background:#090b05}.traitRow i b{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#6f9349,var(--brass))}
 .frow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dotted rgba(222,216,195,.12)}
 .frow .n{flex:1 1 auto;font-size:11.5px}
 .frow .b{flex:0 0 68px;height:6px;border-radius:2px;background:#090b05;border:1px solid var(--line);position:relative;overflow:hidden}
@@ -363,6 +374,9 @@ h1 small{display:block;font-size:10px;letter-spacing:.2em;font-weight:500;color:
 #promoNote{font-size:12.5px;line-height:1.62;color:#a5a891;max-width:31ch}
 #endStats{display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;width:100%;max-width:330px;font-family:var(--mono);font-size:9.5px}
 #endStats div{display:flex;justify-content:space-between;border-bottom:1px dotted rgba(222,216,195,.12);padding:3px 0;color:var(--dim)}
+#endTraits{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;max-width:330px}
+#endTraits small{flex:0 0 100%;font-family:var(--mono);font-size:7px;letter-spacing:.18em;color:var(--dim)}
+#endTraits span{padding:3px 6px;border:1px solid rgba(201,163,73,.3);border-radius:3px;color:var(--brass);font-family:var(--mono);font-size:7px;letter-spacing:.08em;text-transform:uppercase}
 @media (max-width:360px){
   #app{padding-left:10px;padding-right:10px}
   .tag{gap:8px}
@@ -382,6 +396,7 @@ h1 small{display:block;font-size:10px;letter-spacing:.2em;font-weight:500;color:
   #insBox{width:36px;height:46px}
   .careerBadge{margin-bottom:2px}
   .hudmeta{margin-top:5px;padding-top:5px}
+  #traitStrip{margin-top:5px;padding-top:5px}
   #gauges{margin-top:5px;grid-template-columns:repeat(4,1fr);gap:4px}
   .g{padding:5px 6px 6px}
   .gname{font-size:7.5px}
