@@ -89,9 +89,11 @@ Object.assign(RW,{
 const rawCache=new Map(),resCache=new Map();
 function parseRaw(s){
   if(rawCache.has(s))return rawCache.get(s);
-  const o={tag:{},exp:{},add:[],del:[],t:0,end:null,mul:1};
+  const o={tag:{},exp:{},add:[],del:[],later:[],t:0,end:null,mul:1};
   for(const p of (s||"").split(" ")){
     if(!p)continue;
+    const later=/^@([a-z0-9_]+):(\d+)$/.exec(p);
+    if(later){o.later.push({flag:later[1],delay:+later[2]});continue}
     if(p[0]==="!"){o.end=p.slice(1);continue}
     if(p[0]==="x"&&!isNaN(+p.slice(1))){o.mul=+p.slice(1);continue}
     if(p[0]==="t"&&!isNaN(+p.slice(1))){o.t=+p.slice(1);continue}
@@ -114,7 +116,7 @@ function resolve(s,r){
     if(Math.abs(v)>=.5)st[k]=Math.round(v);
   }
   for(const k in raw.exp)st[k]=(st[k]||0)+raw.exp[k];
-  const o={st,add:raw.add,del:raw.del,t:raw.t,end:raw.end};
+  const o={st,add:raw.add,del:raw.del,later:raw.later,t:raw.t,end:raw.end};
   resCache.set(key,o);return o;
 }
 

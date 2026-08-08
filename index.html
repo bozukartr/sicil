@@ -23,6 +23,7 @@
       <div class="clock"><span id="mAge"></span><i></i><span id="mSrv"></span></div>
       <div id="pips"></div>
     </div>
+    <div id="traitStrip" class="hide" aria-label="Karar profili"></div>
   </div>
   <div id="gauges"></div>
   <div id="stage">
@@ -51,6 +52,7 @@
       <button id="fileJournalTab" role="tab" aria-selected="false">Kariyer Günlüğü</button>
     </div>
     <div id="fileStatsPanel">
+      <div id="fileTraits"></div>
       <div id="fileRows"></div>
       <div class="note" id="fileNote"></div>
     </div>
@@ -117,6 +119,7 @@
     <div class="eyebrow" id="endTop"></div>
     <h1 id="endTitle" style="font-size:clamp(21px,6.6vw,30px);letter-spacing:.09em"></h1>
     <p class="lead" id="endText"></p>
+    <div id="endTraits"></div>
     <div id="endStats"></div>
     <div id="endNote" style="font-family:var(--mono);font-size:9px;letter-spacing:.05em;color:var(--brass);max-width:33ch;line-height:1.7"></div>
     <button class="btn p" id="again">Yeni dosya aç</button>
@@ -126,10 +129,12 @@
 <script src="ranks.js"></script>
 <script src="storage.js"></script>
 <script src="game.js"></script>
+<script src="progression.js"></script>
 <script src="specialties.js"></script>
 <script src="transitions.js"></script>
 <script src="exam.js"></script>
 <script src="events-officer.js"></script>
 <script src="events-field.js"></script>
+<script src="events-phase5.js"></script>
 </body>
 </html>
