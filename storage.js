@@ -21,6 +21,10 @@ function serializableState(state){
     warnCd:{...(state.warnCd||{})},
     transitionAttempts:{...(state.transitionAttempts||{})},
     transitionQuestionHistory:{...(state.transitionQuestionHistory||{})},
+    eventCounts:{...(state.eventCounts||{})},
+    pendingConsequences:Array.from(state.pendingConsequences||[]),
+    traits:{...(state.traits||{})},
+    traitMilestones:{...(state.traitMilestones||{})},
     journal:Array.from(state.journal||[])
   };
 }
@@ -40,10 +44,15 @@ function restoreSavePayload(payload){
     warnCd:{...(state.warnCd||{})},
     transitionAttempts:{...(state.transitionAttempts||{})},
     transitionQuestionHistory:{...(state.transitionQuestionHistory||{})},
+    eventCounts:{...(state.eventCounts||{})},
+    pendingConsequences:Array.from(state.pendingConsequences||[]),
+    traits:{...(state.traits||{})},
+    traitMilestones:{...(state.traitMilestones||{})},
     journal:Array.from(state.journal||[]),
     track:state.track||"command",
     grace:Number(state.grace)||0,
     cards:Number(state.cards)||0,
+    totalDecisions:Number(state.totalDecisions)||0,
     months:Number(state.months)||0,
     age:Number(state.age)||18,
     ended:!!state.ended
