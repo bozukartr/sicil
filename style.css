@@ -198,8 +198,24 @@ h1 small{display:block;font-size:10px;letter-spacing:.2em;font-weight:500;color:
   display:grid;place-items:center;font-family:var(--mono);font-size:26px;font-weight:700}
 .examResult.pass .scoreRing{color:#b9d590;border-color:var(--green);background:rgba(111,147,73,.09)}
 .examResult.fail .scoreRing{color:#e3a18f;border-color:var(--oxide);background:rgba(168,60,41,.09)}
+.examResult.sinirda .scoreRing{color:#e2bd67;border-color:var(--brass);background:rgba(201,163,73,.09)}
+.examResult.ustun .scoreRing{color:#f0cd77;border-color:#dfb959;background:rgba(201,163,73,.13);box-shadow:0 0 28px rgba(201,163,73,.13)}
 .examResult h2{font-size:23px;letter-spacing:.04em}
 .examResult p{margin:10px auto 0;max-width:30ch;font-size:13px;line-height:1.6;color:#aeb19c}
+.resultPanel{min-height:510px}
+.examBreakdown{width:100%;margin:17px 0 13px;padding:11px;border:1px solid rgba(222,216,195,.1);border-radius:7px;
+  background:rgba(9,11,5,.25);display:flex;flex-direction:column;gap:9px;text-align:left}
+.examMetric{display:grid;grid-template-columns:1fr auto;gap:4px 9px;align-items:center;font-family:var(--mono)}
+.examMetric span{font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.examMetric b{font-size:8.5px;font-weight:600;color:var(--paper-2)}
+.examMetric i{grid-column:1/-1;height:4px;border-radius:2px;background:rgba(222,216,195,.1);overflow:hidden}
+.examMetric em{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#627f45,#b8994c)}
+.examMods{width:100%;display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.examMods small{flex:0 0 100%;margin-bottom:2px;font-family:var(--mono);font-size:7px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim)}
+.examMods span{padding:3px 6px;border:1px solid;border-radius:3px;font-family:var(--mono);font-size:7.5px;letter-spacing:.04em}
+.examMods .up{color:#aeca86;border-color:rgba(111,147,73,.42);background:rgba(111,147,73,.07)}
+.examMods .down{color:#d98e7b;border-color:rgba(168,60,41,.42);background:rgba(168,60,41,.07)}
 
 #promo{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:13px;padding:30px;background:rgba(8,10,5,.94);backdrop-filter:blur(3px);text-align:center}
@@ -248,6 +264,7 @@ h1 small{display:block;font-size:10px;letter-spacing:.2em;font-weight:500;color:
   .ch{min-height:58px;padding-top:19px;padding-bottom:8px}
   #hint{margin-top:4px}
   .examPanel{min-height:320px;padding:17px}
+  .examPanel.resultPanel{min-height:470px}
   .examGlyph{width:58px;height:58px;margin:14px 0 12px;font-size:22px}
   .reactionPad{width:150px;height:150px}
 }
