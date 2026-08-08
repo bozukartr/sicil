@@ -257,6 +257,13 @@ h1 small{display:block;font-size:10px;letter-spacing:.2em;font-weight:500;color:
 .reactionPad.identify{font-size:11px}
 .reactionPad.target{border-color:var(--oxide);background:rgba(168,60,41,.22);color:#f0b09e;box-shadow:0 0 34px rgba(168,60,41,.18)}
 .reactionPad.friend{border-color:#7895ad;background:rgba(75,104,128,.2);color:#bdd2e1;box-shadow:0 0 34px rgba(75,104,128,.15)}
+.reactionPad.hold{position:relative;overflow:hidden;isolation:isolate}
+.reactionPad.hold span{position:relative;z-index:2}
+.reactionPad.hold::after{content:"";position:absolute;z-index:1;inset:15px;border:3px solid rgba(201,163,73,.18);border-radius:50%;
+  transform:scale(.58);opacity:0}
+.reactionPad.hold.holding{border-color:var(--brass);background:rgba(201,163,73,.09);color:#ecd181}
+.reactionPad.hold.holding::after{opacity:1;animation:holdExpand var(--hold-duration) linear forwards}
+@keyframes holdExpand{0%{transform:scale(.58);border-color:rgba(201,163,73,.18)}100%{transform:scale(1);border-color:var(--brass)}}
 .reactionPad:active{transform:scale(.975)}
 .memoryDisplay{height:112px;margin:24px 0 18px;border:1px solid rgba(222,216,195,.12);border-radius:8px;
   display:grid;place-items:center;background:rgba(9,11,5,.36);font-size:42px;color:var(--brass)}
@@ -279,6 +286,12 @@ h1 small{display:block;font-size:10px;letter-spacing:.2em;font-weight:500;color:
 .numberGrid button{min-height:55px;border:1px solid rgba(222,216,195,.16);border-radius:6px;background:rgba(222,216,195,.035);
   color:var(--paper);font-family:var(--mono);font-size:15px;cursor:pointer}
 .numberGrid button:active{border-color:var(--brass);background:rgba(201,163,73,.12)}
+.positionGrid{width:238px;height:238px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px;
+  border:1px solid rgba(222,216,195,.12);border-radius:10px;background:rgba(9,11,5,.28)}
+.positionGrid i,.positionGrid button{border:1px solid rgba(222,216,195,.12);border-radius:5px;background:rgba(222,216,195,.03)}
+.positionGrid.preview i.on{border-color:#8fae65;background:rgba(111,147,73,.36);box-shadow:0 0 14px rgba(111,147,73,.18)}
+.positionGrid.input button{cursor:pointer}
+.positionGrid.input button.selected{border-color:var(--brass);background:rgba(201,163,73,.2)}
 .examResult{margin:auto 0;text-align:center}
 .examResult .scoreRing{width:116px;height:116px;margin:0 auto 20px;border:2px solid;border-radius:50%;
   display:grid;place-items:center;font-family:var(--mono);font-size:26px;font-weight:700}
