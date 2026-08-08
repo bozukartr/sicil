@@ -51,6 +51,19 @@ function insSVG(r,f){
 /* ---- durum ---- */
 let S,ev,dragging=false,x0=0,y0=0,dx=0,raf=0,locked=true,POOL=[];
 const HIDDEN_FLOOR=11;
+function addJournal(kind,title,detail){
+  if(!S)return;
+  S.journal=S.journal||[];
+  const rank=RANKS[S.r]&&RANKS[S.r].n[S.f]||"Aday";
+  S.journal.push({kind,title,detail:detail||"",month:S.months||0,age:S.age||18,rank,at:new Date().toISOString()});
+  if(S.journal.length>180)S.journal=S.journal.slice(-180);
+}
+function persistGame(screen,reason){
+  if(!S||S.ended)return false;
+  S.resumeScreen=screen||S.resumeScreen||"card";
+  S.pendingEvent=S.resumeScreen==="card"&&ev?{...ev}:null;
+  return saveActiveState(S,reason||S.resumeScreen);
+}
 function initialStats(career,profile,specialty){
   const stats={dis:56,sic:50,ast:50,fiz:62,ruh:60,tek:48,ope:45,lid:45,loj:45,kar:career==="nco"?32:38,iti:46,ail:62};
   if(profile&&profile.modifiers)for(const k in profile.modifiers)
@@ -68,11 +81,15 @@ function newGame(force,career,examProfile,specialtyId){
   const flags=new Set();
   if(profile.grade&&profile.grade!=="legacy")flags.add("sinav_"+profile.grade);
   if(specialty)flags.add("uz_"+specialty.id);
-  S={f:force,career,specialty:specialty?specialty.id:null,track:"command",transitionAttempts:{},transitionQuestionHistory:{},exam:profile,examScore:profile.total||0,r:0,cards:0,months:0,age:18,flags,hist:[],grace:0,ended:false,
+  S={f:force,career,specialty:specialty?specialty.id:null,track:"command",transitionAttempts:{},transitionQuestionHistory:{},exam:profile,examScore:profile.total||0,r:0,cards:0,months:0,age:18,flags,hist:[],journal:[],grace:0,ended:false,
      warnCd:{},seen:new Set(RANKS[0].vis),
      st:initialStats(career,profile,specialty)};
+  const grade=({ustun:"Üstün başarı",basarili:"Başarılı",sinirda:"Sınırda kabul",saha:"Saha ataması"}[profile.grade]||"Aday değerlendirmesi");
+  addJournal("exam","Aday sınavı tamamlandı",grade+" · "+(profile.total||0)+" puan");
+  addJournal("career",career==="nco"?"Saha kariyeri başladı":"Harp Okulu kariyeri başladı",(specialty?specialty.name+" · ":"")+FORCE[force]);
   document.getElementById("exam").classList.add("hide");
   document.getElementById("specialty").classList.add("hide");
+  document.getElementById("start").classList.add("hide");
   buildGauges();paintHUD();nextCard();
 }
 function E(tags,force,who,role,place,text,lt,la,rt,ra,opt){
@@ -171,11 +188,8 @@ function fitText(){
     txtEl.style.lineHeight=s<13.4?"1.42":"1.52";
   }
 }
-function nextCard(){
-  const src=warnPick()||pick();
-  if(!src){finish("bos","Dosya tamamlandı","Kayıtlar burada sona eriyor.");return}
-  ev=Math.random()<.5?src:{who:src.who,role:src.role,place:src.place,text:src.text,warn:src.warn,
-    lt:src.rt,la:src.ra,rt:src.lt,ra:src.la};
+function renderCard(event){
+  ev=event;
   document.getElementById("who").textContent=ev.who;
   document.getElementById("role").textContent=ev.role;
   document.getElementById("place").textContent=ev.place||"";
@@ -191,9 +205,18 @@ function nextCard(){
   clearPreview();locked=false;
   requestAnimationFrame(fitText);
 }
+function nextCard(){
+  const src=warnPick()||pick();
+  if(!src){finish("bos","Dosya tamamlandı","Kayıtlar burada sona eriyor.");return}
+  const event=Math.random()<.5?src:{who:src.who,role:src.role,place:src.place,text:src.text,warn:src.warn,
+    lt:src.rt,la:src.ra,rt:src.lt,ra:src.la};
+  renderCard(event);persistGame("card","new-card");
+}
 function decide(right){
   if(locked)return;locked=true;
   const fx=resolve(right?ev.ra:ev.la,S.r);
+  addJournal(ev.warn?"critical":"decision",right?ev.rt:ev.lt,ev.who+" · "+ev.role);
+  S.pendingEvent=null;
   decisionFeedback.textContent=ev.warn?"Geçmiş kayıt güncellendi":"Karar dosyaya işlendi";
   decisionFeedback.classList.remove("on");void decisionFeedback.offsetWidth;decisionFeedback.classList.add("on");
   cardA.classList.add("fly");
@@ -235,6 +258,7 @@ function apply(fx){
   fx.add.forEach(f=>S.flags.add(f));fx.del.forEach(f=>S.flags.delete(f));
   S.months+=fx.t||4;S.age=18+Math.floor(S.months/12);S.cards++;
   paintGauges();paintHUD();
+  persistGame("resolving","decision-applied");
   vis.forEach((k,i)=>{if(fx.st[k]){gEls[i].root.classList.remove("bump");void gEls[i].root.offsetWidth;gEls[i].root.classList.add("bump")}});
   setTimeout(()=>{
     clearPreview();decisionFeedback.classList.remove("on");
@@ -333,6 +357,9 @@ function ceiling(R){
   finish("kadrosuz",R.n[S.f]+" olarak emeklilik","Üst rütbeye seçilemedin. "+sebep+" "+son);
 }
 function showPromo(top,rank,note){
+  const restoring=arguments[3]===true;
+  if(!restoring)addJournal(top==="Bekleme"?"review":"promotion",top+" · "+rank,note);
+  S.resumeData={top,rank,note};
   document.getElementById("promoTop").textContent=top;
   document.getElementById("promoRank").textContent=rank;
   document.getElementById("promoNote").textContent=note;
@@ -346,9 +373,10 @@ function showPromo(top,rank,note){
   document.getElementById("promoIns").innerHTML=insSVG(S.r,S.f);
   buildGauges();paintHUD();
   document.getElementById("promo").classList.remove("hide");
+  persistGame("promo",restoring?"resume-promotion":"promotion");
 }
 document.getElementById("promoBtn").onclick=()=>{
-  document.getElementById("promo").classList.add("hide");nextCard();
+  document.getElementById("promo").classList.add("hide");S.resumeData=null;nextCard();
 };
 function retire(){
   const s=S.st;
@@ -372,7 +400,9 @@ function retire(){
   else finish("emekli","Emeklilik","Otuz beş yıl. Üniformayı astın, nizamiyede nöbetçi son kez selam durdu.");
 }
 function finish(id,title,text){
+  if(S.ended)return;
   S.ended=true;locked=true;
+  addJournal("ending",title,text);
   document.getElementById("endTitle").textContent=title;
   document.getElementById("endText").textContent=text;
   document.getElementById("endTop").textContent=RANKS[S.r].n[S.f]+" · "+S.age+" yaş · "+FORCE[S.f];
@@ -386,6 +416,30 @@ function finish(id,title,text){
   const hon=KEYS.filter(k=>S.st[k]>=88);
   document.getElementById("endNote").textContent=hon.length?"Dosyaya işlenen üstünlük — "+hon.map(k=>STATS[k].n).join(" · "):"";
   document.getElementById("end").classList.remove("hide");
+  archiveCareer(S,{id,title,text});
+}
+function renderJournal(){
+  const rows=document.getElementById("journalRows");rows.innerHTML="";
+  const entries=(S.journal||[]).slice().reverse();
+  if(!entries.length){rows.innerHTML='<div class="journalEmpty">Henüz günlük kaydı yok.</div>';return}
+  entries.forEach(entry=>{
+    const row=document.createElement("article");row.className="journalEntry "+(entry.kind||"");
+    const meta=document.createElement("div");meta.className="journalMeta";
+    meta.textContent=(Math.floor((entry.month||0)/12)+1)+". hizmet yılı · "+entry.age+" yaş · "+entry.rank;
+    const title=document.createElement("h3");title.textContent=entry.title;
+    const detail=document.createElement("p");detail.textContent=entry.detail||"";
+    row.append(meta,title);if(entry.detail)row.append(detail);rows.appendChild(row);
+  });
+}
+function setFileTab(tab){
+  const journal=tab==="journal";
+  document.getElementById("fileStatsPanel").classList.toggle("hide",journal);
+  document.getElementById("fileJournalPanel").classList.toggle("hide",!journal);
+  document.getElementById("fileStatsTab").classList.toggle("on",!journal);
+  document.getElementById("fileJournalTab").classList.toggle("on",journal);
+  document.getElementById("fileStatsTab").setAttribute("aria-selected",String(!journal));
+  document.getElementById("fileJournalTab").setAttribute("aria-selected",String(journal));
+  if(journal)renderJournal();
 }
 function openFile(){
   const vis=RANKS[S.r].vis,rows=document.getElementById("fileRows");rows.innerHTML="";
@@ -403,9 +457,39 @@ function openFile(){
   document.getElementById("fileNote").textContent=
     "Aday sınavı: "+(S.exam?S.exam.total:"—")+" puan · "+grade+". Uzmanlık: "+(specialty?specialty.name:"kayıt yok")+". Kariyer yolu: "+(S.track==="admin"?"idari görev":"aktif komuta")+". Bu rütbede sicilinde yalnızca dört unsur ölçülüyor. Daha önce ölçüldüğün unsurlar için yaklaşık bir kanaatin var; hiç ölçülmediklerin hakkında hiçbir fikrin yok — ama onlar işlemeye devam ediyor.";
   document.getElementById("file").classList.remove("hide");
+  setFileTab("stats");
 }
 document.getElementById("fileBtn").onclick=openFile;
 document.getElementById("fileClose").onclick=()=>document.getElementById("file").classList.add("hide");
+document.getElementById("fileStatsTab").onclick=()=>setFileTab("stats");
+document.getElementById("fileJournalTab").onclick=()=>setFileTab("journal");
+
+function refreshResumePanel(){
+  const summary=getActiveSaveSummary(),panel=document.getElementById("resumePanel"),forces=document.getElementById("forceList");
+  document.getElementById("newCareerConfirm").classList.add("hide");
+  if(!summary){panel.classList.add("hide");forces.classList.remove("hide");return}
+  const ranks=summary.career==="nco"?NCO_RANKS:OFFICER_RANKS;
+  const rank=ranks[summary.r]&&ranks[summary.r].n[summary.f]||"Kayıtlı kariyer";
+  const specialty=typeof getSpecialty==="function"?getSpecialty(summary.f,summary.specialty):null;
+  document.getElementById("resumeRank").textContent=rank;
+  document.getElementById("resumeMeta").textContent=FORCE[summary.f]+" · "+(specialty?specialty.name+" · ":"")+summary.age+" yaş";
+  forces.classList.add("hide");panel.classList.remove("hide");
+}
+function resumeSavedGame(){
+  const restored=loadActiveState();if(!restored){refreshResumePanel();return false}
+  S=restored;S.ended=false;RANKS=S.career==="nco"?NCO_RANKS:OFFICER_RANKS;
+  ["start","exam","specialty","transition","end","promo","file"].forEach(id=>document.getElementById(id).classList.add("hide"));
+  buildGauges();paintHUD();
+  if(S.resumeScreen==="promo"&&S.resumeData){showPromo(S.resumeData.top,S.resumeData.rank,S.resumeData.note,true);return true}
+  if(S.resumeScreen==="transition"&&typeof restoreTransitionSession==="function"&&restoreTransitionSession())return true;
+  if(S.resumeScreen==="specialtyReassign"&&typeof showTransitionSpecialties==="function"){showTransitionSpecialties(true);return true}
+  if(S.resumeScreen==="card"&&S.pendingEvent){renderCard(S.pendingEvent);persistGame("card","resume-card");return true}
+  nextCard();return true;
+}
+document.getElementById("continueBtn").onclick=resumeSavedGame;
+document.getElementById("newCareerBtn").onclick=()=>document.getElementById("newCareerConfirm").classList.remove("hide");
+document.getElementById("cancelNewCareer").onclick=()=>document.getElementById("newCareerConfirm").classList.add("hide");
+document.getElementById("confirmNewCareer").onclick=()=>{clearActiveSave();refreshResumePanel()};
 
 function onDown(e){if(locked)return;dragging=true;x0=e.clientX;y0=e.clientY;dx=0;cardA.classList.remove("snap")}
 function onMove(e){
@@ -453,7 +537,9 @@ document.getElementById("again").onclick=()=>{
   document.getElementById("end").classList.add("hide");
   document.getElementById("specialty").classList.add("hide");
   document.getElementById("start").classList.remove("hide");
+  refreshResumePanel();
 };
+window.addEventListener("beforeunload",()=>{if(S&&!S.ended)persistGame(S.resumeScreen||"card","page-hidden")});
 
 /* ==========================================================================
    UYUYAN UNSUR — görünmeyen bir unsur kritik seviyeye inerse

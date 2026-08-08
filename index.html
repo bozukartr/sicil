@@ -46,8 +46,15 @@
 
   <div id="file" class="hide">
     <h2>Sicil Dosyası</h2>
-    <div id="fileRows"></div>
-    <div class="note" id="fileNote"></div>
+    <div class="fileTabs" role="tablist" aria-label="Dosya bölümleri">
+      <button class="on" id="fileStatsTab" role="tab" aria-selected="true">Sicil</button>
+      <button id="fileJournalTab" role="tab" aria-selected="false">Kariyer Günlüğü</button>
+    </div>
+    <div id="fileStatsPanel">
+      <div id="fileRows"></div>
+      <div class="note" id="fileNote"></div>
+    </div>
+    <div id="fileJournalPanel" class="hide"><div id="journalRows"></div></div>
     <button class="btn" id="fileClose" style="margin-top:auto">Kapat</button>
   </div>
 
@@ -89,6 +96,21 @@
     <h1>Sicil<small>kariyerin sınavla başlar</small></h1>
     <p class="lead">Kuvvetini seç, üç aşamalı aday sınavına gir. Başarı Harp Okulu yolunu açar; başarısızlık kariyerini er olarak sahadan başlatır.</p>
     <div class="forces" id="forceList"></div>
+    <div class="resumePanel hide" id="resumePanel">
+      <div class="resumeMark">↻</div>
+      <div class="resumeKicker">Kayıtlı Kariyer</div>
+      <h2 id="resumeRank"></h2>
+      <p id="resumeMeta"></p>
+      <div class="resumeActions">
+        <button class="btn p" id="continueBtn">Kariyere devam et</button>
+        <button class="btn ghost" id="newCareerBtn">Yeni kariyer</button>
+      </div>
+      <div class="newCareerConfirm hide" id="newCareerConfirm" role="alert">
+        <b>Kayıtlı kariyer silinecek.</b>
+        <span>Bu işlem geri alınamaz; tamamlanan kariyer arşivleri etkilenmez.</span>
+        <div><button class="btn ghost" id="cancelNewCareer">Vazgeç</button><button class="btn danger" id="confirmNewCareer">Sil ve başla</button></div>
+      </div>
+    </div>
   </div>
 
   <div class="screen hide" id="end">
