@@ -131,6 +131,21 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans);
 #file.hide{display:none}
 #file h2{font-size:13.5px;letter-spacing:.16em;text-transform:uppercase}
 #file .note{font-family:var(--mono);font-size:8.5px;line-height:1.75;color:var(--dim)}
+.fileTabs{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(222,216,195,.14);border-radius:5px;overflow:hidden}
+.fileTabs button{min-height:36px;border:0;background:rgba(222,216,195,.025);color:var(--dim);font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.fileTabs button+button{border-left:1px solid rgba(222,216,195,.14)}
+.fileTabs button.on{background:rgba(201,163,73,.1);color:var(--brass)}
+#fileStatsPanel,#fileJournalPanel{display:flex;flex-direction:column;gap:11px}
+#fileStatsPanel.hide,#fileJournalPanel.hide{display:none}
+#journalRows{display:flex;flex-direction:column;gap:8px;padding-bottom:4px}
+.journalEntry{position:relative;padding:10px 11px 10px 16px;border:1px solid rgba(222,216,195,.1);border-radius:5px;background:rgba(222,216,195,.025)}
+.journalEntry::before{content:"";position:absolute;left:6px;top:12px;width:3px;height:3px;border-radius:50%;background:var(--dim)}
+.journalEntry.promotion::before,.journalEntry.exam::before{background:var(--brass);box-shadow:0 0 0 3px rgba(201,163,73,.1)}
+.journalEntry.critical::before,.journalEntry.ending::before{background:var(--oxide)}
+.journalMeta{font-family:var(--mono);font-size:7px;letter-spacing:.06em;color:var(--dim-2);text-transform:uppercase}
+.journalEntry h3{margin-top:4px;font-size:11px;letter-spacing:.035em;color:var(--paper)}
+.journalEntry p{margin-top:4px;font-size:9px;line-height:1.5;color:var(--dim)}
+.journalEmpty{padding:28px 12px;text-align:center;font-family:var(--mono);font-size:9px;color:var(--dim)}
 .frow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dotted rgba(222,216,195,.12)}
 .frow .n{flex:1 1 auto;font-size:11.5px}
 .frow .b{flex:0 0 68px;height:6px;border-radius:2px;background:#090b05;border:1px solid var(--line);position:relative;overflow:hidden}
@@ -156,12 +171,26 @@ h1 small{display:block;font-size:10px;letter-spacing:.2em;font-weight:500;color:
   border-radius:3px;cursor:pointer;background:transparent;color:var(--paper);border:1px solid rgba(222,216,195,.32)}
 .btn:active{background:rgba(222,216,195,.1)} .btn.p{border-color:var(--brass);color:var(--brass)}
 .forces{display:flex;flex-direction:column;gap:9px;width:100%;max-width:310px}
+.forces.hide{display:none}
 .fbtn{min-height:56px;display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:4px;cursor:pointer;
   border:1px solid rgba(222,216,195,.17);background:rgba(222,216,195,.028);text-align:left;color:var(--paper)}
 .fbtn:active{border-color:var(--brass);background:rgba(201,163,73,.08)}
 .fbtn b{display:block;font-size:13px;font-weight:700;letter-spacing:.05em}
 .fbtn i{display:block;font-style:normal;font-family:var(--mono);font-size:8.5px;color:var(--dim);margin-top:3px;line-height:1.45}
 .fbtn svg{flex:0 0 auto;width:25px;height:33px}
+.resumePanel{width:100%;max-width:330px;padding:18px;border:1px solid rgba(201,163,73,.28);border-radius:9px;background:linear-gradient(145deg,rgba(201,163,73,.085),rgba(8,10,5,.38));box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.resumePanel.hide{display:none}
+.resumeMark{width:42px;height:42px;margin:0 auto 10px;display:grid;place-items:center;border:1px solid rgba(201,163,73,.36);border-radius:50%;color:var(--brass);font-family:var(--mono);font-size:19px}
+.resumeKicker{font-family:var(--mono);font-size:8px;letter-spacing:.2em;color:var(--brass);text-transform:uppercase}
+.resumePanel h2{margin-top:7px;font-size:18px;letter-spacing:.08em;text-transform:uppercase}
+.resumePanel>p{margin-top:6px;font-family:var(--mono);font-size:8.5px;line-height:1.5;color:var(--dim)}
+.resumeActions{display:grid;gap:8px;margin-top:16px}
+.btn.ghost{color:var(--dim);border-color:rgba(222,216,195,.18)}
+.btn.danger{color:#d98773;border-color:rgba(168,60,41,.6)}
+.newCareerConfirm{margin-top:13px;padding-top:13px;border-top:1px solid rgba(222,216,195,.12);display:flex;flex-direction:column;gap:6px;text-align:left}
+.newCareerConfirm.hide{display:none}
+.newCareerConfirm b{font-size:11px;color:#d7a18f}.newCareerConfirm span{font-size:9px;line-height:1.5;color:var(--dim)}
+.newCareerConfirm>div{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:5px}.newCareerConfirm .btn{padding:10px 8px;font-size:8px;letter-spacing:.08em}
 
 #specialty{justify-content:flex-start;padding-top:calc(env(safe-area-inset-top) + 23px);background:radial-gradient(110% 70% at 50% 0%,#293019 0%,#101309 58%,#080a05 100%)}
 .specialtyShell{width:100%;max-width:390px;display:flex;flex-direction:column;align-items:center;text-align:center}
