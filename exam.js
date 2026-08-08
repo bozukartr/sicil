@@ -132,13 +132,13 @@ function showExamResult(){
   examTrack.querySelectorAll("i").forEach(i=>i.className="done");
   examBody.innerHTML='<div class="examPanel resultPanel"><div class="examResult '+(pass?"pass":"fail")+' '+profile.grade+'"><div class="scoreRing">'+profile.total+'</div>'+ 
     '<h2>'+title+'</h2><p>'+copy+'</p><div class="examBreakdown">'+rows+'</div><div class="examMods"><small>Başlangıç sicili</small>'+mods+'</div></div>'+ 
-    '<button class="examAction" id="examAction">Kariyere başla</button></div>';
-  document.getElementById("examAction").onclick=()=>newGame(EXAM.force,profile.career,profile);
+    '<button class="examAction" id="examAction">Uzmanlık seç</button></div>';
+  document.getElementById("examAction").onclick=()=>showSpecialtySelect(EXAM.force,profile);
 }
 (function(){
   const list=document.getElementById("forceList");
   const nm={k:"Kara Harp Okulu",d:"Deniz Harp Okulu",h:"Hava Harp Okulu"};
-  const desc={k:"Piyade · sınır · manevra",d:"Güverte · seyir · filo",h:"Pilotaj · üs · hava savunma"};
+  const desc={k:"Piyade · Topçu · Tank · İkmal",d:"Güverte · Makine · Deniz Piyadesi · İkmal",h:"Pilotaj · Hava Savunma · Teknik · Lojistik"};
   ["k","d","h"].forEach(f=>{
     const b=document.createElement("button");b.className="fbtn";
     b.innerHTML=insSVG(3,f)+'<div><b>'+nm[f]+'</b><i>'+desc[f]+'</i></div>';
@@ -146,4 +146,3 @@ function showExamResult(){
     list.appendChild(b);
   });
 })();
-

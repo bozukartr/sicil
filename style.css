@@ -33,6 +33,11 @@ body{background:var(--ink);color:var(--paper);font-family:var(--sans);
 .rankname{font-weight:760;font-size:clamp(15px,4.2vw,18px);letter-spacing:.075em;text-transform:uppercase;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.15}
 .sub{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase;margin-top:3px}
+.identityMeta{display:flex;align-items:center;gap:6px;min-width:0;margin-top:3px}
+.identityMeta .sub{min-width:0;margin-top:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.specialtyBadge{flex:0 0 auto;padding:2px 5px;border:1px solid rgba(111,147,73,.42);border-radius:3px;
+  background:rgba(111,147,73,.08);color:#b7cc99;font-family:var(--mono);font-size:7px;letter-spacing:.07em;text-transform:uppercase}
+.specialtyBadge.hide{display:none}
 .hudmeta{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;margin-top:9px;
   padding-top:8px;border-top:1px solid rgba(222,216,195,.09)}
 .clock{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:8.5px;line-height:1.3;color:var(--dim);white-space:nowrap}
@@ -158,6 +163,26 @@ h1 small{display:block;font-size:10px;letter-spacing:.2em;font-weight:500;color:
 .fbtn i{display:block;font-style:normal;font-family:var(--mono);font-size:8.5px;color:var(--dim);margin-top:3px;line-height:1.45}
 .fbtn svg{flex:0 0 auto;width:25px;height:33px}
 
+#specialty{justify-content:flex-start;padding-top:calc(env(safe-area-inset-top) + 23px);background:radial-gradient(110% 70% at 50% 0%,#293019 0%,#101309 58%,#080a05 100%)}
+.specialtyShell{width:100%;max-width:390px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.specialtyShell h1{margin-top:9px;font-size:clamp(24px,8vw,32px);letter-spacing:.1em}
+.specialtyShell .lead{margin-top:10px;font-size:12.5px}
+.specialtyList{width:100%;display:flex;flex-direction:column;gap:8px;margin-top:17px;padding-bottom:calc(env(safe-area-inset-bottom) + 18px)}
+.specialtyCard{width:100%;min-height:88px;padding:10px 12px;border:1px solid rgba(222,216,195,.15);border-radius:8px;
+  background:linear-gradient(150deg,rgba(222,216,195,.055),rgba(9,11,5,.25));color:var(--paper);text-align:left;
+  display:flex;align-items:flex-start;gap:11px;cursor:pointer;transition:border-color .15s,background .15s,transform .12s}
+.specialtyCard:active{transform:scale(.987);border-color:var(--brass);background:rgba(201,163,73,.08)}
+.specialtyGlyph{flex:0 0 38px;width:38px;height:38px;border:1px solid rgba(201,163,73,.35);border-radius:50%;
+  display:grid;place-items:center;background:rgba(201,163,73,.07);color:var(--brass);font-family:var(--mono);font-size:17px}
+.specialtyText{flex:1 1 auto;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:3px 5px}
+.specialtyText b{flex:0 0 100%;font-size:13px;letter-spacing:.07em;text-transform:uppercase}
+.specialtyText em{flex:0 0 100%;font-style:normal;font-size:10px;line-height:1.35;color:#a9ad96}
+.specialtyText small{flex:0 0 100%;font-family:var(--mono);font-size:6.8px;letter-spacing:.07em;color:var(--dim);text-transform:uppercase}
+.specialtyMods{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:3px;margin-top:2px}
+.specialtyMods i{padding:2px 4px;border:1px solid;border-radius:2px;font-family:var(--mono);font-size:6.5px;font-style:normal;letter-spacing:.03em}
+.specialtyMods .up{color:#aeca86;border-color:rgba(111,147,73,.36)}
+.specialtyMods .down{color:#d98e7b;border-color:rgba(168,60,41,.36)}
+
 #exam{background:radial-gradient(100% 64% at 50% 12%,#293019 0%,#101309 58%,#080a05 100%)}
 .examShell{width:100%;max-width:360px;text-align:left}
 .examTop{display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:var(--mono);
@@ -245,6 +270,7 @@ h1 small{display:block;font-size:10px;letter-spacing:.2em;font-weight:500;color:
   .gval{font-size:11.5px}
   .ch{font-size:12.5px;padding-left:10px;padding-right:10px}
   .examPanel{min-height:340px;padding:18px}
+  .specialtyCard{min-height:82px;padding:9px 10px}
 }
 @media (max-height:700px){
   #app{padding-top:calc(env(safe-area-inset-top) + 5px);padding-bottom:calc(env(safe-area-inset-bottom) + 5px)}

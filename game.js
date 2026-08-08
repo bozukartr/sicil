@@ -51,23 +51,28 @@ function insSVG(r,f){
 /* ---- durum ---- */
 let S,ev,dragging=false,x0=0,y0=0,dx=0,raf=0,locked=true,POOL=[];
 const HIDDEN_FLOOR=11;
-function initialStats(career,profile){
+function initialStats(career,profile,specialty){
   const stats={dis:56,sic:50,ast:50,fiz:62,ruh:60,tek:48,ope:45,lid:45,loj:45,kar:career==="nco"?32:38,iti:46,ail:62};
   if(profile&&profile.modifiers)for(const k in profile.modifiers)
     if(k in stats)stats[k]=Math.max(0,Math.min(100,stats[k]+profile.modifiers[k]));
+  if(specialty&&specialty.modifiers)for(const k in specialty.modifiers)
+    if(k in stats)stats[k]=Math.max(0,Math.min(100,stats[k]+specialty.modifiers[k]));
   return stats;
 }
-function newGame(force,career,examProfile){
+function newGame(force,career,examProfile,specialtyId){
   const profile=examProfile&&typeof examProfile==="object"
     ?examProfile:{total:Number(examProfile)||0,reaction:0,memory:0,logic:0,grade:"legacy",modifiers:{}};
   career=career||profile.career||"officer";
   RANKS=career==="nco"?NCO_RANKS:OFFICER_RANKS;
+  const specialty=typeof getSpecialty==="function"?getSpecialty(force,specialtyId):null;
   const flags=new Set();
   if(profile.grade&&profile.grade!=="legacy")flags.add("sinav_"+profile.grade);
-  S={f:force,career,exam:profile,examScore:profile.total||0,r:0,cards:0,months:0,age:18,flags,hist:[],grace:0,ended:false,
+  if(specialty)flags.add("uz_"+specialty.id);
+  S={f:force,career,specialty:specialty?specialty.id:null,exam:profile,examScore:profile.total||0,r:0,cards:0,months:0,age:18,flags,hist:[],grace:0,ended:false,
      warnCd:{},seen:new Set(RANKS[0].vis),
-     st:initialStats(career,profile)};
+     st:initialStats(career,profile,specialty)};
   document.getElementById("exam").classList.add("hide");
+  document.getElementById("specialty").classList.add("hide");
   buildGauges();paintHUD();nextCard();
 }
 function E(tags,force,who,role,place,text,lt,la,rt,ra,opt){
@@ -109,9 +114,13 @@ function clearPreview(){gEls.forEach(g=>{g.d.className="gd";g.d.textContent=""})
 
 function paintHUD(){
   const R=RANKS[S.r];
+  const specialty=typeof getSpecialty==="function"?getSpecialty(S.f,S.specialty):null;
   document.getElementById("careerBadge").textContent=S.career==="nco"?"Saha Kariyeri":"Subay Kariyeri";
   document.getElementById("rankName").textContent=R.n[S.f];
   document.getElementById("forceName").textContent=FORCE[S.f];
+  const specialtyBadge=document.getElementById("specialtyBadge");
+  specialtyBadge.textContent=specialty?specialty.glyph+" "+specialty.name:"";
+  specialtyBadge.classList.toggle("hide",!specialty);
   document.getElementById("insBox").innerHTML=insSVG(S.r,S.f);
   document.getElementById("mAge").textContent=S.age+" yaş";
   document.getElementById("mSrv").innerHTML="<b>"+(Math.floor(S.months/12)+1)+".</b> hizmet yılı";
@@ -133,7 +142,7 @@ function paintHUD(){
 function pick(){
   const t=RANKS[S.r].t;
   const fit=i=>{const e=POOL[i];
-    return e.tg.indexOf(t)>=0&&(e.fo==="*"||e.fo.indexOf(S.f)>=0)
+    return (e.tg.indexOf(t)>=0||e.tg.indexOf("*")>=0)&&(e.fo==="*"||e.fo.indexOf(S.f)>=0)
       &&(!e.req||e.req.split(",").every(f=>S.flags.has(f)))
       &&(!e.no||!e.no.split(",").some(f=>S.flags.has(f)))};
   let best=[],bp=-1;
@@ -281,7 +290,8 @@ function tryPromote(){
   if(S.r>=RANKS.length-1){retire();return}
   const vAvg=R.vis.reduce((a,k)=>a+S.st[k],0)/4;
   const aAvg=KEYS.reduce((a,k)=>a+S.st[k],0)/KEYS.length;
-  if(vAvg*.85+aAvg*.15>=R.need&&S.st.dis>=18&&S.st.sic>=18){
+  const sAvg=typeof specialtyScore==="function"?specialtyScore(S):vAvg;
+  if(vAvg*.65+aAvg*.1+sAvg*.25>=R.need&&S.st.dis>=18&&S.st.sic>=18){
     S.r++;S.cards=0;S.grace=0;
     RANKS[S.r].vis.forEach(k=>S.seen.add(k));
     showPromo("Terfi",RANKS[S.r].n[S.f],PROMO[RANKS[S.r].t]);
@@ -337,6 +347,7 @@ document.getElementById("promoBtn").onclick=()=>{
 };
 function retire(){
   const s=S.st;
+  if(typeof finishSpecialtyCareer==="function"&&finishSpecialtyCareer(S))return;
   if(S.career==="nco"){
     if(s.ast>=75&&s.lid>=68&&s.iti>=65)
       finish("usta","Birliğin Hafızası","Astsubay Kıdemli Başçavuş olarak emekli oldun. Yetiştirdiğin personel farklı birliklere dağıldı; usulün ve sözlerin senden sonra da yaşamaya devam etti.");
@@ -383,8 +394,9 @@ function openFile(){
     rows.appendChild(d);
   });
   const grade=S.exam?({ustun:"üstün başarı",basarili:"başarılı",sinirda:"sınırda kabul",saha:"saha ataması"}[S.exam.grade]||S.exam.grade):"kayıt yok";
+  const specialty=typeof getSpecialty==="function"?getSpecialty(S.f,S.specialty):null;
   document.getElementById("fileNote").textContent=
-    "Aday sınavı: "+(S.exam?S.exam.total:"—")+" puan · "+grade+". Bu rütbede sicilinde yalnızca dört unsur ölçülüyor. Daha önce ölçüldüğün unsurlar için yaklaşık bir kanaatin var; hiç ölçülmediklerin hakkında hiçbir fikrin yok — ama onlar işlemeye devam ediyor.";
+    "Aday sınavı: "+(S.exam?S.exam.total:"—")+" puan · "+grade+". Uzmanlık: "+(specialty?specialty.name:"kayıt yok")+". Bu rütbede sicilinde yalnızca dört unsur ölçülüyor. Daha önce ölçüldüğün unsurlar için yaklaşık bir kanaatin var; hiç ölçülmediklerin hakkında hiçbir fikrin yok — ama onlar işlemeye devam ediyor.";
   document.getElementById("file").classList.remove("hide");
 }
 document.getElementById("fileBtn").onclick=openFile;
@@ -434,6 +446,7 @@ document.addEventListener("touchmove",e=>{
 
 document.getElementById("again").onclick=()=>{
   document.getElementById("end").classList.add("hide");
+  document.getElementById("specialty").classList.add("hide");
   document.getElementById("start").classList.remove("hide");
 };
 
