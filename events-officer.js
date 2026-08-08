@@ -1,0 +1,1204 @@
+"use strict";
+
+/* ==========================================================================
+   OLAY HAVUZU
+========================================================================== */
+/* ================= HARBİYE ================= */
+E("hb","*","Sınıf Subayı Ütğm. Aydın","Sabah yoklaması","Harp Okulu · Öğrenci Alayı",
+"Koğuşunuzdan iki kişi gece izinsiz çıkmış ve henüz dönmediler. Yoklamada mevcut sayısını sen okuyacaksın; eksiği şu an yalnızca sen biliyorsun.",
+"Mevcudu tam okudum","koruma sakla dis-4","Eksiği bildirdim","kural dogruluk");
+
+E("hb","*","Devre Arkadaşın Kenan","Koğuş, saat 23.40","Harp Okulu · 2. Sınıf",
+"Kenan yarınki sınavın sorularını bir üst devreden almış. Kâğıdı masana bırakıp hiçbir şey söylemeden yatağına dönüyor.",
+"Kâğıdı geri verdim","kural ogrenme","Bir göz attım","ortbas tek+5 +kopya");
+
+E("hb","*","Disiplin Kurulu Kâtibi","Ön inceleme","Harp Okulu · Kurul Odası",
+"Sınavda soru sızıntısı tespit edildi ve kâğıdın elden ele dolaştığı koğuş araştırılıyor. Tutanakta senin koğuşun da geçiyor.",
+"Bilgim yok dedim","ortbas ruh-5","Kendimi de yazdırdım","dogruluk sahiplen sic-6",{req:"kopya",pri:2});
+
+E("hb","*","Beden Eğitimi Öğretim Elemanı","Dayanıklılık koşusu","Harp Okulu · Pist",
+"Diz ağrın üç haftadır geçmiyor ve bugün 3000 metre derecelendirmesi var. Revire çıkarsan bu dönem için derecen boş kalır.",
+"Revire çıktım","dinlenme sic-3","Koştum, dereceyi aldım","ozveri fiz+4 +dizsakat");
+
+E("hb","*","Revir Tabibi Ütğm. Aksan","Muayene","Harp Okulu · Revir",
+"Menisküste yırtık şüphesi var. \"Üç hafta dinlenirsen kurtulursun; zorlarsan bu diz otuz yıl boyunca dosyanda kalır\" diyor.",
+"İlaçla devam ettim","sakla fiz-4","Üç hafta dinlendim","dinlenme tek-3 -dizsakat",{req:"dizsakat",pri:2});
+
+E("hb","*","Devre Başkanı","Yemek tertibi","Harp Okulu · Gazino",
+"Devre olarak yemek tertibi hakkında toplu dilekçe hazırlanıyor. Toplu müracaat İç Hizmet Yönetmeliği'ne aykırı ama herkes imzalıyor.",
+"İmzalamadım","kural mesafe","İmzaladım","moral esnek");
+
+E("hb","*","Nöbetçi Astsubay","Nizamiye","Harp Okulu · Nizamiye",
+"İzin dönüşünde yoklama saatini yedi dakika geçirdin. Nöbetçi astsubay saati deftere bir satır yukarı yazmayı teklif ediyor.",
+"Kendimi geç yazdırdım","kural dogruluk","Teklifi kabul ettim","ortbas ast+4");
+
+E("hb","*","Topoğrafya Öğretim Üyesi","Ders sonrası","Harp Okulu · Dershane",
+"Matematik notların yüksek ama arazi krokisi ve pusula uygulamalarında sınıf ortalamasının altındasın. Kalan üç haftayı tek bir alana ayırabilirsin.",
+"Analize çalıştım","ogrenme sic+3","Araziye çalıştım","ogrenme fiz+4 tek+2");
+
+E("hb","*","Devre Arkadaşın Melih","Etüt salonu","Harp Okulu · 3. Sınıf",
+"Melih üç dersten sınırda; kalırsa devre kaybediyor. Akşam etütlerinde kendi çalışmanı bırakıp onunla ilgilenmeni istiyor.",
+"Kendi derslerime çalıştım","menfaat tek+4","Onu çalıştırdım","mentor tek-2");
+
+E("hb","*","Sınıf Subayı","Dolap denetimi","Harp Okulu · Koğuş",
+"Dolabında talimatnamede sayılmayan bir kitap bulundu. Kitap arkadaşının, ama dolap senin adına kayıtlı.",
+"Benim değil dedim","harcama ruh-4","Sahiplendim","sahiplen sic-4");
+
+E("hb","*","Kıdemli Harbiyeli","Koridor, gece","Harp Okulu · Alt Devre",
+"Bir üst devre \"gelenek\" adı altında alt devreye talimatname dışı uygulamalar yaptırıyor. Sıradaki sensin ve bütün devren izliyor.",
+"Sessizce yaptım","pasif ruh-6","Karşı çıktım","direnc lid+5 +dikbasli");
+
+E("hb","*","Okul Disiplin Kurulu","Yazılı savunma","Harp Okulu · Kurul Odası",
+"Üst devreye karşı çıkışın tutanağa geçti; kuruldan savunman isteniyor. Kâtip hazır bir özür metnini önüne koyuyor, imzalaman yeterli.",
+"Hazır metni imzaladım","itaat sic+4","Kendi savunmamı yazdım","direnc lid+6 sic-4",{req:"dikbasli",pri:2});
+
+E("hb","*","Sınıflandırma Kurulu","Tercih formu","Harp Okulu · 3. Sınıf",
+"Sınıflandırma tercih formu önünde. Zor sınıflar sicilde ağır basıyor ama eleme oranı yüksek ve elenirsen tercih hakkın kalmıyor.",
+"Garanti sınıfı yazdım","ihtiyat sic+3","Zor sınıfı yazdım","risk ogrenme");
+
+E("hb","d","Seyir Öğretmeni","Açık deniz seyri","TCG Eğitim Gemisi · Ege",
+"İlk açık deniz seyrinde deniz tuttu, iki saattir kusuyorsun ve köprüüstü vardiyası senin. Yerine geçmeye hazır bir devre arkadaşın var.",
+"Vardiyayı devrettim","dinlenme ast-4 tek-3","Vardiyayı tamamladım","ozveri moral ruh+4");
+
+E("hb","d","Güverte Astsubayı","Bağlama manevrası","Liman · Baş Üstü",
+"Baş halatı yanlış voltalanmış; kopması hâlinde güvertede duran üç kişi tehlikede. Hatayı yapan bir üst devre ve seni görmedi.",
+"Sesimi çıkarmadım","pasif tek-4","Yüksek sesle uyardım","dogruluk tek+4 ast-3");
+
+E("hb","h","Uçuş Öğretmeni Yzb. Bulut","İlk eğitim uçuşu","Hava Harp Okulu · Meydan",
+"İlk uçuşta ani irtifa kaybında panikleyip kumandayı bıraktın. Yere indikten sonra öğretmen \"bugün bir daha çıkalım mı?\" diye soruyor.",
+"Yarın devam dedim","ihtiyat ruh-4","Aynı gün tekrar çıktım","risk ruh+7 tek+4");
+
+E("hb","h","Uçuş Tabibi","Periyodik muayene","Hava Harp Okulu · Sağlık",
+"Gece görüş adaptasyon testinde sınır değerdesin. Doktor testi tekrarlayabilir ya da bu haliyle geçirebilir; kararı sana bırakıyor.",
+"Geçirmesini istedim","sakla kapali +goz","Tekrar test istedim","dogruluk tek+3");
+
+E("hb","h","Uçuş Şube Müdürü","Değerlendirme","Hava Harp Okulu · Filo",
+"Gece uçuşunda iniş süzülüşünü iki kez kaçırdın ve sebep görüşünde. Bir hata daha kayda geçerse sınıf değişikliği gündeme gelir.",
+"Kayda geçirmedim","sakla ruh-5","Durumu rapor ettim","dogruluk sic-4 fiz+3",{req:"goz",pri:2});
+
+E("hb","k","Piyade Öğretim Elemanı","Üç günlük arazi","Eğitim Alanı · Yayla",
+"Üçüncü günün sonunda bir devre arkadaşın bitkin düştü, çantasını taşıyamıyor. Sen de son on kilometreyi zor tamamlıyorsun.",
+"Kendi yükümü taşıdım","menfaat fiz+3","Malzemesini de aldım","feragat fiz-4");
+
+E("hb","k","Komando Okulu Eğitmeni","Aday seçimi","Eğirdir · Seçme Kampı",
+"Komando temel kursuna aday gösterildin. Katılım gönüllü, süre üç ay ve kurstan ayrılan bir daha aday olamıyor.",
+"Aday olmadım","ihtiyat sic-3","Kursa yazıldım","risk ozveri fiz+6");
+
+E("hb","*","Baban","Telefon kulübesi","Harp Okulu · Kantin",
+"Baban emekli astsubay ve bu yola girmeni hiç istememişti. \"Hâlâ vazgeçebilirsin, kimse sana bir şey demez\" diyor.",
+"Düşündüğümü söyledim","aile dis-3","Kararlıyım dedim","gorev ail-3");
+
+E("hb","*","Annen","Ziyaret günü","Harp Okulu · Ziyaretçi Alanı",
+"Ailen ilk kez ziyarete geldi, sekiz saat yol yaptılar. Aynı gün bölük nöbeti çizelgede sana düştü ve değişecek kimse yok.",
+"Nöbeti tuttum","gorev dis+3","Nöbeti değiştirttim","aile dis-5");
+
+E("hb","*","Devre Arkadaşın Serkan","Kantin","Harp Okulu · Kantin",
+"Serkan yine borç istiyor. Önceki iki borcunu ödemedi ve harçlığın ay sonuna zaten zor yetiyor.",
+"Vermedim","mesafe ail+3","Yine verdim","moral ail-4");
+
+E("hb","*","Nöbet Çizelgesi","Aylık tertip","Harp Okulu · Bölük",
+"Nöbet çizelgesini bu ay sen tutuyorsun. Aranın iyi olmadığı bir arkadaşına üç hafta sonu üst üste düşürmek kimsenin dikkatini çekmez.",
+"Öyle bıraktım","menfaat lid-5","Adil dağıttım","kural lid+5 ast+4");
+
+E("hb","*","Rehberlik Servisi","Görüşme talebi","Harp Okulu · Psikolojik Danışma",
+"Devre arkadaşın iki aydır kimseyle konuşmuyor ve geceleri uyumuyor. Danışman gözlemlerini istiyor; anlatırsan dosyası açılır.",
+"Bir şey söylemedim","sakla ast+3","Durumu anlattım","koruma mentor ast-4 +yardim");
+
+E("hb","*","Devre Arkadaşın","Dönüş","Harp Okulu · Koğuş",
+"Tedavi görüp döndü ve devreye yeniden karıştı. \"Sen söylemesen buradan gitmiştim\" deyip hemen konuyu değiştiriyor.",
+"Konuyu kapattım","geriplan ast+3","Yanında olmayı sürdürdüm","mentor moral",{req:"yardim",pri:1});
+
+E("hb","*","Askerî Tarih Öğretim Üyesi","Seminer","Harp Okulu · Konferans Salonu",
+"Seminerde bildiri sunacak gönüllü aranıyor; salonda dört yüz kişi olacak. Topluluk önünde konuşmak en zayıf tarafın.",
+"Gönüllü olmadım","geriplan lid-4","Bildiriyi ben sundum","gorunur lid+5 ogrenme");
+
+E("hb","*","Atış Eğitim Astsubayı","Talimhane","Harp Okulu · Atış Alanı",
+"Tabanca atış puanların sınıf ortalamasının altında. Astsubay hafta sonu ek atış öneriyor; karşılığında çarşı izni hakkın gidiyor.",
+"İzne çıktım","dinlenme ail+4 tek-4","Talimhanede kaldım","ogrenme ail-3");
+
+E("hb","*","Bölük Komutanı Yzb. Ersoy","Derece hesabı","Harp Okulu · 4. Sınıf",
+"Devre birinciliğinde bir arkadaşınla puanın eşit çıktı; bir sözlü sınavla ayrılacaksınız. O, ailesine birincilik sözü verdiğini söylüyor.",
+"Sınava girdim","menfaat sic+4","Feragat ettim","feragat sic-3");
+
+E("hb","*","Nöbetçi Amiri","Gece 03.00","Harp Okulu · Nizamiye",
+"Devriyede nöbet yerinde uyuklayan arkadaşını gördün. Nöbetçi amiri on dakika içinde aynı noktadan geçecek.",
+"Uyandırıp sustum","koruma esnek","Tutanak tuttum","kural sertlik");
+
+E("hb","*","Lise Arkadaşların","İzin günü","Şehir Merkezi",
+"Arkadaşların seni gece açık bir mekâna çağırıyor. Sivil kıyafetle bile askerî öğrencilere yasak ve inzibat şehirde geziyor.",
+"Gitmedim","kural ail-3","Gittim","esnek ail+4 +sivilgece");
+
+E("hb","*","Okul İnzibat Astsubayı","Nizamiye kontrolü","Harp Okulu · Nizamiye",
+"İnzibat o gece o mekânda görüldüğünü ima ediyor ama elinde kayıt yok. \"Sen söylersen tutanak hafif olur\" diyor.",
+"İnkâr ettim","ortbas ruh-4","Kabul ettim","dogruluk sic-5",{req:"sivilgece",pri:2});
+
+E("hb","*","Sınıf Subayı","Yılsonu kanaat","Harp Okulu · Sınıf Subayı Odası",
+"Yılsonu görüşmesinde \"kendini devre içinde nerede görüyorsun?\" diye soruluyor. Cevabın kanaat notuna doğrudan yansıyacak.",
+"Mütevazı konuştum","geriplan ast+4","Başarılarımı saydım","gorunur sic+4 ast-4");
+
+E("hb","*","Devre Arkadaşın Volkan","Kondisyon salonu","Harp Okulu · Spor Tesisi",
+"Volkan iki aydır takviye kullanıyor ve derecelerinde belirgin sıçrama var. Kutuyu önüne koyup \"kimse test yapmıyor\" diyor.",
+"Kabul etmedim","kural fiz-2","Denedim","yolsuz fiz+8 +ilac");
+
+E("hb","*","Sağlık Şube Müdürü","Tahlil sonucu","Harp Okulu · Sağlık Şubesi",
+"Rutin kan tahlilinde beklenmedik bir değer çıktı ve şube müdürü açıklama bekliyor. Testin tekrarı iki gün sonra.",
+"Bilmiyorum dedim","ortbas dis-6 ruh-5","Doğruyu söyledim","dogruluk fiz-5 -ilac",{req:"ilac",pri:3});
+
+E("hb","*","Mezuniyet Komitesi","Görev dağılımı","Harp Okulu · 4. Sınıf",
+"Mezuniyet töreni organizasyonunda kimse sorumluluk almak istemiyor. Bir aksaklık çıkarsa hesabı da organizatör veriyor.",
+"Almadım","geriplan lid-4","Üstlendim","insiyatif lid+4 duzen");
+
+E("hb","*","Okul Komutanı Tuğg. Ünsal","Kılıç töreni öncesi","Harp Okulu · Tören Alanı",
+"\"Yarın kılıcını alırken aklında ne olacak?\" diye soruyor. Cevabın kanaat dosyasına geçmiyor ama otuz yıl boyunca hatırlanıyor.",
+"Görev dedim","kural sic+3","İnsanlar dedim","moral lid+4");
+
+E("hb","*","Personel Şubesi","Kura töreni","Harp Okulu · Tören Alanı",
+"Mezuniyet kurası çekiliyor. Doğu bölgesine gönüllü yazılanlar kura beklemeden yerleştiriliyor ve bu tercih sicilde ağır basıyor.",
+"Kurayı bekledim","ihtiyat ail+3","Gönüllü yazıldım","gorev risk +gonullu");
+
+/* ================= TEĞMEN / ÜSTEĞMEN ================= */
+E("tg","*","Bölük Komutanı Yzb. Tanır","Göreve başlama","Piyade Taburu · 2. Bölük",
+"\"Bu takım artık senin. Kırk kişi yarın sabah senin ağzından çıkacak ilk cümleye göre sana bir yer biçecek.\"",
+"Önce kuralları anlattım","kural sertlik","Önce herkesi dinledim","moral yumusak lid+3");
+
+E("tg","*","Kd. Bçvş. Karaca","Takım astsubayı","Piyade Taburu · Takım",
+"Karaca on dört yıldır bu takımda. \"Komutanım siz yenisiniz, buranın düzenini ben bilirim; siz kâğıt işlerine bakın\" diyor.",
+"Yönetimi ona bıraktım","pasif ast+4 +astsbgolge","Birlikte yürüyeceğiz dedim","insiyatif mentor");
+
+E("tg","*","Kd. Bçvş. Karaca","Sabah içtiması","Piyade Taburu · Takım",
+"Verdiğin eğitim emrini erlerin önünde \"biz bunu böyle yapmayız komutanım\" diyerek değiştirdi. Kırk kişi ne yapacağını bekliyor.",
+"O anda sustum","pasif lid-6 ruh-4","Sonra odama çağırdım","insiyatif lid+5 -astsbgolge",{req:"astsbgolge",pri:2});
+
+E("tg ut","*","Er Yılmaz","Mazeret izni","Piyade Taburu · Yazı İşleri",
+"Babası yoğun bakımda, izin kontenjanı bu ay dolu. Tabur onaylamaz ama sen ısrar edersen dosya üste çıkar.",
+"Kontenjana uydum","kural sertlik","Tabura çıkardım","koruma insiyatif");
+
+E("tg ut","*","Tabur Komutanı Bnb. Sezer","Onay masası","Piyade Taburu · Karargâh",
+"\"Kontenjan dışı izin için ısrar ediyorsun. Bu ısrar senin kanaat notuna yazılır, farkında mısın Teğmen?\"",
+"Geri çektim","itaat ast-5","Israr ettim","direnc koruma");
+
+E("tg ut","*","Bölük Astsubayı","Silah sayımı","Piyade Taburu · Silahlık",
+"Akşam sayımında bir şarjör eksik çıktı; büyük ihtimalle atış sahasında kaldı. Tutanağı bir saat içinde imzalaman gerekiyor.",
+"Derhal bildirdim","kural dogruluk ast-4","Önce kendim arattım","koruma risk +sarjor");
+
+E("tg ut","*","İkmal Astsubayı","Depo","Piyade Taburu · İkmal",
+"Kayıp şarjör atış sahasında bulundu, ama eksik sayım tutanağı çoktan imzalanıp tabura gitti. Düzeltmek soruşturma açtırır.",
+"Sessizce yerine koydum","ortbas duzen","Tutanağı düzelttirdim","dogruluk sic-4 -sarjor",{req:"sarjor",pri:2});
+
+E("tg ut","*","Erbaş Doğan","Koğuş düzeni","Piyade Taburu · Koğuş",
+"Bir er koğuşta sistematik olarak dışlanıyor; kimse açıkça bir şey söylemiyor ama yemekhanede yanına oturan yok.",
+"Karışmadım","pasif ast-5","Meseleyi eşeledim","insiyatif koruma lid+3");
+
+E("tg ut","*","Tabip Ütğm. Erdoğan","Revir","Piyade Taburu · Revir",
+"Bir er üç haftada dokuz kez revire çıktı, doktor \"fiziksel bulgu yok\" diyor. Simülasyon yazarsan disiplin işlemi başlar.",
+"Simülasyon yazdırdım","sertlik kural","Psikiyatriye sevk ettirdim","koruma destek sic-3");
+
+E("tg ut","*","Nöbetçi Er","Gece 02.00","Piyade Taburu · Nöbet Kulesi",
+"Nöbetçi er silahını yere bırakmış, kule kapısında ağlıyor. Sabah tugay denetimi var ve senin de sabah brifingin.",
+"Yerine başkasını verdim","kural dinlenme","Yanına oturup konuştum","koruma ozveri");
+
+E("tg ut","*","Tabur Komutanı","Denetim arifesi","Piyade Taburu · Karargâh",
+"Yarın tugay denetimi. Astsubayın \"birkaç eksiği kâğıt üzerinde kapatalım, nasıl olsa tek tek bakmazlar\" diyor.",
+"Kâğıt üzerinde kapattık","ortbas sic+3","Olduğu gibi girdim","dogruluk seffaf sic-4");
+
+E("tg ut","*","Tugay Denetleme Heyeti","Teftiş","Piyade Taburu · Bölük Bölgesi",
+"Denetimde eksikler çıktı ve heyet sorumluyu soruyor. Eksiklerin çoğu astsubayın ihmalinden ama imza senin.",
+"Astsubayı gösterdim","yikma sic+3","Sorumluluğu aldım","sahiplen");
+
+E("tg ut","*","Eşin","Tayin kararı","Lojman · Mutfak",
+"Tayinin çıktı ve eşinin işi burada. Taşınırsa istifa etmesi gerekiyor; kalırsa yılda dört kez görüşeceksiniz.",
+"Ayrı yaşamayı kabul ettim","gorev ail-4 +ayriyasam","Onun kalmasını istemedim","aile ope-3");
+
+E("tg ut","*","Eşin","Telefon","Lojman · Gece",
+"Sekiz aydır ayrı yaşıyorsunuz ve görüşmeler telefona indi. \"Bu böyle gitmiyor, bir karar ver\" diyor.",
+"İşi bırakmasını istedim","gorev ail+3 -ayriyasam","Tayin talebi verdim","aile kar-4 -ayriyasam",{req:"ayriyasam",pri:1});
+
+E("tg ut","*","Bölük Komutanı","Tabur turnuvası","Piyade Taburu · Saha",
+"Tabur futbol turnuvasında bölüğün kaleci arıyor. Subayların erlerle aynı sahada oynaması yazılı olarak yasak değil ama hoş karşılanmıyor.",
+"Kenardan izledim","mesafe ast-4","Kaleye geçtim","moral esnek fiz+3");
+
+E("tg ut","*","Er Aksoy","Şikâyet dilekçesi","Piyade Taburu · Bölük",
+"Bir er, kıdemli çavuşun kendisine hakaret ettiğini yazılı olarak bildiriyor. Tanık yok ve çavuş taburun en tecrübeli personeli.",
+"Dilekçeyi kapattım","ortbas kapali","Tutanak tuttum","dogruluk kural ast+3");
+
+E("tg ut","*","Uzman Çavuş Bal","Maaş kesintisi","Piyade Taburu · Personel",
+"Uzman çavuşun maaşından üç aydır hatalı kesinti yapılıyor ve personel şube ilgilenmiyor. Konu senin görev alanında değil.",
+"Onun işi dedim","pasif ast-5","Şubenin peşine düştüm","koruma duzen");
+
+E("tg ut","*","Sınıf Okulu Müdürlüğü","Kurs duyurusu","Sınıf Okulu · Eğitim",
+"Sınıfında altı aylık ihtisas kursu açıldı. Kurs süresince birlikten ayrılacaksın ve takımın vekâletle yönetilecek.",
+"Birliğimde kaldım","pasif ast+4 tek-4","Kursa gittim","ogrenme ast-4 t6");
+
+E("tg ut","*","Kurs Öğretim Görevlisi","Bitirme sınavı","Sınıf Okulu · Dershane",
+"Kurs bitirme sınavında ilk üçe girmek dosyanda kalıcı bir not. Bunun için üç hafta günde dört saat uykuyla çalışman gerek.",
+"Normal çalıştım","dinlenme tek+3","Derece için zorladım","ogrenme ozveri");
+
+E("tg ut","k","Karakol Komutanı","Devriye planı","Sınır Hattı · Karakol",
+"Devriye rotası sekiz aydır değişmedi; personel yolu ezbere biliyor ama karşı taraf da biliyor. Rota değişikliği ek yürüyüş demek.",
+"Rotayı korudum","pasif ihtiyat","Rotayı değiştirdim","insiyatif tempo");
+
+E("tg ut","k","Devriye Timi","Arazi, saat 05.00","Sınır Hattı · Devriye",
+"Yolun yarısında sis bastırdı ve görüş yirmi metreye düştü. Geri dönmek görevi yarım bırakmak, devam etmek tökezleme riski demek.",
+"Geri döndüm","ihtiyat koruma","Devam ettim","risk +riskli");
+
+E("tg ut","k","Tabur Komutanı","Olay raporu","Sınır Hattı · Karakol",
+"Sisli devriyede iki personel kayarak hafif yaralandı. Raporu sen yazacaksın ve nasıl yazdığın sonraki devriye emirlerini belirleyecek.",
+"Yumuşatarak yazdım","ortbas sic+3","Olduğu gibi yazdım","dogruluk seffaf",{req:"riskli",pri:2});
+
+E("tg ut","d","Gemi Komutanı Bnb. Uzel","İlk vardiya","TCG Fırkateyn · Köprüüstü",
+"Radarda tanımlanamayan bir iz var, mesafe kapanıyor. Komutan iki saat önce yattı ve talimatname \"şüphe hâlinde uyandır\" diyor.",
+"Kendim değerlendirdim","risk insiyatif","Komutanı uyandırdım","kural ihtiyat");
+
+E("tg ut","d","Baş Çarkçı","Makine dairesi","TCG Fırkateyn · Makine",
+"Yakıt hattında küçük bir sızıntı var. Liman dönüşünde onarılabilir ama seyir daha altı gün sürecek ve sızıntı büyüyebilir.",
+"Seyre devam dedim","risk savsakla +kacak","Limana dönüş önerdim","ihtiyat duzen ope-3");
+
+E("tg ut","d","Filo Komutanlığı","Arıza raporu","Donanma · Filo Karargâhı",
+"Sızıntı büyüdü, gemi üç gün seyir dışı kaldı ve filo takvimi bozuldu. Karargâh, sızıntının ilk fark edildiği anı soruyor.",
+"Sonradan fark ettik dedim","ortbas dis-5","Kararımı sahiplendim","sahiplen dogruluk",{req:"kacak",pri:2});
+
+E("tg ut","d","Güverte Personeli","Yabancı liman","Akdeniz · Liman Ziyareti",
+"İki personel liman izninden dönmedi ve kalkışa iki saat kaldı. Bildirirsen haklarında işlem başlar, aramaya çıkarsan kalkış gecikir.",
+"Rapor ettim","kural sertlik","Aramaya çıktım","koruma ozveri");
+
+E("tg ut","h","Filo Komutanı","Görev planlaması","Ana Jet Üssü · Filo",
+"Meydan hava raporu asgari şartların hemen üstünde. Görevi iptal etmek filo uçuş istatistiğini düşürür, uçmak ise sınırda kalmak demek.",
+"Görevi iptal ettim","ihtiyat tek+3","Uçtum","risk +marjinal");
+
+E("tg ut","h","Uçuş Emniyet Subayı","İnceleme","Ana Jet Üssü · Emniyet Şubesi",
+"Marjinal havadaki uçuşun emniyet raporuna girdi. \"Kâğıt üzerinde kural ihlali yok ama bir daha olmayacak, değil mi?\"",
+"Kararımı savundum","direnc dis-4","Hatamı kabul ettim","dogruluk tek+3",{req:"marjinal",pri:2});
+
+E("tg ut","h","Bakım Astsubayı","Hangar","Ana Jet Üssü · Bakım",
+"Uçakta tekrarlayan bir hidrolik basınç kaydı var; teknik olarak uçuşa engel değil ama üçüncü kez aynı kod düşüyor.",
+"Görevi yaptım","risk savsakla","Uçağı yere çektim","duzen ihtiyat");
+
+E("tg ut","*","Bölük Komutanı","Tören provası","Kışla · Tören Alanı",
+"Bayram provasında bölüğün dağınık geçti. Ceza olarak hafta sonu izinlerini kesebilir ya da ek prova koyabilirsin.",
+"İzinleri kestim","sertlik","Ek prova yaptırdım","tempo ast+3");
+
+E("tg ut","*","Er Ailesi","Nizamiye","Kışla · Nizamiye",
+"Bir erin annesi altı saat yol gelmiş, kapıda bekliyor. Bugün ziyaret günü değil ve nizamiye kaydı tutuluyor.",
+"Kurala uydum","kural sertlik","On dakika izin verdim","esnek koruma");
+
+E("tg ut","*","Devre Arkadaşın","Referans talebi","Personel Şube · Ankara",
+"Devre arkadaşın senin birliğine tayin istiyor ve komutanına senin görüşünü soracaklar. Sicili zayıf ve sebebini biliyorsun.",
+"Referans olmadım","mesafe dogruluk","Referans oldum","koruma iliski +referans");
+
+E("tg ut","*","Tabur Komutanı","Hesap sorma","Piyade Taburu · Karargâh",
+"Referans olduğun arkadaşın iki ay içinde disiplin işlemiyle karşılaştı. \"Sen kefil olmuştun\" deniyor.",
+"Uzaklaştım","harcama ruh-4","Arkasında durdum","koruma sahiplen",{req:"referans",pri:2});
+
+E("tg ut","*","Personel Şubesi","Gönüllü çağrısı","Kışla · Personel",
+"Doğu bölgesindeki bir birlik için gönüllü subay aranıyor. Sicilde ağırlığı büyük, ama iki yıl aile ziyareti üçe düşüyor.",
+"Gönüllü olmadım","ihtiyat ail+4","Gönüllü oldum","gorev risk +gonullu");
+
+E("tg ut","*","Ast Personel","Ramazan programı","Kışla · Bölük",
+"Erlerin çoğu oruç tutuyor ve öğle saatlerindeki eğitim ağır. Programı kaydırmak yetkinde ama tabur takvimi sıkışır.",
+"Programı korudum","kural tempo","Saatleri kaydırdım","yumusak moral");
+
+E("tg ut","*","Kantin Sorumlusu","Hesap açığı","Kışla · Bölük Kantini",
+"Bölük kantin hesabında küçük bir açık var; miktar senin bir maaşının üçte biri kadar. Kimse fark etmeden kapatabilirsin.",
+"Kendi cebimden kapattım","ortbas ail-6","Tutanakla bildirdim","dogruluk duzen ast-4");
+
+E("tg ut","*","Uzman Çavuş Türk","Eğitim yöntemi","Kışla · Eğitim Alanı",
+"\"Komutanım siz gençsiniz, biz bu eğitimi hep şöyle yaparız\" diyor. Senin yöntemin daha doğru ama onunki daha alışıldık.",
+"Onun yolunu izledim","pasif ast+4 tek-3","Kendi yöntemimi uyguladım","insiyatif ast-4 +cekisme");
+
+E("tg ut","*","Uzman Çavuş Türk","Sonuç","Kışla · Eğitim Alanı",
+"Yeni yöntem sonuç verdi ve uzman çavuş bunu bölüğün önünde açıkça kabul etti. Şimdi kimin haklı olduğu konuşuluyor.",
+"Sessiz kaldım","geriplan lid+3","Onu herkesin önünde takdir ettim","moral mentor -cekisme",{req:"cekisme",pri:1});
+
+E("tg ut","*","Tabur Komutanı","Yazışma yükü","Piyade Taburu · Karargâh",
+"Taburun bütün yazışması yavaş yavaş senin masana kaydı, çünkü sen hızlısın. Kimse itiraz etmiyor ve mesai 21.00'i buluyor.",
+"Kabul ettim","ozveri tek+4","Sınır koydum","dinlenme sic-4");
+
+E("tg ut","*","Kendi vicdanın","Gece, lojman","Kışla · Lojman",
+"Dört aydır uyku düzenin bozuk, sürekli gerginsin ve bunu kimseye söylemedin. Tabipten randevu almak dosyaya kayıt düşürüyor.",
+"Kimseye söylemedim","sakla","Tabipten yardım aldım","destek +yardimaldim");
+
+E("tg ut","*","Askerî Tabip","Kontrol","Askerî Hastane · Poliklinik",
+"Aldığın destek işe yaradı ve uyku düzenin geldi. Doktor \"tedaviyi yarıda bırakma\" diyor ama artık iyi hissediyorsun.",
+"Bıraktım","sakla ruh-3","Tedaviye devam ettim","destek",{req:"yardimaldim",pri:1});
+
+E("tg ut","*","Genç Teğmen","Devir teslim","Kışla · Bölük",
+"Yerine gelen teğmen ilk haftasında bocalıyor ve takım bunu fark etti. Onunla ilgilenmek kendi işinden çalacak.",
+"Kendi işime baktım","menfaat lid-4","Yanıma alıp öğrettim","mentor");
+
+E("tg ut","*","Sicil Amirin","Kanaat görüşmesi","Kışla · Bölük Komutanlığı",
+"Sicilin iyi ama \"inisiyatif kullanmaktan kaçınır\" notu düşülmüş. İtiraz hakkın var; itiraz eden subay sayısı çok az.",
+"Kabullendim","pasif ruh-3","İtiraz ettim","direnc lid+4");
+
+E("tg ut","*","Sivil Müteahhit","Kışla tadilatı","Kışla · İnşaat Sahası",
+"Tadilat müteahhidi seni akşam yemeğine çağırıyor. \"Sadece bir yemek komutanım, kimseye söylemem\" diyor.",
+"Reddettim","durust","Kabul ettim","yolsuz +yemek");
+
+E("tg ut","*","İç Denetim Subayı","Görüşme","Tugay · Denetim",
+"Müteahhitle akşam yemeği bir başka dosyada tanık ifadesinde geçmiş. Denetim senden yazılı açıklama istiyor.",
+"İnkâr ettim","ortbas dis-6","Anlattım","dogruluk sic-4 -yemek",{req:"yemek",pri:3});
+
+E("tg ut","*","Ast Personel","Bayram nöbeti","Kışla · Bölük",
+"Bayramda birliğin yarısı izinli, kalanlar kışlada. Sen de izin hakkını kullanabilirsin, kalırsan kimse özel olarak takdir etmeyecek.",
+"İzne çıktım","aile ast-5","Erlerle kaldım","moral ozveri");
+
+E("ut","*","Tabur Komutanı","Yeni görev","Tugay · Personel Şube",
+"Takım komutanlığın bitiyor. İki seçenek var: tugay karargâhında şube subaylığı ya da sorunlu bir bölükte komutan yardımcılığı.",
+"Karargâha geçtim","iliski ope-4","Birlikte kaldım","gorev ast+4 kar-4");
+
+E("ut","*","Şube Müdürü Bnb. Aras","İlk dosya","Tugay · Harekât Şube",
+"İlk dosyan bir taburun yıllık eğitim planı. Geçen yılın planını tarih değiştirip vermek mümkün ve kimse fark etmiyor.",
+"Tarihleri değiştirdim","savsakla kar+3","Baştan yazdım","ogrenme duzen ozveri");
+
+E("ut","*","Emrindeki Astsubaylar","Kadro","Tugay · Şube",
+"Emrine altı astsubay verildi ve hepsi senden kıdemli. İlk toplantıda seni tartıyorlar.",
+"Mesafe koydum","sertlik mesafe","Tecrübelerini kullandım","mentor moral");
+
+E("ut","*","Tugay Komutanı","Brifing hazırlığı","Tugay · Karargâh",
+"Yarınki brifingin hazırlık tablosunda bir veri hatası buldun. Düzeltmek gece boyu çalışmak, bırakmak ise fark edilmeme ihtimaline oynamak.",
+"Öyle bıraktım","savsakla +brifinghata","Gece düzelttim","duzen ozveri");
+
+E("ut","*","Tugay Komutanı","Brifing","Tugay · Konferans Salonu",
+"Tablodaki hata brifingde ortaya çıktı ve komutan hesabı senden değil şube müdüründen sordu. Müdür seni koruyor.",
+"Sustum","yikma ruh-5","Hata bende dedim","sahiplen dogruluk -brifinghata",{req:"brifinghata",pri:3});
+
+E("ut","*","Eşin","Doğum","Askerî Hastane · Doğum Servisi",
+"Çocuğunuz doğuyor ama tugay tatbikatı başladı ve şube subayı olarak yerin karargâh. İzin talebin reddedilebilir.",
+"Tatbikatta kaldım","gorev ail-5","İzin için diretim","aile direnc");
+
+E("ut","*","Ailen","Cenaze","Memleket",
+"Seni büyüten dayın vefat etti. Aynı gün birliğin denetime giriyor ve senin sorumlu olduğun bölüm kontrol edilecek.",
+"Denetimde kaldım","gorev ail-4","Cenazeye gittim","aile sic-3");
+
+E("ut","*","Kd. Bnb. Ergin","Teklif","Tugay · Karargâh",
+"Yükselen bir komutan seni kendi ekibine çekmek istiyor. Güçlü bir isim ama hakkında dolaşan söylentiler de var.",
+"Teşekkür edip reddettim","mesafe","Ekibine katıldım","iliski +hami");
+
+E("ut","*","Askerî Savcılık","İfade","Askerî Mahkeme",
+"Ekibine katıldığın komutan hakkında soruşturma açıldı. Senden onun lehine ifade vermen bekleniyor ve bunu kimse yazılı olarak istemiyor.",
+"Lehine ifade verdim","itaat yolsuz","Bildiğimi anlattım","dogruluk direnc -hami",{req:"hami",pri:3});
+
+/* ================= YÜZBAŞI ================= */
+E("yz","*","Tabur Komutanı Bnb. Aksu","Devir teslim","Piyade Taburu · 1. Bölük",
+"Bölük komutanlığını devraldın. Önceki komutan her kararı kendisi verirmiş; astsubaylar bir şey sormadan hiçbir adım atmıyor.",
+"Aynı düzeni sürdürdüm","sertlik pasif","Yetkiyi dağıttım","mentor insiyatif");
+
+E("yz","*","Bölük Astsubayı","İlk hafta","Piyade Taburu · Bölük",
+"\"Komutanım, önceki komutan on iki kişiye izin sözü verdi ama yazılı bir şey yok. Adamlar bekliyor.\"",
+"Sözü tanımadım","kural sertlik","Sözü tuttum","koruma moral ope-3");
+
+E("yz","*","Bölük Yazıcısı","Firar bildirimi","Piyade Taburu · Bölük",
+"Er izinden dönmedi ve 24 saati doldurmasına altı saat kaldı. Bildirim yaparsan hakkında adli süreç başlar; beklersen sorumluluk sende.",
+"Süresinde bildirdim","kural dogruluk","Altı saat daha bekledim","koruma risk dis-4");
+
+E("yz","*","Firari Erin Babası","Telefon","Piyade Taburu · Bölük",
+"\"Oğlum yolda komutanım, akşama orada olur. Ne olur kayıt düşürmeyin, bu çocuğun hayatı kararır.\"",
+"Kaydı işledim","kural sertlik","Bir gün daha bekledim","koruma risk dis-4");
+
+E("yz","*","Tabur Komutanı","Eğitim faaliyet raporu","Piyade Taburu · Karargâh",
+"Yıllık eğitim planında bölüğün yüzde otuz geride. Rapor kâğıt üzerinde tamamlanmış gösterilirse kimse sahaya inip bakmıyor.",
+"Tamamlandı yazdım","ortbas savsakla","Gerçek oranı yazdım","dogruluk seffaf sic-3");
+
+E("yz","*","Ast Bölük Komutanları","Tugay tatbikatı","Tatbikat Sahası · Kuzey",
+"Tatbikatta bölüğüne en zor kesim verildi ve komşu bölükler destek göndermiyor. Şikâyet edersen tatbikat ortasında tartışma çıkar.",
+"Şikâyet ettim","pasif kar-3","Kendi imkânımla yaptım","tempo insiyatif");
+
+E("yz","*","Tugay Komutanı","Takdir","Tatbikat Sahası · Karargâh",
+"Tatbikat sonrası tek bir kişiye takdir belgesi verilecek. Başarıda en büyük pay, üç gece uyumayan bölük astsubayının.",
+"Kendimi öne sürdüm","menfaat gorunur","Astsubayımı gösterdim","feragat moral");
+
+E("yz","*","Uzman Çavuş Türk","İstifa dilekçesi","Piyade Taburu · Bölük",
+"Bölüğün en tecrübeli uzman çavuşu istifa dilekçesi verdi; özel güvenlikten iki katı maaş teklifi almış.",
+"Dilekçeyi onayladım","pasif ast-4","Oturup uzun uzun konuştum","koruma mentor");
+
+E("yz","*","Personel Şube","Yeni teğmenler","Piyade Taburu · Bölük",
+"Bölüğüne iki teğmen geldi. Biri hazır ve hızlı, diğeri bocalıyor ama iyi niyetli. Zamanını ikiye bölemezsin.",
+"Hazır olanı kullandım","menfaat ope+3","Zayıf olanı yetiştirdim","mentor ope-3");
+
+E("yz","*","Genç Teğmen","Ciddi hata","Piyade Taburu · Atış Alanı",
+"Yetiştirdiğin teğmen atış emniyet mesafesini yanlış hesapladı; kimse yaralanmadı ama tutanak tutuldu. Onay imzası senin.",
+"Onu yazdırdım","yikma","Sorumluluğu üstlendim","sahiplen");
+
+E("yz","*","Askerî Savcı","İfade","Askerî Mahkeme · Sorgu",
+"Birliğinde çıkan bir kavga yargıya taşındı. İfadende personelini koruyabilir ya da gördüğünü olduğu gibi anlatabilirsin.",
+"Personelimi korudum","koruma ortbas","Gördüğümü anlattım","dogruluk ast-4");
+
+E("yz","*","Tabur Komutanı","İzin defteri","Piyade Taburu · Karargâh",
+"Üç yıldır yıllık izin kullanmadın ve defterde 62 gün birikmiş. Komutan kullanmanı istiyor ama tatbikat dönemi başlıyor.",
+"İzne çıktım","dinlenme aile ope-3","Erteledim","ozveri gorev");
+
+E("yz","*","Eşin","Okul kaydı","Lojman · Salon",
+"Çocuğun üç yılda üçüncü kez okul değiştirecek. Eşin \"bir yerde duralım, tayin isteme\" diyor ve haklı olduğunu biliyorsun.",
+"Tayin istemedim","gorev kar+3","Sabit bölge talebi verdim","aile kar-4");
+
+E("yz","*","Kurmaylık Sınavı Duyurusu","Başvuru","Kışla · Personel",
+"Kurmay subay sınavı açıldı. Hazırlık bir yıl sürer, bu süre boyunca bölük performansın kaçınılmaz olarak düşer.",
+"Başvurmadım","pasif ast+4 kar-5","Hazırlanmaya başladım","ogrenme iliski ope-4 +kurmayhazir");
+
+E("yz","*","Sınav Salonu","Kurmaylık sınavı","Harp Akademileri · Sınav",
+"Emin olmadığın bir soruda takıldın ve yanındaki adayın optik formu tamamen açıkta. Salon görevlisi arkada, pencereye bakıyor.",
+"Kendim yaptım","kural dogruluk","Göz attım","ortbas tek+3 +kurmaykopya",{req:"kurmayhazir",pri:2});
+
+E("yz","*","Sınav Komisyonu","Salon kayıtları","Harp Akademileri · Komisyon",
+"Sınavı kazandın. Ama komisyon o salonun kamera kayıtlarını incelemeye aldı ve sonuçlar bir ay askıya alındı.",
+"Sessiz bekledim","ortbas ruh-6","Kendim başvurup anlattım","dogruluk sic-4 -kurmaykopya",{req:"kurmaykopya",pri:3});
+
+E("yz","*","Harp Akademileri","Kabul","Harp Akademileri · Yenilevent",
+"Kurmaylığı kazandın. İki yıl Akademi demek; birlikten, astlarından ve sahadan tamamen kopmak demek.",
+"Vazgeçtim","pasif ast+5 kar-6","Akademiye gittim","ogrenme iliski ast-5 t8 +kurmay",{req:"kurmayhazir"});
+
+E("yz","*","Bölük Personeli","Veda","Piyade Taburu · Bölük Bölgesi",
+"Akademiye gidiyorsun. Bölük tören düzeninde bekliyor ve bir er sıradan seslenerek \"komutanım bizi unutmayın\" diyor.",
+"Resmî veda ettim","kural mesafe","Tek tek elini sıktım","moral ozveri",{req:"kurmay"});
+
+E("yz","*","Denetim Heyeti","Depo sayımı","Piyade Taburu · Bölük Deposu",
+"Sayımda eksik malzeme çıktı ama eksiklerin tamamı senden önceki komutan döneminden. Devir tutanağını da sen imzalamıştın.",
+"Devraldığımı belirttim","yikma dogruluk","Sessizce tamamladım","ortbas duzen ail-5");
+
+E("yz","*","İkmal Subayı","Yakıt kaydı","Piyade Taburu · Motorlu Araç",
+"Araçların yakıt kaydı ile fiili tüketim aylardır tutmuyor. Fark küçük ama düzenli, yani birileri sistematik olarak alıyor.",
+"Görmezden geldim","savsakla ruh-3","Peşine düştüm","duzen dogruluk ast-4");
+
+E("yz","*","Bölük Astsubayı","İtiraf","Piyade Taburu · Bölük",
+"Yakıt farkını çözdün: astsubaylardan biri hasta çocuğunu şehir dışındaki hastaneye götürmek için aracı kullanmış ve söylememiş.",
+"Tutanak tuttum","kural sertlik","İdari uyarıyla kapattım","koruma esnek");
+
+E("yz","k","Tabur Komutanı","Harekât emri","Sınır Bölgesi · Tabur",
+"Bölgede istihbarat var. Gece intikali ile sürpriz sağlanır ama arazi bozuk; gündüz beklemek fırsatı kaçırma riski taşıyor.",
+"Gündüz bekledim","ihtiyat koruma","Gece intikal ettim","risk tempo +geceop");
+
+E("yz","k","Tim Komutanı","Sonuç raporu","Sınır Bölgesi · Karakol",
+"Gece intikalinde bir personelin ayak bileği kırıldı, ancak görev hedefine ulaşıldı. Raporda hangi kısmın öne çıkacağını sen belirliyorsun.",
+"Başarıyı öne çıkardım","gorunur menfaat","Kaza sorumluluğunu yazdım","dogruluk sahiplen",{req:"geceop",pri:2});
+
+E("yz","k","Köy Muhtarı","Sivil ilişkiler","Sınır Bölgesi · Köy",
+"Bölge halkı birliğin araç geçişlerinden ve toz duman içinde kalan mahsulden rahatsız. Muhtar üçüncü kez görüşme talep ediyor.",
+"Görevime baktım","pasif iti-4","Muhtarla oturdum","temsil insiyatif");
+
+E("yz","d","Filo Komutanlığı","Bot komutanlığı","Donanma · Karakol Botu",
+"İlk kez bir teknenin komutanısın. Mürettebat önceki komutanı çok seviyordu ve karşılaştırmayı yüzüne söylemiyorlar ama hissediyorsun.",
+"Kendi düzenimi kurdum","insiyatif sertlik","Önce dinledim","moral mentor");
+
+E("yz","d","Seyir Subayı","Fırtına uyarısı","Ege · Açık Deniz",
+"Meteoroloji altı saat içinde şiddetli fırtına veriyor. Tatbikat takvimi sıkışık ve limanda kalmak filo programını bozar.",
+"Limanda kaldım","ihtiyat ast+3","Denize çıktım","risk tempo");
+
+E("yz","d","Baş Çarkçı","Bakım ertelemesi","Tersane · Havuz",
+"Geminin planlı havuz bakımı altı ay erteleniyor ve erteleme onayına senin imzan isteniyor. Teknik olarak sınırdasınız.",
+"İmzaladım","itaat savsakla","Yazılı itiraz ettim","direnc duzen");
+
+E("yz","h","Filo Komutanı","Uçuş programı","Ana Jet Üssü · Filo",
+"Genç pilotların uçuş saati asgarinin altında. Programı artırmak tek çözüm ama bakım ekibi zaten üç haftadır fazla mesaide.",
+"Programı korudum","pasif tek-3","Uçuş saatini artırdım","tempo +bakimyorgun");
+
+E("yz","h","Bakım Şefi Bçvş. Ergün","Yorgunluk","Ana Jet Üssü · Bakım Hangarı",
+"\"Komutanım ekip bitti. Dün bir teknisyen aynı formu iki kez imzaladı, farkında bile değildi.\"",
+"Programı sürdürdüm","tempo savsakla","Ekibe ara verdirdim","koruma dinlenme ope-4",{req:"bakimyorgun",pri:1});
+
+E("yz","h","Kaza Kırım Kurulu","Yer olayı","Ana Jet Üssü · Apron",
+"Yorgun ekibin gözünden kaçan bir emniyet pimi apronda ciddi hasara yol açtı. Kurul, uçuş programını kimin artırdığını soruyor.",
+"Ekibi öne sürdüm","yikma ortbas","Kararı sahiplendim","sahiplen seffaf",{req:"bakimyorgun",pri:3});
+
+E("yz","*","Yerel Gazeteci","Kışla kapısı","Garnizon · Nizamiye",
+"Kapıda bir gazeteci bölgedeki bir olayla ilgili soru soruyor. Basınla ilişkiler senin yetkinde değil ama kamera çalışıyor.",
+"Yorum yapmadım","kural mesafe","Kısaca açıkladım","gorunur dis-5");
+
+E("yz","*","Stajyer Harbiyeliler","Birlik stajı","Kışla · Bölük",
+"Harbiyeliler bir haftalık staj için bölüğüne geldi. Onlara düzenlenmiş bir vitrin de gösterebilirsin, işin gerçeğini de.",
+"Vitrini gösterdim","kapali gorunur","Gerçeği gösterdim","seffaf mentor");
+
+E("yz","*","Emrindeki Teğmen","Ayrılma kararı","Kışla · Bölük",
+"Teğmenlerinden biri istifa etmek istiyor. \"Bu iş bana göre değil komutanım, sekiz yıl daha dayanamam\" diyor.",
+"Yolunu açtım","pasif ast-3","Uzun uzun konuştum","mentor ozveri");
+
+E("yz","*","Tabur Komutanı","Kadro dengesi","Piyade Taburu · Karargâh",
+"\"Sicil dağılımında birinin düşük alması gerekiyor, kadro böyle istiyor. En kolayı yeni gelen teğmen.\"",
+"Talimatı uyguladım","itaat harcama","Hak ettiğini yazdım","direnc dogruluk");
+
+E("yz","*","Kendi vicdanın","Gece nöbeti","Kışla · Nöbetçi Subay Odası",
+"On bir yıldır aynı ritim: kışla, lojman, kışla. İstifa eden bir devre arkadaşın \"dışarısı sandığın gibi değil, iyi\" diye yazmış.",
+"Aklıma bile getirmedim","gorev dis+3","Ciddi ciddi düşündüm","aile dinlenme sic-3");
+
+E("yz","*","Eski Devre Arkadaşın","İş görüşmesi","İstanbul · Ofis",
+"Devre arkadaşın seni bir savunma şirketiyle görüşmeye çağırıyor; maaş üç katı ve hafta sonları serbest.",
+"Görüşmeye gitmedim","gorev durust","Görüşmeye gittim","menfaat ail+5 dis-4");
+
+E("yz","*","Tugay Komutanı","Zor birlik","Tugay · Personel",
+"Disiplin sorunları yüksek bir bölüğün komutanlığı öneriliyor. Düzeltirsen dosyanda kalıcı not, düzeltemezsen aynı şekilde.",
+"Kabul etmedim","ihtiyat sic-4","Kabul ettim","risk gorev +zorbirlik");
+
+E("yz","*","Zor Birliğin Personeli","İlk gün","Kışla · Bölük Bölgesi",
+"Devraldığın bölükte iki grup var ve birbirleriyle konuşmuyorlar. Yemekhanede oturma düzeni bile ayrılmış.",
+"Sert kurallar koydum","sertlik kural","Ortak görev verdim","insiyatif moral lid+3",{req:"zorbirlik",pri:1});
+
+E("yz","*","Kd. Bçvş. Yalçın","Emeklilik","Kışla · Bölük",
+"Otuz yıllık astsubayın son günü. Tören bütçesi yok, protokolde de yer almıyor; kimse hatırlamadı.",
+"Rutini uyguladım","pasif ast-5","Kendi imkânımla tören yaptım","moral temsil ail-3");
+
+E("yz","*","Tugay Komutanı","Yurtdışı görev","Tugay · Karargâh",
+"Bir yıllık uluslararası görev teklifi var. Dosyanda ağırlığı büyük, ama bir yıl boyunca aileni üç kez göreceksin.",
+"Reddettim","aile kar-4","Kabul ettim","gorev iliski t12 +yurtdisi");
+
+E("yz","*","Uluslararası Karargâh","Toplantı","Yurtdışı · Müttefik Karargâh",
+"Toplantıda Türkiye'nin pozisyonu masaya geldi ve odadaki tek Türk subayısın. Sessiz kalmak da bir cevap sayılacak.",
+"Sessiz kaldım","geriplan iti-4","Pozisyonu savundum","temsil gorunur",{req:"yurtdisi",pri:1});
+
+E("yz","*","Tabur Komutanı","Mektup","Piyade Taburu · Karargâh",
+"Bir er ailesine \"burada baskı var\" diye mektup yazmış ve mektup dışarı çıktı. Tabur, eri cezalandırmanı bekliyor.",
+"Eri cezalandırdım","sertlik ortbas","Baskı iddiasını araştırdım","insiyatif dogruluk");
+
+E("yz","*","Bölük Personeli","Kar tipisi","Doğu Anadolu · Garnizon",
+"Yol iki gündür kapalı, kalorifer arızalı ve ikmal gelmiyor. Merkez \"bekleyin\" diyor, personel üşüyor.",
+"Merkezi bekledim","pasif ast-5","İnisiyatif alıp çözdüm","insiyatif duzen ozveri");
+
+E("yz","*","Tabur Komutanı","Terfi öncesi","Piyade Taburu · Karargâh",
+"\"Binbaşılık kapıda. Bundan sonrası artık sadece iş değil; kimin seni tanıdığı da hesaba giriyor. Anlıyor musun?\"",
+"Ben işime bakarım dedim","mesafe dogruluk","Not aldım","iliski");
+
+/* ================= BİNBAŞI ================= */
+E("bb","*","Tugay Komutanı","Şube müdürlüğü","Tugay · Harekât Şubesi",
+"Harekât şube müdürlüğünü devraldın. Masanda üç taburun eğitim, ikmal ve hazırlık dosyaları var; hiçbiri güncel değil.",
+"Devraldığım gibi sürdürdüm","pasif savsakla","Şubeyi baştan kurdum","duzen tempo insiyatif");
+
+E("bb","*","İkmal Müdürü","Bütçe kesintisi","Tugay · Lojistik",
+"Yıllık ödenekte yüzde on sekiz kesinti var. Ya eğitim faaliyetleri kısılacak ya da araç bakım periyotları uzatılacak.",
+"Eğitimi kıstım","tasarruf ope-4","Bakımı erteledim","israf +bakimborcu");
+
+E("bb","*","Bakım Merkezi Müdürü","Sonuç","Tugay · Bakım Merkezi",
+"Ertelenen bakımlar birikti; üç araç tamamen kullanılamaz durumda ve yedek parça tedariki dört ay sürüyor.",
+"Hurdaya ayırttım","tasarruf ope-4","Bütçe dışı onarım yaptırdım","israf yolsuz ope+4",{req:"bakimborcu",pri:2});
+
+E("bb","*","İhale Komisyonu","Teknik şartname","Tugay · Satın Alma",
+"En düşük teklif teknik şartnameyi zar zor karşılıyor ve firma bölgede güçlü. Şartnameyi savunmak süreci üç ay uzatır.",
+"Ucuz teklifi seçtim","tasarruf itaat","Şartnameyi korudum","durust direnc");
+
+E("bb","*","Firma Temsilcisi","Görüşme","Şehir · Otel Lobisi",
+"\"Kararı gözden geçirirseniz, emeklilik sonrası için çok iyi bir danışmanlık pozisyonumuz var. Bunu şimdi konuşmamıza gerek yok.\"",
+"Odayı terk ettim","durust mesafe","Dinledim","yolsuz +teklif");
+
+E("bb","*","Askerî Savcılık","Soruşturma","Askerî Mahkeme",
+"İhale sürecinde usulsüzlük iddiası var ve senin adın tanık listesinde geçiyor. Belgeler hâlâ senin kasanda.",
+"Belge yok dedim","ortbas dis-8","Belgeleri sundum","dogruluk seffaf -teklif",{req:"teklif",pri:3});
+
+E("bb","*","Tugay Komutanı","Sel felaketi","Bölge · Kriz Masası",
+"İlçede sel var, valilik askerî imkân talep ediyor. Aynı hafta tugay tatbikatı başlıyor ve tatbikat üst karargâh takviminde.",
+"Tatbikata devam ettim","gorev iti-6","Yardıma yönlendirdim","temsil insiyatif ope-4");
+
+E("bb","*","Valilik","Plaket töreni","İl · Valilik",
+"Sel yardımı sonrası valilik plaket vermek istiyor ve tören basına açık. Kurum içinde \"öne çıkma\" olarak okunabilir.",
+"Katılmadım","geriplan","Katıldım","temsil gorunur");
+
+E("bb","*","Eşin","Dokuzuncu tayin","Lojman · Salon",
+"On beş yılda dokuzuncu tayin. Eşin bu kez tartışmıyor, sadece \"kararı sen ver, ben ne dersem diyeyim değişmiyor\" diyor.",
+"Kariyeri seçtim","gorev iliski","Aileyi seçtim","aile kar-4");
+
+E("bb","*","Çocuğun Öğretmeni","Veli görüşmesi","İl · Okul",
+"Çocuğun okulda ciddi bir sorun yaşıyor ve öğretmen görüşmek istiyor. Aynı saatte kolordu komutanına brifing veriyorsun.",
+"Brifinge girdim","gorev ail-4","Okula gittim","aile sic-4");
+
+E("bb","*","Emrindeki Yüzbaşı","Sicil","Tugay · Şube",
+"Yüzbaşılarından biri fazlasıyla yetenekli ve toplantılarda seni gölgede bırakıyor. Sicil notunu sen veriyorsun.",
+"Sicilini törpüledim","harcama menfaat","Hak ettiğini yazdım","dogruluk mentor");
+
+E("bb","*","Personel Şube Müdürü","Rica","Tugay · Personel",
+"Üst makamdan bir yakının tayini için ricada bulunuluyor. Yetki sende ve kimse yazılı bir şey istemiyor.",
+"Reddettim","durust mesafe","Hallettim","iliski yolsuz");
+
+E("bb","*","Harekât Şubesi","Plan müdahalesi","Tugay · Harekât",
+"Sınır bölgesi için hazırladığın plana üst karargâh müdahale etti; müdahale sonrası plan teknik olarak zayıfladı.",
+"Sessizce uyguladım","itaat pasif","Yazılı şerh düştüm","direnc dogruluk");
+
+E("bb","*","Ast Birlik Komutanı","Kayıp","Sınır Bölgesi · Karakol",
+"Zayıflatılan planla yürütülen görevde iki personel yaralandı. Şerhini hatırlatmak üst karargâhı zora sokar.",
+"Sustum","pasif ruh-6","Şerhimi hatırlattım","direnc dogruluk");
+
+E("bb","*","Askerî Hastane","Yıllık kontrol","Askerî Hastane · Kardiyoloji",
+"Tansiyon ve stres bulguların sınırın üstünde. Doktor iş yükünü azaltmanı öneriyor ve bunu rapora yazmak istiyor.",
+"Rapora yazdırmadım","sakla","Tedbir aldım","destek dinlenme");
+
+E("bb","*","Tugay Komutanı","NATO kursu","Tugay · Karargâh",
+"Müttefik bir karargâhta bir yıllık kurs açıldı. Rekabet yüksek, aday gösterilmek için birkaç kapı çalman gerek.",
+"Aday olmadım","pasif kar-4","Aday oldum","ogrenme iliski ail-4 t12 +natokurs");
+
+E("bb","*","Müttefik Subay","Kokteyl","Yurtdışı · Karargâh",
+"Kursta bir müttefik subay hassas bir konuda görüş soruyor. Ortam gayriresmî, kayıt yok ve o da samimi davranıyor.",
+"Genel geçer konuştum","mesafe kural","Açık konuştum","kapali iti-4 +ifsa",{req:"natokurs",pri:1});
+
+E("bb","*","İstihbarat Şubesi","Görüşme","Ankara · Şube",
+"Yurtdışındaki konuşman rapor edilmiş ve şube senden açıklama istiyor. Konuşmanın tam metni ellerinde değil.",
+"Hatırlamıyorum dedim","ortbas dis-6","Ne dediğimi anlattım","dogruluk sic-3 -ifsa",{req:"ifsa",pri:3});
+
+E("bb","*","Lojistik Merkezi","Depo yangını","Garnizon · İkmal Deposu",
+"Depoda yangın çıktı. Yanan malzemenin bir kısmı zaten envanterde eksikti; yangın raporu bu eksiği kapatabilir.",
+"Yangına yazdım","ortbas tasarruf","Envanteri açıp yazdım","dogruluk seffaf loj-4");
+
+E("bb","*","Tugay Denetim","İç teftiş","Tugay · Denetim",
+"İç teftişte şubende eksikler çıktı. Astların çoğu bu eksiklerin senden önce de var olduğunu biliyor ama söylemiyor.",
+"Alt kadroyu gösterdim","yikma","Üstlendim","sahiplen");
+
+E("bb","k","Tugay Komutanlığı","Tabur komutanlığı","Tugay · Personel",
+"Tabur komutanlığı teklif edildi. Sahaya dönmek demek, karargâhta iki yılda kurduğun ilişkileri kaybetmek demek.",
+"Karargâhta kaldım","iliski ope-4","Tabura gittim","gorev insiyatif kar-5");
+
+E("bb","k","Tabur Personeli","Sahaya dönüş","Tabur · Eğitim Alanı",
+"Yıllar sonra araziye çıktın. Kondisyonun eski değil ve personel bunu ilk sabah yürüyüşünde gördü.",
+"Ofiste kaldım","pasif ast-4","Onlarla birlikte koştum","ozveri moral fiz+3");
+
+E("bb","d","Donanma Komutanlığı","Fırkateyn komutanlığı","Donanma · TCG",
+"Bir fırkateynin komutasını devraldın; 220 kişilik mürettebat, yirmi beş yaşında bir tekne ve dolu bir görev takvimi.",
+"Temkinli yönettim","ihtiyat pasif","Yüksek tempo kurdum","tempo insiyatif");
+
+E("bb","d","Seyir Subayı","Karşılaşma","Uluslararası Sular",
+"Yabancı bir savaş gemisi güvenli seyir mesafesini ihlal ediyor. Rota değiştirmek geri adım, korumak tırmandırma riski.",
+"Rota değiştirdim","ihtiyat temsil","Rotamı korudum","risk direnc");
+
+E("bb","d","Filo Komutanlığı","Karşılaşma raporu","Donanma · Filo",
+"Karşılaşma raporunu yazıyorsun. Gerginliği yumuşatarak yazmak diplomatik olarak rahatlatır ama kayıt gerçeği yansıtmaz.",
+"Yumuşattım","kapali itaat","Aynen yazdım","dogruluk seffaf");
+
+E("bb","h","Hava Kuvvetleri","Filo komutanlığı","Ana Jet Üssü · Filo",
+"Bir filonun komutanısın ve uçuş emniyeti istatistiğin bölge ortalamasının altında. İki seçenek: az uç, ya da çok eğit.",
+"Uçuşu azalttım","ihtiyat ope-4","Eğitimi yoğunlaştırdım","tempo ogrenme");
+
+E("bb","h","Genç Pilot","İtiraf","Ana Jet Üssü · Filo Odası",
+"Genç bir pilot uçuştan korktuğunu sana itiraf ediyor. Kimse bilmiyor ve raporlarsan uçuş kariyeri fiilen biter.",
+"Uçuştan aldım","kural sertlik","Kademeli program hazırladım","koruma mentor destek");
+
+E("bb","*","Basın Sözcülüğü","Olumsuz haber","Ankara · Basın İrtibat",
+"Bir gazete birliğinle ilgili olumsuz bir dosya hazırlıyor. Yanıt vermek senin yetkinde değil ama muhabir seni arıyor.",
+"Sustum, hiçbir şey yapmadım","pasif iti-4","Amirime yazılı olarak taşıdım","kural dogruluk");
+
+E("bb","*","Emekli Komutanın","Vakıf daveti","Ankara · Vakıf",
+"Eski komutanın kurduğu bir vakfa katılmanı istiyor. Faaliyetleri meşru ama kurum içinde bu tür oluşumlara mesafe var.",
+"Katılmadım","mesafe durust","Katıldım","iliski iti-4");
+
+E("bb","*","Astsubay Heyeti","Özlük talepleri","Garnizon · Astsubay Gazinosu",
+"Astsubaylar lojman ve nöbet yükü konusunda hazırladıkları raporu sana getiriyor. Çözüm senin yetkinde değil, iletmek ise yetkinde.",
+"Yetkim yok dedim","pasif ast-5","Üst makama resmen taşıdım","koruma insiyatif kar-3");
+
+E("bb","*","Kendi vicdanın","Ayna","Lojman · Banyo",
+"Aynada kendine baktın. On sekiz yıl geçmiş ve bu mesleği neden seçtiğini hatırlamak için birkaç saniye düşünmen gerekti.",
+"Düşünmeyi bıraktım","sakla","Bir gün izin aldım","dinlenme aile sic-3");
+
+E("bb","*","Tugay Komutanı","Terfi listesi","Tugay · Karargâh",
+"Yarbaylık listesi hazırlanıyor. \"Ankara'da bir iki kapıyı çalman tavsiye edilir\" deniyor, ama kimse bunu emir olarak vermiyor.",
+"Kimseyle görüşmedim","mesafe durust","Görüşmelere gittim","iliski dis-3");
+
+E("bb","*","Şehit Ailesi","Cenaze günü","Garnizon · Şehitlik",
+"Cenaze töreninde ailenin yanında olacak bir subay lazım. Aynı saatte protokol sıralaması var ve komutanlar orada.",
+"Protokolde durdum","gorunur ast-5","Ailenin yanında kaldım","moral temsil kar-3");
+
+E("bb","*","Şehit Ailesi","Aylar sonra","İl · Adliye",
+"Şehit ailesi bir bürokratik sorunla seni arıyor. Görev tanımında değil, kimse senden beklemiyor ve zaman alacak.",
+"Yönlendirdim","pasif iti-3","Bizzat takip ettim","temsil ozveri");
+
+/* ================= YARBAY ================= */
+E("yb","*","Kuvvet Karargâhı","Ankara'ya atama","Ankara · Kuvvet Komutanlığı",
+"Ankara'ya atandın. Burada başarı ölçüsü artık ne yaptığın değil, kimin masasında ne kadar durduğun.",
+"Oyuna girmedim","mesafe direnc","Oyunu öğrendim","iliski dis-3");
+
+E("yb","*","Daire Başkanı","İlk dosya","Ankara · Daire Başkanlığı",
+"Sana verilen ilk dosya, önceki ekibin usulsüz harcamalarını gizliyor. Açarsan çok kişi yanar ve bazıları hâlâ görevde.",
+"Dosyayı kapattım","ortbas kapali","Dosyayı açtım","dogruluk direnc +dosyaacti");
+
+E("yb","*","Daire Başkanı","Karşılık","Ankara · Daire Başkanlığı",
+"Açtığın dosyadan sonra toplantı davetleri gelmez oldu ve dosyaların ikinci elden dönüyor. Kimse açıkça bir şey söylemiyor.",
+"Geri adım attım","itaat iliski -dosyaacti","Duruşumu korudum","direnc geriplan",{req:"dosyaacti",pri:2});
+
+E("yb","*","Genelkurmay Şubesi","Sunum","Ankara · Genelkurmay",
+"Üst düzey bir toplantıda sunum yapacaksın. Verilerin bir bölümü üst makamın kamuoyuna verdiği rakamla çelişiyor.",
+"Çelişen kısmı çıkardım","kapali itaat","Tamamını sundum","dogruluk direnc");
+
+E("yb","*","Mesai Arkadaşın Yb. Cem","Rekabet","Ankara · Koridor",
+"Aynı kadro için yarıştığın arkadaşın hakkında dedikodu yayıyor ve bu kulağına üç ayrı kişiden geldi.",
+"Aynısını yaptım","menfaat yolsuz","Yüzüne söyledim","dogruluk direnc");
+
+E("yb","*","Personel Başkanlığı","İki kadro","Ankara · Personel Başkanlığı",
+"İki seçenek: kritik ama tamamen görünmez bir proje, ya da hiçbir işe yaramayan ama vitrinde duran bir görev.",
+"Vitrini seçtim","gorunur iliski tek-4","Projeyi seçtim","ogrenme geriplan");
+
+E("yb","*","Proje Ekibi","Takvim","Ankara · Proje Ofisi",
+"Yürüttüğün proje takvimin altı hafta gerisinde. Ekibi hafta sonları çalıştırabilirsin ya da takvim revizyonu isteyebilirsin.",
+"Ekibi hafta sonu çalıştırdım","tempo ozveri","Revizyon talep ettim","dinlenme sic-4");
+
+E("yb","*","Savunma Sanayii Yetkilisi","Kabul testi","Test Merkezi",
+"Yerli bir sistemin kabul testinde performans şartnamenin altında kaldı. Raporu sen yazacaksın ve proje ulusal öneme sahip.",
+"Olumlu yazdım","ortbas itaat","Eksikleri yazdım","dogruluk direnc");
+
+E("yb","*","Üst Komutan","İma","Ankara · Makam Odası",
+"\"Bu raporu bir kez daha değerlendirmeni istiyorum Yarbay.\" Emir değil, rica da değil; arada bir şey.",
+"Yeniden yazdım","itaat ortbas","Değiştirmedim","direnc dogruluk");
+
+E("yb","*","Kuvvet Komutanlığı","Doktrin ekibi","Ankara · Doktrin Şubesi",
+"Kuvvetin yeni harekât doktrinini yazacak ekipte yer alman isteniyor. Prestijli ama yazdığın her paragrafın sahibi olacaksın.",
+"Reddettim","pasif tek-4","Kabul ettim","ogrenme gorunur +doktrin");
+
+E("yb","*","Doktrin Ekibi","Tartışma","Ankara · Doktrin Şubesi",
+"Yazdığın bölüm eski ekolü savunanları rahatsız etti ve metinden çıkarılması isteniyor. Teknik olarak haklı olduğunu biliyorsun.",
+"Geri çektim","itaat tek-4","Savundum","direnc ogrenme",{req:"doktrin",pri:1});
+
+E("yb","*","Harp Akademileri","Ders teklifi","İstanbul · Akademi",
+"Akademide ders vermen teklif ediliyor. Prestijli ama haftada iki gün ana görevinden çalacak.",
+"Reddettim","pasif iti-3","Kabul ettim","mentor temsil ozveri");
+
+E("yb","*","Öğrenci Subay","Ders","İstanbul · Akademi Dershanesi",
+"Derste bir öğrenci subay kurumun geçmişte aldığı hatalı bir kararı açıkça eleştiriyor. Sınıf sessizleşti ve sana bakıyor.",
+"Konuyu kapattım","kapali sertlik","Tartışmayı açtım","seffaf mentor");
+
+E("yb","*","Eşin","Ankara düzeni","Ankara · Ev",
+"Ankara'da nihayet bir düzen kuruldu ama sen evde neredeyse hiç yoksun. Eşin bunu artık şikâyet olarak bile dile getirmiyor.",
+"Tempoyu sürdürdüm","gorev ail-5","Akşamlarımı ayırdım","aile kar-3");
+
+E("yb","*","Kardiyolog","Bulgu","Askerî Hastane · Kardiyoloji",
+"Kalp ritminde düzensizlik saptandı. Askerî hastaneye başvurursan kayıt terfi dosyana geçer, sivil hastane bunu yapmaz.",
+"Sivil hastaneye gittim","sakla kapali","Askerî hastaneye başvurdum","dogruluk destek +saglikkaydi");
+
+E("yb","*","Sağlık Kurulu","Ek muayene","Askerî Hastane · Sağlık Kurulu",
+"Sağlık kaydın terfi dosyanda görünüyor ve kurul ek muayene istiyor. Ertelemek dosyayı bir sonraki döneme atar.",
+"Erteledim","sakla fiz-4","Muayeneye girdim","destek dogruluk",{req:"saglikkaydi",pri:2});
+
+E("yb","*","Genç Binbaşı","Yol sorma","Ankara · Kantin",
+"Yeni gelen bir binbaşı senden akıl istiyor. İleride aynı kadro için rakibin olabilecek biri ve bunu ikiniz de biliyorsunuz.",
+"Mesafeli davrandım","mesafe menfaat","Açık konuştum","mentor moral");
+
+E("yb","*","İsimsiz Mektup","İhbar","Ankara · Daire",
+"Masana isimsiz bir yolsuzluk ihbarı geldi. İçindeki isim, kariyerinin kritik bir anında sana yardım etmiş biri.",
+"Yırttım","ortbas yolsuz","İşleme koydum","dogruluk direnc ast-4");
+
+E("yb","*","Basın Danışmanlığı","Kriz","Ankara · Basın Müşavirliği",
+"Kurumla ilgili bir görüntü yayıldı ve ilk altı saat kritik. Sessiz kalma ve şeffaf açıklama seçenekleri masada.",
+"Sessiz kalınmasını önerdim","kapali iti-4","Şeffaf açıklama önerdim","seffaf temsil");
+
+E("yb","*","Kuvvet Komutanı","Sahaya çağrı","Ankara · Makam",
+"Kritik bir bölgeye alay komutanı olarak gitmen isteniyor. Kabul edersen Ankara'da üç yılda kurduğun her şey dağılır.",
+"Reddettim","iliski ope-4","Kabul ettim","gorev insiyatif kar-6");
+
+E("yb","*","Emekli Komutanın","Telefon","Ankara · Ev",
+"Emekli olan eski komutanın bir tayin için aracı olmanı istiyor. Sana çok emeği geçti ve bunu hatırlatmadan söylüyor.",
+"Yapamayacağımı söyledim","durust mesafe ast-3","Aracı oldum","iliski yolsuz");
+
+E("yb","*","Denetim Kurulu","Teftiş","Taşra · Garnizon",
+"Denetlediğin birlikte ciddi eksikler var. Birlik komutanı eski bir dostun ve emekliliğine iki yıl kaldı.",
+"Görmezden geldim","ortbas koruma","Raporu yazdım","dogruluk kural ast-5");
+
+E("yb","*","Kendi vicdanın","Gece","Ankara · Çalışma Odası",
+"Yirmi beş yıl. Kazandıklarınla kaybettiklerini ilk kez aynı kâğıda alt alta yazdın ve sağ sütun daha uzun çıktı.",
+"Kâğıdı yırttım","sakla","Uzun uzun baktım","destek aile kar-3");
+
+E("yb","*","Yüksek Askerî Şûra","Albaylık listesi","Ankara · Şûra Sekretaryası",
+"Dosyanda hem güçlü hem tartışmalı notlar var. Bazı kapıları çalmak dengeyi çevirebilir, çalmamak da bir duruş.",
+"Kimseyle görüşmedim","mesafe durust","Destek aradım","iliski dis-3");
+
+/* ================= ALBAY ================= */
+E("al","k","Tugay Komutanı","Alay komutanlığı","Garnizon · Alay",
+"Bir alayın komutanısın: üç bin kişi, bir garnizon, bir lojman sitesi ve bulunduğun ilçenin en büyük işvereni.",
+"Selefimin düzenini korudum","pasif ihtiyat","Baştan ele aldım","insiyatif tempo");
+
+E("al","d","Donanma Komutanlığı","Filo komutanlığı","Donanma · Filo",
+"Bir filonun komutanısın. Gemiler yaşlı, mürettebat yorgun ve görev takvimi hiçbir bakım penceresi bırakmıyor.",
+"Takvime uydum","itaat israf","Takvimi değiştirmek için savaştım","direnc duzen");
+
+E("al","h","Hava Kuvvetleri","Üs komutanlığı","Ana Jet Üssü · Komutanlık",
+"Bir ana jet üssünün komutanısın. Pist onarımı sekiz yıldır erteleniyor ve her yıl aynı gerekçeyle bütçeden çıkarılıyor.",
+"Mevcutla idare ettim","pasif savsakla","Ödenek için mücadele ettim","direnc duzen ruh-4");
+
+E("al","*","Valilik Protokol Müdürü","Protokol krizi","İl · Valilik",
+"Bir törende protokol sıralaması yüzünden valilikle gerginlik çıktı ve konu yerel basına düştü.",
+"Geri çekildim","geriplan iti-4","Diyalog kurdum","temsil insiyatif");
+
+E("al","*","Kolordu Komutanı","Büyük tatbikat","Tatbikat Sahası",
+"Kolordu tatbikatında ana rolü birliğin oynuyor ama hazırlık için verilen süre gerçekçi değil.",
+"Erteleme talep ettim","ihtiyat kar-4","Süreyi kabul edip zorladım","tempo ozveri");
+
+E("al","*","Ast Tabur Komutanı","Değerlendirme","Garnizon · Alay Karargâhı",
+"Tatbikatta bir tabur belirgin şekilde zayıf kaldı. Komutanının emekliliğine bir yıl var ve sert rapor kariyerini bitirir.",
+"Raporu sertleştirdim","dogruluk sertlik","Gelişim planı yazdım","mentor koruma");
+
+E("al","*","Askerî Savcı","Ağır olay","Garnizon · Kışla",
+"Garnizonda bir intihar girişimi yaşandı. Aile hukuki süreç başlatmak istiyor ve kurum sessiz kalmanı bekliyor.",
+"Süreci kapatmaya çalıştım","ortbas kapali","Şeffaf soruşturma açtım","seffaf dogruluk kar-4");
+
+E("al","*","Personel Şubesi","Destek programı","Garnizon · Alay",
+"Olay sonrası personel için psikolojik destek programı öneriyorsun. Bütçe yok ve üst makam konuyu büyütmek istemiyor.",
+"Vazgeçtim","pasif ast-5","Kendi imkânımla kurdum","insiyatif koruma loj-4");
+
+E("al","*","Televizyon Ekibi","Çekim talebi","Garnizon · Nizamiye",
+"Bir kanal garnizonda çekim yapmak istiyor. İzin senin yetkinde ve iyi geçerse kurum kazanır, kötü giderse hesabı sen verirsin.",
+"İzin vermedim","kapali geriplan","Kontrollü izin verdim","gorunur temsil +kamera");
+
+E("al","*","Basın Müşavirliği","Yayın sonrası","Ankara · Basın",
+"Yayında bağlamından koparılmış bir görüntü kullanıldı ve kurum rahatsız. Suçu kanala yıkmak kolay.",
+"Kanalı suçladım","yikma iti-4","Sorumluluğu üstlendim","sahiplen seffaf");
+
+E("al","*","Kuvvet Komutanlığı","Araç tedariki","Ankara · Tedarik",
+"Alayın için araç tedarikinde iki seçenek var. Uygun olan pahalı, ucuz olan üç yıl sonra sorun çıkaracak.",
+"Ucuz olanı aldım","tasarruf itaat","Uygun olanı savundum","direnc duzen");
+
+E("al","*","Yüklenici Firma","İma","İl · Restoran",
+"Firma temsilcisi eşinin iş başvurusundan söz ediyor. \"Tanıdıklarımız var, bir kolaylık gösterebiliriz komutanım.\"",
+"Görüşmeyi bitirdim","durust mesafe","İlgilendim","yolsuz ail+5");
+
+E("al","*","Eşin","Emeklilik planı","Lojman · Salon",
+"Çocuklar üniversiteye gitti, ev sessiz. Eşin \"emeklilikten sonra nerede yaşayacağız?\" diye soruyor ve cevabın yok.",
+"Düşünmedim dedim","gorev ail-4","Birlikte plan yaptık","aile destek");
+
+E("al","*","Askerî Hastane","Ameliyat","Askerî Hastane · Ortopedi",
+"Yıllardır ihmal ettiğin sorun ameliyat gerektiriyor. Üç ay iş göremezsin ve o üç ay terfi değerlendirme dönemi.",
+"Erteledim","sakla ope+3","Ameliyat oldum","destek dinlenme t6");
+
+E("al","*","Kolordu Komutanı","Sicil talimatı","Kolordu · Makam",
+"Astlarından biri hakkında olumsuz sicil düzenlemen isteniyor. Gerekçe mesleki değil ve bunu ikiniz de biliyorsunuz.",
+"Talimatı uyguladım","itaat harcama","Reddettim","direnc dogruluk");
+
+E("al","*","Emrindeki Yarbay","İstifa","Garnizon · Alay",
+"Yetiştirdiğin yarbay istifa edip özel sektöre geçiyor. Bu yıl kurumdan ayrılan altıncı kurmay subay.",
+"Yolunu açtım","pasif ast-3","İkna etmeye çalıştım","mentor ozveri");
+
+E("al","*","Genelkurmay","Askerî ataşelik","Ankara · Genelkurmay",
+"Bir müttefik ülkede askerî ataşelik teklifi. Prestijli ve nüfuz kazandırır, ama sahadan tamamen kopmak demek.",
+"Reddettim","gorev kar-5","Kabul ettim","temsil iliski ope-5 t12 +atase");
+
+E("al","*","Büyükelçilik","Kriz","Yurtdışı · Büyükelçilik",
+"Bulunduğun ülkeyle gerginlik çıktı ve yerel basın açıklama istiyor. Merkeze havale etmek güvenli ama yavaş.",
+"Merkeze havale ettim","pasif kural","Kendim yönettim","temsil insiyatif risk",{req:"atase",pri:1});
+
+E("al","*","Şûra Sekretaryası","Eski dosya","Ankara · Şûra",
+"Generallik dosyaları toplanırken yıllar önce kapanmış bir tutanak yeniden gündeme geldi. Açıklama hakkın var.",
+"Görmezden geldim","pasif ruh-4","Açıklama dilekçesi verdim","dogruluk seffaf");
+
+E("al","*","Alay Personeli","Veda töreni","Garnizon · Tören Alanı",
+"Alay komutanlığın bitiyor. Personel senin için tören istiyor ama protokolde böyle bir tören yok.",
+"Sade bir veda yaptım","kural mesafe","Onlarla vedalaştım","moral temsil");
+
+E("al","*","Genç Teğmen","Soru","Garnizon · Alay Karargâhı",
+"Bir teğmen doğrudan soruyor: \"Komutanım, bu mesleği baştan seçme şansınız olsa yine seçer miydiniz?\"",
+"Kesinlikle dedim","kural temsil","Dürüst konuştum","seffaf mentor");
+
+E("al","*","Yüksek Askerî Şûra","Karar günü","Ankara · Şûra",
+"Generallik listesinde adın var ama kritik bir imza hâlâ eksik. Dosyanı savunmak için görüşme talep edebilirsin.",
+"Bekledim","pasif mesafe","Dosyamı savundum","gorunur iliski");
+
+/* ================= TUĞGENERAL / TUĞAMİRAL ================= */
+E("g1","*","Kuvvet Komutanı","İlk gün","Ankara · Karargâh",
+"Omuzuna yıldız takıldı. Odandaki telefon artık farklı yerlerden çalıyor ve söylediğin her cümle bir yere not ediliyor.",
+"Sessiz durdum","geriplan mesafe","Ağımı kurdum","iliski gorunur");
+
+E("g1","*","Kolordu Karargâhı","Tugay komutanlığı","Bölge · Tugay",
+"Bir tugayın komutanısın ve bölgede güvenlik durumu hassas. Her gece harekât merkezinde bir masa seni bekliyor.",
+"Temkinli yönettim","ihtiyat pasif","Yüksek tempoyla yönettim","tempo insiyatif");
+
+E("g1","*","Harekât Merkezi","Karar anı","Bölge · Harekât Merkezi",
+"Sınırda hareketlilik var. Karşılık vermek tırmandırabilir, vermemek caydırıcılığın sorgulanmasına yol açar.",
+"Bekledim","ihtiyat pasif","Karşılık verdim","risk insiyatif +tirmanma");
+
+E("g1","*","Genelkurmay","Açıklama talebi","Ankara · Genelkurmay",
+"Verdiğin karşılık siyasi düzeyde tartışma yarattı ve senden yazılı açıklama isteniyor. Emri uyguladığını söylemek mümkün.",
+"Emri uyguladım dedim","yikma pasif","Kararı sahiplendim","sahiplen direnc",{req:"tirmanma",pri:2});
+
+E("g1","*","Denetim Başkanlığı","Devreden açık","Tugay · Mali Şube",
+"Tugay bütçesinde geçmiş yıllardan devreden bir açık var. Kapatmanın gri ama işleyen bir yolu var ve herkes biliyor.",
+"Gri yolu seçtim","yolsuz tasarruf","Açığı rapor ettim","dogruluk seffaf loj-4");
+
+E("g1","*","Savunma Sanayii","Kabul testi","Test Merkezi",
+"Yerli bir sistem üçüncü kez kabul testinden geçemedi. Proje siyasi olarak önemli ve kabul için baskı yoğun.",
+"Kabul ettim","itaat ortbas","Reddettim","direnc dogruluk");
+
+E("g1","*","Personel Başkanlığı","Ekip kurma","Tugay · Karargâh",
+"Kendi ekibini kuruyorsun. Listedeki en yetenekli albay, geçmişte senin bir kararına açıkça karşı çıkmış biri.",
+"Ekibime almadım","menfaat mesafe","Ekibime aldım","mentor dogruluk");
+
+E("g1","*","Basın Müşavirliği","Kamuoyu","Ankara · Basın",
+"Kurumla ilgili bir tartışmada senden kamuoyu önünde konuşman bekleniyor. Konuşmamak da bir mesaj olarak okunacak.",
+"Konuşmadım","geriplan kapali","Ölçülü konuştum","temsil gorunur");
+
+E("g1","*","Eşin","Protokol hayatı","Ankara · Ev",
+"General eşi olmak yeni bir hayat: davetler, açılışlar, sürekli görünürlük. Eşin bunu istemediğini söylüyor.",
+"Aileyi geri planda tuttum","gorev ail-5","Dengeyi korudum","aile temsil kar-3");
+
+E("g1","*","Ast Komutan","Kayıp","Bölge · Harekât",
+"Sorumluluk sahandaki bir olayda personel kaybı yaşandı. Sorumluluk zinciri belirsiz ve alt kademeyi işaret etmek mümkün.",
+"Alt kademeyi gösterdim","yikma ortbas","Sorumluluğu üstlendim","sahiplen seffaf");
+
+E("g1","*","Şehit Aileleri","Ziyaret","Bölge · İlçeler",
+"Kayıp verilen ailelerin evlerine gitmek protokolde yok, kimse senden beklemiyor ve dört ayrı ilçeye dağılmışlar.",
+"Gitmedim","pasif ast-5","Tek tek gittim","temsil moral ozveri");
+
+E("g1","*","Kendi vicdanın","Gece yarısı","Bölge · Lojman",
+"Artık verdiğin her emir birilerinin hayatını doğrudan değiştiriyor. Uyku düzenin altı aydır bozuk ve kimseye söylemedin.",
+"Kimseye söylemedim","sakla","Destek aldım","destek sic-3");
+
+/* ================= TÜMGENERAL / TÜMAMİRAL ================= */
+E("g2","*","Genelkurmay","Tümen komutanlığı","Bölge · Tümen",
+"Bir tümenin komutanısın. Karar alanın o kadar genişledi ki artık her şeyi kendin görmen fiilen imkânsız.",
+"Merkeziyetçi yönettim","sertlik pasif","Yetki devrettim","mentor insiyatif");
+
+E("g2","*","Milli Savunma Bakanlığı","Politika toplantısı","Ankara · MSB",
+"Savunma politikasına ilişkin toplantıda kurumun teknik görüşünü sen savunacaksın. Görüş masadaki beklentiyle çelişiyor.",
+"Genel geçer konuştum","kapali itaat","Net pozisyon aldım","dogruluk direnc");
+
+E("g2","*","Kuvvet Komutanı","Yeniden yapılanma","Ankara · Karargâh",
+"Kuvvette köklü bir yapı değişikliği tartışılıyor ve sen teknik gerekçelerle karşısındasın. Yazılı görüş vermek kalıcı bir kayıt.",
+"Sessiz kaldım","pasif kapali","Yazılı görüş verdim","direnc dogruluk");
+
+E("g2","*","Tedarik Komitesi","Büyük ihale","Ankara · SSB",
+"Milyar dolarlık bir tedarik kararında oy kullanacaksın. Çoğunluk bir yönde ve tek başına ayrışmak görünür bir tercih.",
+"Çoğunlukla oy verdim","itaat pasif","Bağımsız oy kullandım","direnc durust");
+
+E("g2","*","Askerî Yargı","Suistimal dosyası","Ankara · Askerî Savcılık",
+"Emrindeki bir general hakkında suistimal iddiası var. Dosyayı açma yetkisi sende ve açarsan kurum sarsılır.",
+"Kapattım","ortbas kapali","Açtım","dogruluk seffaf kar-5");
+
+E("g2","*","NATO Karargâhı","Azınlık pozisyonu","Brüksel · Karargâh",
+"Müttefik karargâhta Türkiye'nin pozisyonu azınlıkta kaldı. Israr etmek uzun vadeli ilişkilere maliyetli olabilir.",
+"Uzlaştım","itaat iti-4","Pozisyonu korudum","temsil direnc");
+
+E("g2","*","Afet Koordinasyon","Deprem gecesi","Kriz Merkezi",
+"Büyük bir deprem oldu. Askerî imkânların sevki için resmî talep henüz gelmedi ve hiyerarşi saatler alacak.",
+"Emri bekledim","pasif iti-7","İnisiyatif aldım","insiyatif temsil dis-4");
+
+E("g2","*","Genelkurmay","Usul tartışması","Ankara · Genelkurmay",
+"İnisiyatif alman usul tartışması yarattı; bazıları bunu emir komuta zinciri ihlali sayıyor.",
+"Özür diledim","itaat pasif","Kararımı savundum","direnc sahiplen");
+
+E("g2","*","Sağlık Kurulu","Kritik eşik","GATA · Sağlık Kurulu",
+"Sağlık durumun kritik eşikte ve kurul \"görev sınırlaması\" önerebilir. Bildirmemek de bir seçenek.",
+"Sakladım","sakla","Kurula çıktım","destek dogruluk");
+
+E("g2","*","Eşin","Ameliyat","Hastane · Cerrahi",
+"Eşin ciddi bir ameliyat geçiriyor. Aynı hafta yılın en büyük tatbikatı var ve komuta senin.",
+"Tatbikatta kaldım","gorev ail-6","Hastanede kaldım","aile ope-5");
+
+E("g2","*","Genç Generaller","Miras","Ankara · Karargâh",
+"Arkandan gelen generaller senden ne öğrendiklerini soruyor. Teknik anlatmak kolay, hatalarını anlatmak değil.",
+"Teknik anlattım","kapali tek+3","Hatalarımı anlattım","seffaf mentor");
+
+/* ================= KORGENERAL / KORAMİRAL ================= */
+E("g3","*","Genelkurmay Başkanlığı","Ordu komutanlığı","Bölge · Ordu Komutanlığı",
+"Bir ordunun komutanısın. Statükoyu korumak güvenli, reform başlatmak ise senden sonra sonuç verecek bir yatırım.",
+"Statükoyu korudum","pasif ihtiyat","Reform başlattım","insiyatif ogrenme ruh-4");
+
+E("g3","*","Milli Savunma Bakanlığı","Görüş ayrılığı","Ankara · MSB",
+"Sivil otoriteyle kurumsal bir görüş ayrılığı var. Kamuoyuna yansırsa kriz olur, içeride tutmak ise çözümsüzlük demek.",
+"Kurum içinde tuttum","kural durust","Alenen tartıştım","direnc iti-14 dis-10");
+
+E("g3","*","Harekât Merkezi","Kriz gecesi","Ankara · Harekât Merkezi",
+"Gece yarısı kriz masasındasın ve istihbarat eksik. Beklemek fırsat kaybı, karar vermek eksik bilgiyle sorumluluk almak.",
+"Bilgi bekledim","ihtiyat pasif","Karar verdim","risk insiyatif");
+
+E("g3","*","Basın Toplantısı","Kamuoyu","Ankara · Basın Merkezi",
+"Krizden sonra kamuoyu açıklaması yapacaksın. Her cümle tutanağa geçecek ve yıllarca alıntılanacak.",
+"Kısa kestim","geriplan kapali","Ayrıntılı anlattım","seffaf temsil");
+
+E("g3","*","Personel Başkanlığı","Terfi listesi","Ankara · Personel",
+"Terfi listelerini sen şekillendiriyorsun. Yıllar önce sana ciddi zarar vermiş biri listede ve liyakati tartışmasız.",
+"Listeden çıkardım","menfaat harcama","Liyakate baktım","dogruluk durust");
+
+E("g3","*","Emekli Generaller","Ortak açıklama","Ankara · Dernek",
+"Emekli generallerden bir grup kurumsal bir konuda ortak açıklama hazırlıyor ve imzanı istiyor.",
+"Katılmadım","kural durust","İmza attım","direnc iti-12 dis-9");
+
+E("g3","*","Savunma Sanayii","Miras projesi","Ankara · SSB",
+"On yıllık bir proje senin imzanla başlayacak ya da rafa kalkacak. Sonucunu görmeden emekli olacaksın.",
+"Rafa kaldırdım","tasarruf pasif","Başlattım","insiyatif ogrenme loj-5");
+
+E("g3","*","Kendi vicdanın","Ayna","Ankara · Makam Odası",
+"Otuz üç yıl. Hangi kararının seni buraya getirdiğini artık ayırt edemiyorsun ve bu düşünce gece uykunu bölüyor.",
+"Düşünmedim","sakla","Yüzleştim","destek aile");
+
+E("g3","*","Eşin","Son teklif","Ankara · Ev",
+"\"Bir adım daha var ve o adım kalan her şeyi alacak. Ben otuz üç yıl bekledim; sen ne kadar bekleyeceksin?\"",
+"Devam ettim","gorev ail-6","Yavaşladım","aile kar-5");
+
+/* ================= ORGENERAL / ORAMİRAL ================= */
+E("g4","*","Genelkurmay Başkanlığı","Zirve","Ankara · Kuvvet Komutanlığı",
+"Kuvvet komutanısın. Bundan sonrası kariyer değil; devraldığın kurumu nasıl bıraktığın meselesi.",
+"Devraldığımı korudum","pasif ihtiyat","İz bırakmayı seçtim","insiyatif ogrenme");
+
+E("g4","*","Cumhurbaşkanlığı","Brifing","Ankara · Külliye",
+"En üst düzeyde brifing vereceksin ve kurumun gerçek hazırlık durumu iç açıcı değil. Tablo istenildiği gibi sunulabilir.",
+"Olumlu resmettim","ortbas itaat","Gerçeği anlattım","dogruluk seffaf");
+
+E("g4","*","Personel Başkanlığı","Sistem reformu","Ankara · Karargâh",
+"Personel sisteminde köklü bir reform öneriyorsun. Direnç çok büyük ve reform senden sonra uygulanacak.",
+"Vazgeçtim","pasif tek-4","Sonuna kadar gittim","direnc insiyatif ruh-5");
+
+E("g4","*","Uluslararası Zirve","Temsil","Yurtdışı · Zirve",
+"Türkiye'yi uluslararası askerî zirvede temsil edeceksin. Protokolle yetinmek de mümkün, gündem belirlemek de.",
+"Protokolle yetindim","geriplan","Aktif rol aldım","temsil gorunur ail-3");
+
+E("g4","*","Şehit Aileleri Derneği","Buluşma","Ankara · Dernek",
+"Yıllardır gitmediğin bir buluşmaya çağrıldın. Bazı aileler senin dönemindeki kararlardan seni sorumlu tutuyor.",
+"Temsilci gönderdim","pasif iti-5","Kendim gittim","temsil sahiplen ruh-4");
+
+E("g4","*","Kuvvet Komutanlığı","Halef","Ankara · Makam",
+"Yerine geçecek ismi sen önereceksin. En yetenekli aday, yıllardır sana en çok itiraz eden kişi.",
+"Sadık olanı önerdim","menfaat harcama","Yetenekliyi önerdim","dogruluk mentor");
+
+E("g4","*","Askerî Tarih Başkanlığı","Resmî kayıt","Ankara · Arşiv",
+"Dönemine ilişkin resmî tarih yazılıyor. Bazı bölümleri yumuşatmak mümkün ve kimse itiraz etmeyecek.",
+"Yumuşattım","ortbas kapali","Olduğu gibi bıraktım","dogruluk seffaf");
+
+E("g4","*","Harp Okulu","Son ders","Harp Okulu · Konferans Salonu",
+"Harp Okulu'nda son konuşmanı yapacaksın. Beş yüz genç dinliyor ve söyleyeceklerin otuz yıl sonra hatırlanacak.",
+"Klasik konuştum","kural temsil","Gerçekleri anlattım","seffaf mentor moral");
+
+E("g4","*","Eşin","Son yıl","Ankara · Ev",
+"\"Otuz beş yıl bekledim. Bir yıl daha bekleyebilirim ama bu kez bana sormanı istiyorum.\"",
+"Bir yıl daha istedim","gorev ail-6","Emekliliği konuştuk","aile destek");
+
+E("g4","*","Kendi vicdanın","Devir teslim","Ankara · Makam Odası",
+"Devir teslim tutanağını imzalamadan önce odaya son kez baktın. Duvardaki fotoğrafların yarısındaki insanlar artık yok.",
+"Hemen imzaladım","pasif","Bir süre oturdum","destek aile");
+
+E("g4","*","Genelkurmay","Görev uzatma","Ankara · Genelkurmay",
+"Görev süren doluyor ve uzatma talebinde bulunabilirsin. Talep etmek nüfuz, etmemek zamanında çekilmek demek.",
+"Uzatma istedim","menfaat gorev","Görevi devrettim","aile temsil");
+
+E("g4","*","Basın","Veda röportajı","Ankara · Basın Merkezi",
+"Emeklilik öncesi son röportaj. Kurumu eleştirme fırsatın var ve söyleyeceklerin manşet olur.",
+"Sadece teşekkür ettim","kural temsil","Eksikleri söyledim","direnc iti-8 kar-6 tek+5");
+
+E("g4","*","Nöbetçi Er","Son selam","Ankara · Nizamiye",
+"Nizamiyeden son kez çıkıyorsun. Nöbetçi er selam duruyor ve adını bilmiyorsun.",
+"Selamı alıp çıktım","kural mesafe","Durup adını sordum","moral temsil");
+
+E("g4","*","Savunma Şirketi","Teklif","İstanbul · Ofis",
+"Emeklilik sonrası bir savunma şirketinden yönetim kurulu üyeliği teklifi geldi. Yasal, ama hepsi bunu yapıyor diye meşru olmuyor.",
+"Kabul ettim","yolsuz ail+6","Reddettim","durust ail-3");
+
+/* ================= GENERAL KADEMESİ TAKVİYE ================= */
+E("g1 g2","*","Karargâh Başkanı","Sabah toplantısı","Karargâh · Toplantı Salonu",
+"Toplantıda bir albay, senin onayladığın planın hatalı olduğunu söylüyor ve teknik olarak haklı. Odada on iki kişi var.",
+"Konuyu kapattım","sertlik kapali","Haklı olduğunu söyledim","seffaf mentor");
+
+E("g1 g2","*","Emrindeki Albay","Tayin talebi","Karargâh · Personel",
+"Değerli bir albay ailevi sebeplerle sıcak bölgeden çıkmak istiyor. Yerine koyacak dengi yok ve bunu o da biliyor.",
+"Talebi reddettim","gorev harcama","Talebini karşıladım","koruma ope-4");
+
+E("g1 g2","*","İç Denetim","Temsil giderleri","Karargâh · Mali Şube",
+"Karargâhın temsil giderlerinde belirgin bir şişkinlik var ve tamamı selefinden devredildi. Kesmek çok kişiyi rahatsız eder.",
+"Aynen sürdürdüm","savsakla yolsuz","Kestim","durust tasarruf kar-4");
+
+E("g1 g2","*","Yerel Basın","Asılsız iddia","İl · Basın",
+"Garnizonla ilgili asılsız bir iddia yerel basında çıktı. Dava açmak yıllar sürer, belgeyle yanıtlamak bir haftada biter.",
+"Dava açtım","kural iti-3","Belgeyle yanıtladım","seffaf temsil");
+
+E("g1 g2","*","Astsubay Temsilcileri","Kurumsal talep","Karargâh · Gazino",
+"Astsubaylar özlük hakları konusunda hazırladıkları raporu sana iletti. Konu hassas ve iletmek de bir tercih sayılıyor.",
+"Konuyu almadım","pasif ast-6","Üst makama taşıdım","koruma insiyatif");
+
+E("g1 g2","*","Sağlık Merkezi","Tükenmişlik raporu","Karargâh · Sağlık",
+"Birliğinde tükenmişlik oranı beklenenin çok üstünde çıktı. Rapor yayımlanırsa kurum kamuoyunda eleştirilir.",
+"Raporu içeride tuttum","kapali ortbas","Yayımlanmasını sağladım","seffaf koruma kar-5");
+
+E("g1 g2","*","Müttefik Komutan","Ortak tatbikat","Tatbikat · Ortak Karargâh",
+"Ortak tatbikatta müttefik taraf Türk birliklerine ikincil bir rol öneriyor. İtiraz etmek planlamayı geciktirir.",
+"Kabul ettim","itaat iti-5","Eşit rol için diretim","temsil direnc");
+
+E("g1 g2","*","Genç General","Danışma","Karargâh · Kantin",
+"Yeni terfi etmiş bir general senden akıl istiyor. İleride aynı makam için rakibin olacağı neredeyse kesin.",
+"Mesafeli davrandım","mesafe menfaat","Açık konuştum","mentor moral");
+
+E("g1 g2","*","Kuvvet Komutanlığı","Birlik kapatma","Ankara · Karargâh",
+"Bir birliğin kapatılması gündemde. Ekonomik olarak doğru, ama o birliğin bulunduğu ilçe için sembolik olarak ağır.",
+"Kapatmayı önerdim","tasarruf harcama","Karşı çıktım","koruma israf");
+
+E("g1 g2","*","Eşin","Protokol davetleri","Ankara · Ev",
+"Protokol davetlerinin yarısına gitmiyorsun ve bu da bir şekilde kayda geçiyor. Eşin gitmek istemediğini söylüyor.",
+"Katılmadım","aile kar-5","Katıldım","temsil ail-4");
+
+E("g1 g2","*","Kendi vicdanın","Eski sicil","Karargâh · Arşiv",
+"Yıllar önce baskı altında imzaladığın bir olumsuz sicil, o subayın kariyerini bitirmiş. Adını arşivde görüyorsun.",
+"Unutmayı seçtim","sakla ruh-4","Onu arayıp konuştum","dogruluk destek");
+
+E("g1 g2","*","Askerî Hastane","Tanı","GATA · Onkoloji",
+"Doktorun ciddi bir tanı koydu. Tedavi görev süreni etkileyecek ve bildirmek komuta değişikliği anlamına geliyor.",
+"Sakladım","sakla","Bildirdim","dogruluk destek kar-5");
+
+E("g1 g2 g3","*","Personel Başkanlığı","İki aday","Ankara · Personel",
+"Terfi listesinde iki isim var: biri yetenekli ve zor bir adam, diğeri vasat ama sorunsuz. Kadro tek.",
+"Uyumlu olanı seçtim","menfaat harcama","Yetenekliyi seçtim","dogruluk mentor");
+
+E("g1 g2 g3","*","Harekât Başkanlığı","Ham istihbarat","Harekât Merkezi",
+"Doğrulanmamış bir istihbarat ciddi bir tehdide işaret ediyor. Alarma geçmek maliyetli ve yanlış çıkarsa güven kaybı.",
+"Doğrulamayı bekledim","ihtiyat pasif","Alarma geçtim","risk insiyatif loj-4");
+
+E("g1 g2 g3","*","Kuvvet Komutanlığı","Eğitim reformu","Ankara · Eğitim Dairesi",
+"Eğitim sistemini değiştirme önerin var. Uygulanması on yıl sürer ve sonucunu görmeden emekli olacaksın.",
+"Vazgeçtim","pasif tek-4","Başlattım","insiyatif ogrenme");
+
+E("g2 g3","*","Milli Savunma Bakanlığı","Bütçe savunması","Ankara · MSB",
+"Kuvvetin bütçesini savunacaksın. Abartılı talep güven kaybettirir, gerçekçi talep kaynak kaybettirir.",
+"Gerçekçi rakam verdim","durust dogruluk loj-3","Yüksek talep ettim","israf kapali");
+
+E("g2 g3","*","Teftiş Kurulu","Sistemik sorun","Ankara · Teftiş",
+"Teftişte sistemik bir sorun buldun. Yıllardır herkes biliyor, hiç kimse rapora yazmıyor ve yazan ilk kişi sen olacaksın.",
+"Ben de yazmadım","ortbas savsakla","Rapor ettim","dogruluk direnc");
+
+E("g2 g3","*","Emekli Komutanın","Vefat","Ankara · Camii",
+"Sana yıllarca yol gösteren komutanın vefat etti. Cenaze saati kritik bir toplantıyla çakışıyor.",
+"Toplantıya girdim","gorev ast-5","Cenazeye gittim","moral aile kar-4");
+
+E("g2 g3","*","Savunma Sanayii","Yerlileşme","Ankara · SSB",
+"Yerli sistem yabancısından bugün zayıf ama on yıl sonra stratejik bağımsızlık demek. Karar senin.",
+"Yabancıyı seçtim","tasarruf iti-5 ope+5","Yerliyi seçtim","temsil ogrenme ope-4");
+
+E("g2 g3 g4","*","Genelkurmay","Hukuka aykırı yönerge","Ankara · Hukuk Müşavirliği",
+"Yıllardır uygulanan bir yönergenin hukuka aykırı olduğu ortaya çıktı. Askıya almak yüzlerce işlemi tartışmaya açar.",
+"Uygulamaya devam ettim","ortbas savsakla","Askıya aldım","dogruluk direnc");
+
+E("g2 g3 g4","*","Kriz Merkezi","Orman yangını","Bölge · Kriz Merkezi",
+"Yangın bölgesine askerî imkân sevki için karar veriyorsun. Tam destek hazırlık seviyeni belirgin şekilde düşürecek.",
+"Sınırlı destek verdim","ihtiyat iti-6","Tam destek verdim","temsil insiyatif ope-5");
+
+E("g3 g4","*","Cumhurbaşkanlığı","Danışma","Ankara · Külliye",
+"En üst düzeyde teknik bir soru soruluyor ve cevabın doğrudan politikayı etkileyecek. Temkinli konuşmak da mümkün.",
+"Temkinli konuştum","kapali iliski","Uzman görüşümü verdim","dogruluk direnc");
+
+E("g3 g4","*","Kuvvet Karargâhı","Kriz iletişimi","Ankara · Karargâh",
+"Ciddi bir kaza yaşandı, soruşturma sürüyor ve kamuoyu bilgi bekliyor. Soruşturmayı beklemek usule uygun ama boşluk doldurulur.",
+"Soruşturma bitsin dedim","kapali iti-5","Bilinenleri paylaştım","seffaf temsil");
+
+E("g3 g4","*","Askerî Akademiler","Müfredat","Ankara · Eğitim Dairesi",
+"Müfredatta etik ve hukuk derslerinin ağırlığını artırmayı öneriyorsun. Direnç, beklediğinden çok daha sert.",
+"Geri çektim","itaat tek-4","Israr ettim","direnc ogrenme");
+
+E("g3 g4","*","Emrindeki Generaller","İç çatışma","Karargâh · Makam",
+"Emrindeki iki general açık çatışma hâlinde ve bu kurum içinde konuşuluyor. Birini almak diğerine mesaj olur.",
+"Görmezden geldim","pasif lid-8","Birini görevden aldım","sertlik insiyatif ast-4");
+
+E("g3 g4","*","Uluslararası Heyet","İnceleme talebi","Ankara · Dışişleri",
+"Bir heyet birliklerinle ilgili iddiaları yerinde incelemek istiyor. Reddetme hakkın var ve reddetmek de yorumlanacak.",
+"Reddettim","kapali iti-6","İncelemeye açtım","seffaf temsil kar-5");
+
+E("g3 g4","*","Kendi vicdanın","Arşiv","Ankara · Arşiv",
+"Kendi imzanı taşıyan otuz yıllık evrakları okudun. Bazıları seni utandırdı ve hiçbirini artık değiştiremezsin.",
+"Dosyayı kapattım","sakla","Ders çıkardım","destek ogrenme");
+
+E("g4","*","Genelkurmay Başkanlığı","Doktrin mirası","Ankara · Karargâh",
+"Kuvvetin gelecek yirmi yılını belirleyecek belgeyi imzalayacaksın. Muhafazakâr metin güvenli, cesur metin tartışmalı.",
+"Muhafazakâr metni seçtim","ihtiyat pasif","Cesur metni seçtim","insiyatif ogrenme risk");
+
+E("g4","*","Milli Savunma Bakanı","Anlaşmazlık","Ankara · MSB",
+"Bakanla teknik bir konuda ayrışıyorsunuz. Uyum sağlamak kolay, görüşünü koruyup makamda kalmak zor bir denge.",
+"Uyum sağladım","itaat kapali","Görüşümü koruyup kaldım","direnc dogruluk");
+
+E("g4","*","Kuvvet Personeli","Moral sorunu","Ankara · Karargâh",
+"Kuvvet genelinde moral düşük. Sembolik bir jest hızlı ve ucuz; yapısal düzenleme pahalı ve yavaş ama kalıcı.",
+"Sembolik jest yaptım","gorunur temsil","Yapısal düzenleme yaptım","insiyatif koruma loj-5");
+
+E("g4","*","Harp Okulu Komutanı","Mezuniyet","Harp Okulu · Tören Alanı",
+"Kılıç verirken bir harbiyeli elini sıkıp \"sizin gibi olacağım komutanım\" diyor. Sıra uzun ve tören canlı yayında.",
+"Gülümseyip geçtim","kural temsil","Durup konuştum","moral mentor");
+
+E("g4","*","Askerî Tarih","Son düzeltme","Ankara · Makam",
+"Yıllar sonra dönemini değerlendirecekler ve bugün son bir dosyayı açma yetkin var. Açmak kendi mirasını da riske atmak.",
+"Bıraktım","pasif ruh+3","Son dosyayı açtım","dogruluk direnc");
+
+E("g4","*","Devir Teslim Töreni","Konuşma","Ankara · Tören Alanı",
+"Devir teslim konuşmanda kuruma bir cümle bırakacaksın ve o cümle yıllarca alıntılanacak.",
+"Görev ve şeref dedim","kural temsil","İnsanı merkeze koydum","moral mentor");
+
+E("g4","*","Ailen","İlk sabah","Ev · Mutfak",
+"Emeklilik sonrası ilk sabah. Alarm kurmadın ve yine saat 05.30'da uyandın; ne yapacağını bilmiyorsun.",
+"Yürüyüşe çıktım","dinlenme fiz+4","Sofrada oturdum","aile destek");
+
