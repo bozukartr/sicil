@@ -5,6 +5,14 @@ const examEl=document.getElementById("exam"),examBody=document.getElementById("e
       examTrack=document.getElementById("examTrack");
 let EXAM=null;
 const EXAM_LABELS=["01 · Tepki","02 · Hafıza","03 · Muhakeme","Sonuç"];
+const REACTION_VARIANTS={signal:"Sinyal Tepkisi",identify:"Dost–Tehdit Ayrımı"};
+const MEMORY_VARIANTS={symbols:"İşaret Dizisi",grid:"Rota Hafızası",code:"Kod Hafızası"};
+function shuffledExam(items){
+  const out=items.slice();
+  for(let i=out.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[out[i],out[j]]=[out[j],out[i]]}
+  return out;
+}
+function sampleQuestions(items,count){return shuffledExam(items).slice(0,count)}
 function examMeta(stage){
   examStep.textContent=EXAM_LABELS[stage];
   examScore.textContent=Math.round(EXAM.score)+" PUAN";
@@ -18,14 +26,27 @@ function examIntro(kicker,glyph,title,copy,button,action){
 }
 function beginExam(force){
   locked=true;
-  EXAM={force,stage:0,score:0,timer:0,reactionRound:0,reactionPoints:0,memoryCorrect:0,logicCorrect:0};
+  const reactionMode=Math.random()<.5?"signal":"identify";
+  const memoryMode=["symbols","grid","code"][(Math.random()*3)|0];
+  EXAM={force,stage:0,score:0,timer:0,reactionRound:0,reactionPoints:0,memoryCorrect:0,logicCorrect:0,
+    reactionMode,memoryMode,logicQuestions:sampleQuestions(LOGIC_Q,5),variants:{reaction:REACTION_VARIANTS[reactionMode],memory:MEMORY_VARIANTS[memoryMode],logic:"Karma Muhakeme"}};
   examEl.classList.remove("hide");
-  examIntro("Aday Seçmeleri · 1/3","◎","Tepki Kontrolü","Sinyal yeşile döndüğü anda dokun. Erken dokunuş puan kaybettirir; üç turun ortalaması siciline işlenir.","Testi başlat",startReactionRound);
+  showReactionIntro();
+}
+function showReactionIntro(){
+  const identify=EXAM.reactionMode==="identify";
+  examIntro("Aday Seçmeleri · 1/3",identify?"◉":"◎",REACTION_VARIANTS[EXAM.reactionMode],identify
+    ?"Üç taramada yalnızca HEDEF koduna dokun. DOST kodunda bekle; erken veya yanlış temas puan kaybettirir."
+    :"Sinyal yeşile döndüğü anda dokun. Erken dokunuş puan kaybettirir; üç turun ortalaması siciline işlenir.","Testi başlat",startReactionRound);
 }
 function startReactionRound(){
   if(EXAM.reactionRound>=3){
     EXAM.score+=EXAM.reactionPoints;EXAM.stage=1;showMemoryIntro();return;
   }
+  if(EXAM.reactionMode==="identify"){startIdentifyReactionRound();return}
+  startSignalReactionRound();
+}
+function startSignalReactionRound(){
   examMeta(0);
   const round=EXAM.reactionRound+1;
   examBody.innerHTML='<div class="examPanel"><div class="examKicker">Tepki · Tur '+round+'/3</div>'+ 
@@ -44,10 +65,41 @@ function startReactionRound(){
     setTimeout(startReactionRound,620);
   };
 }
+function startIdentifyReactionRound(){
+  examMeta(0);const round=EXAM.reactionRound+1;
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Ayrım · Tur '+round+'/3</div>'+ 
+    '<div class="roundLabel">Yalnızca HEDEF koduna dokun</div><button class="reactionPad identify" id="reactionPad">TARAMA</button></div>';
+  const pad=document.getElementById("reactionPad");let armed=false,done=false,started=0,signal="";
+  const finish=(points,label)=>{
+    if(done)return;done=true;clearTimeout(EXAM.timer);EXAM.reactionPoints+=points;EXAM.reactionRound++;
+    pad.textContent=label;examScore.textContent=Math.round(EXAM.score+EXAM.reactionPoints)+" PUAN";setTimeout(startReactionRound,620);
+  };
+  EXAM.timer=setTimeout(()=>{
+    if(done)return;armed=true;started=performance.now();signal=Math.random()<.65?"HEDEF":"DOST";EXAM.identifySignal=signal;
+    pad.textContent=signal;pad.classList.add(signal==="HEDEF"?"target":"friend");
+    EXAM.timer=setTimeout(()=>finish(signal==="DOST"?12:2,signal==="DOST"?"DOĞRU":"GEÇ KALDIN"),850);
+  },650+Math.random()*700);
+  pad.onclick=()=>{
+    if(done)return;
+    if(!armed){pad.classList.add("early");finish(2,"ERKEN");return}
+    if(signal==="DOST"){pad.classList.add("early");finish(0,"YANLIŞ");return}
+    const ms=performance.now()-started;
+    finish(Math.max(2,Math.min(12,Math.round(12-Math.max(0,ms-220)/70))),Math.round(ms)+" MS");
+  };
+}
 function showMemoryIntro(){
-  examIntro("Aday Seçmeleri · 2/3","◇","Kısa Süreli Hafıza","Beş işaret sırayla gösterilecek. Dizi bittikten sonra aynı sırayı dokunarak tekrar et.","Diziyi göster",startMemory);
+  const mode=EXAM.memoryMode,title=MEMORY_VARIANTS[mode];
+  const copy=mode==="grid"?"Beş hücre sırayla aydınlanacak. Rota bittikten sonra aynı hücreleri aynı sırayla seç."
+    :mode==="code"?"Beş haneli görev kodunu aklında tut. Kod kapandıktan sonra rakamları aynı sırayla gir."
+    :"Beş işaret sırayla gösterilecek. Dizi bittikten sonra aynı sırayı dokunarak tekrar et.";
+  examIntro("Aday Seçmeleri · 2/3",mode==="grid"?"▦":mode==="code"?"#":"◇",title,copy,mode==="code"?"Kodu göster":"Diziyi göster",startMemory);
 }
 function startMemory(){
+  if(EXAM.memoryMode==="grid"){startGridMemory();return}
+  if(EXAM.memoryMode==="code"){startCodeMemory();return}
+  startSymbolMemory();
+}
+function startSymbolMemory(){
   const symbols=["▲","■","●","◆"],seq=Array.from({length:5},()=>symbols[(Math.random()*symbols.length)|0]);
   EXAM.memorySeq=seq;EXAM.memoryInput=0;EXAM.memoryCorrect=0;examMeta(1);
   examBody.innerHTML='<div class="examPanel"><div class="examKicker">Hafıza Dizisi</div><div class="memoryDisplay" id="memoryDisplay">•</div>'+ 
@@ -59,39 +111,78 @@ function startMemory(){
   };
   EXAM.timer=setTimeout(reveal,450);
 }
+function finishMemoryStage(){
+  EXAM.score+=EXAM.memoryCorrect*7;examScore.textContent=EXAM.score+" PUAN";EXAM.stage=2;setTimeout(showLogicIntro,380);
+}
+function acceptMemory(value,renderNext){
+  if(value===EXAM.memorySeq[EXAM.memoryInput])EXAM.memoryCorrect++;
+  EXAM.memoryInput++;
+  if(EXAM.memoryInput>=EXAM.memorySeq.length)finishMemoryStage();else setTimeout(renderNext,170);
+}
 function renderMemoryInput(){
   const symbols=["▲","■","●","◆"];
   examBody.innerHTML='<div class="examPanel"><div class="examKicker">Hafıza · '+(EXAM.memoryInput+1)+'/5</div>'+ 
     '<div class="memoryDisplay" id="memoryDisplay">?</div><div class="memoryGrid">'+symbols.map(s=>'<button class="memoryBtn">'+s+'</button>').join("")+'</div></div>';
   examBody.querySelectorAll(".memoryBtn").forEach(btn=>btn.onclick=()=>{
-    if(btn.textContent===EXAM.memorySeq[EXAM.memoryInput])EXAM.memoryCorrect++;
     document.getElementById("memoryDisplay").textContent=btn.textContent;EXAM.memoryInput++;
-    if(EXAM.memoryInput>=EXAM.memorySeq.length){
-      EXAM.score+=EXAM.memoryCorrect*7;examScore.textContent=EXAM.score+" PUAN";EXAM.stage=2;setTimeout(showLogicIntro,380);
-    }else setTimeout(renderMemoryInput,170);
+    if(btn.textContent===EXAM.memorySeq[EXAM.memoryInput-1])EXAM.memoryCorrect++;
+    if(EXAM.memoryInput>=EXAM.memorySeq.length)finishMemoryStage();else setTimeout(renderMemoryInput,170);
   });
 }
+function startGridMemory(){
+  EXAM.memorySeq=shuffledExam([0,1,2,3,4,5,6,7,8]).slice(0,5);EXAM.memoryInput=0;EXAM.memoryCorrect=0;examMeta(1);
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Rota Hafızası</div><div class="memoryRoute" id="memoryRoute">'+Array.from({length:9},(_,i)=>'<i data-cell="'+i+'"></i>').join("")+'</div><p class="examCopy">Aydınlanan rotayı sırayla izle.</p></div>';
+  let i=0,cells=examBody.querySelectorAll("[data-cell]");
+  const reveal=()=>{
+    cells.forEach(x=>x.classList.remove("on"));
+    if(i>=EXAM.memorySeq.length){setTimeout(renderGridMemoryInput,350);return}
+    cells[EXAM.memorySeq[i++]].classList.add("on");EXAM.timer=setTimeout(reveal,570);
+  };
+  EXAM.timer=setTimeout(reveal,420);
+}
+function renderGridMemoryInput(){
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Rota · '+(EXAM.memoryInput+1)+'/5</div><div class="memoryRoute input">'+Array.from({length:9},(_,i)=>'<button data-cell="'+i+'"></button>').join("")+'</div></div>';
+  examBody.querySelectorAll("[data-cell]").forEach(btn=>btn.onclick=()=>acceptMemory(+btn.dataset.cell,renderGridMemoryInput));
+}
+function startCodeMemory(){
+  EXAM.memorySeq=Array.from({length:5},()=>Math.floor(Math.random()*10));EXAM.memoryInput=0;EXAM.memoryCorrect=0;examMeta(1);
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Görev Kodu</div><div class="codeDisplay" id="codeDisplay">'+EXAM.memorySeq.join(" ")+'</div><p class="examCopy">Beş haneli kodu aklında tut.</p></div>';
+  EXAM.timer=setTimeout(()=>{document.getElementById("codeDisplay").textContent="• • • • •";setTimeout(renderCodeMemoryInput,320)},2300);
+}
+function renderCodeMemoryInput(){
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Kod · '+(EXAM.memoryInput+1)+'/5</div><div class="codeDisplay compact">'+"• ".repeat(EXAM.memoryInput)+"_"+'</div><div class="numberGrid">'+Array.from({length:10},(_,i)=>'<button data-number="'+i+'">'+i+'</button>').join("")+'</div></div>';
+  examBody.querySelectorAll("[data-number]").forEach(btn=>btn.onclick=()=>acceptMemory(+btn.dataset.number,renderCodeMemoryInput));
+}
 const LOGIC_Q=[
- {q:"Hangisi daha büyük?",a:"17 + 8",av:25,b:"4 × 6",bv:24},
- {q:"Hangisi hedefe daha yakın?",a:"100 − 37",av:63,b:"8 × 8",bv:64,target:65},
- {q:"Hangisi daha küçüktür?",a:"7 × 7",av:49,b:"60 − 8",bv:52,small:1},
- {q:"Hangisi daha büyük?",a:"36 ÷ 3",av:12,b:"5 + 8",bv:13},
- {q:"Hangisi daha küçüktür?",a:"9 × 4",av:36,b:"50 − 11",bv:39,small:1}
+ {id:"buyuk_1",c:"Sayısal",q:"Hangisi daha büyüktür?",o:["17 + 8","4 × 6"],a:0},
+ {id:"hedef_1",c:"Yaklaşım",q:"65 hedefine hangisi daha yakındır?",o:["100 − 37","8 × 8"],a:1},
+ {id:"kucuk_1",c:"Sayısal",q:"Hangisi daha küçüktür?",o:["7 × 7","60 − 8"],a:0},
+ {id:"buyuk_2",c:"Sayısal",q:"Hangisi daha büyüktür?",o:["36 ÷ 3","5 + 8"],a:1},
+ {id:"kucuk_2",c:"Sayısal",q:"Hangisi daha küçüktür?",o:["9 × 4","50 − 11"],a:0},
+ {id:"dizi_1",c:"Örüntü",q:"2 · 4 · 8 · ? dizisini tamamla.",o:["16","12"],a:0},
+ {id:"dizi_2",c:"Örüntü",q:"3 · 6 · 9 · ? dizisini tamamla.",o:["12","18"],a:0},
+ {id:"dizi_3",c:"Örüntü",q:"1 · 1 · 2 · 3 · 5 · ? dizisini tamamla.",o:["7","8"],a:1},
+ {id:"yon_1",c:"Yön",q:"Kuzeye bakarken sağa dönersen hangi yöne bakarsın?",o:["Doğu","Batı"],a:0},
+ {id:"yon_2",c:"Yön",q:"Doğuya bakarken iki kez sola dönersen yönün nedir?",o:["Batı","Kuzey"],a:0},
+ {id:"harita_1",c:"Harita",q:"3 km kuzey, 1 km güney ilerledin. Başlangıca uzaklığın?",o:["2 km","4 km"],a:0},
+ {id:"harita_2",c:"Harita",q:"2 km doğu, 2 km batı ilerledin. Net yer değiştirmen?",o:["0 km","4 km"],a:0},
+ {id:"kod_1",c:"Kod",q:"A · C · E · ? dizisinde sıradaki harf nedir?",o:["F","G"],a:1},
+ {id:"oran_1",c:"Oran",q:"Dört ekip işi 8 saatte bitiriyor. Sekiz eş ekip kaç saatte bitirir?",o:["4 saat","16 saat"],a:0},
+ {id:"mantik_1",c:"Mantık",q:"Bütün timler birliktir; bazı birlikler nöbettedir. Kesin olan?",o:["Bütün timler birliktir","Bütün timler nöbettedir"],a:0},
+ {id:"zaman_1",c:"Zaman",q:"Görev 22.30'da başlayıp 2 saat sürerse ne zaman biter?",o:["00.30","24.00"],a:0},
+ {id:"sirala_1",c:"Sıralama",q:"A, B'den hızlı; B, C'den hızlı. En hızlı kimdir?",o:["A","C"],a:0},
+ {id:"kod_2",c:"Kod",q:"Her harf bir ileri kayarsa KOD ne olur?",o:["LPE","JNC"],a:0}
 ];
 function showLogicIntro(){
-  examIntro("Aday Seçmeleri · 3/3","∴","Muhakeme","Beş kısa karşılaştırmayı mümkün olduğunca doğru tamamla. Süreden önce doğruluk değerlendirilecek.","Soruları başlat",()=>{EXAM.logicIndex=0;EXAM.logicCorrect=0;renderLogic()});
+  examIntro("Aday Seçmeleri · 3/3","∴","Karma Muhakeme","Geniş soru havuzundan seçilen beş sayısal, yön, örüntü ve mantık sorusunu tamamla.","Soruları başlat",()=>{EXAM.logicIndex=0;EXAM.logicCorrect=0;EXAM.logicQuestions=EXAM.logicQuestions||sampleQuestions(LOGIC_Q,5);renderLogic()});
 }
 function renderLogic(){
-  if(EXAM.logicIndex>=LOGIC_Q.length){EXAM.score+=EXAM.logicCorrect*6;showExamResult();return}
-  examMeta(2);const q=LOGIC_Q[EXAM.logicIndex];
-  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Muhakeme · '+(EXAM.logicIndex+1)+'/5</div>'+ 
-    '<div class="examGlyph">?</div><h2 class="examTitle">'+q.q+'</h2><div class="logicGrid"><button class="logicBtn" data-side="a">'+q.a+'</button>'+ 
-    '<button class="logicBtn" data-side="b">'+q.b+'</button></div></div>';
+  if(EXAM.logicIndex>=EXAM.logicQuestions.length){EXAM.score+=EXAM.logicCorrect*6;showExamResult();return}
+  examMeta(2);const q=EXAM.logicQuestions[EXAM.logicIndex];
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">'+q.c+' · '+(EXAM.logicIndex+1)+'/5</div>'+ 
+    '<div class="examGlyph">?</div><h2 class="examTitle">'+q.q+'</h2><div class="logicGrid">'+q.o.map((x,i)=>'<button class="logicBtn" data-answer="'+i+'">'+x+'</button>').join("")+'</div></div>';
   examBody.querySelectorAll(".logicBtn").forEach(btn=>btn.onclick=()=>{
-    const correct=q.target!=null
-      ?(Math.abs(q.av-q.target)<Math.abs(q.bv-q.target)?"a":"b")
-      :q.small?(q.av<q.bv?"a":"b"):(q.av>q.bv?"a":"b");
-    if(btn.dataset.side===correct)EXAM.logicCorrect++;
+    if(+btn.dataset.answer===q.a)EXAM.logicCorrect++;
     EXAM.logicIndex++;setTimeout(renderLogic,220);
   });
 }
@@ -111,7 +202,7 @@ function buildExamProfile(exam){
   if(grade==="ustun"){
     modifiers.sic+=2;modifiers.ruh+=2;modifiers.tek+=2;
   }
-  return {reaction,memory,logic,total,grade,career:total>=60?"officer":"nco",modifiers};
+  return {reaction,memory,logic,total,grade,career:total>=60?"officer":"nco",modifiers,variants:exam.variants||null};
 }
 function showExamResult(){
   const profile=buildExamProfile(EXAM);EXAM.profile=profile;EXAM.score=profile.total;EXAM.stage=3;examMeta(3);
@@ -124,8 +215,9 @@ function showExamResult(){
       :pass
         ?"Aday sınavını geçtin. Kariyerin Harbiyeli olarak başlayacak ve bölüm sonuçların ilk sicil değerlerini belirleyecek."
         :"Aday sınavı barajını geçemedin. Kariyerin Er olarak başlayacak; sınavdaki güçlü yönlerin saha siciline aktarılacak.";
+  const variants=profile.variants||{};
   const rows=[
-    ["Tepki",profile.reaction,36],["Hafıza",profile.memory,35],["Muhakeme",profile.logic,30]
+    [variants.reaction||"Tepki",profile.reaction,36],[variants.memory||"Hafıza",profile.memory,35],[variants.logic||"Muhakeme",profile.logic,30]
   ].map(x=>'<div class="examMetric"><span>'+x[0]+'</span><b>'+x[1]+' / '+x[2]+'</b><i><em style="width:'+Math.round(x[1]/x[2]*100)+'%"></em></i></div>').join("");
   const mods=Object.entries(profile.modifiers).filter(x=>x[1]).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,6)
     .map(x=>'<span class="'+(x[1]>0?"up":"down")+'">'+STATS[x[0]].s+' '+(x[1]>0?"+":"")+x[1]+'</span>').join("");
