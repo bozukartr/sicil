@@ -137,6 +137,11 @@ function prepareTransitionQuestions(cfg){
 }
 
 let TRANSITION=null;
+function syncTransitionSession(phase){
+  if(!S||!TRANSITION)return;
+  S.transitionSession={cfgId:TRANSITION.cfg.id,questions:TRANSITION.questions,index:TRANSITION.index,correct:TRANSITION.correct,answers:TRANSITION.answers,attempt:TRANSITION.attempt,phase,score:TRANSITION.score||null,pass:typeof TRANSITION.pass==="boolean"?TRANSITION.pass:null};
+  persistGame("transition","transition-"+phase);
+}
 function transitionConfig(state){
   return TRANSITION_EXAMS[state.career]&&TRANSITION_EXAMS[state.career][state.r]||null;
 }
@@ -153,6 +158,7 @@ function beginTransitionExam(retry){
   TRANSITION={cfg,questions:prepareTransitionQuestions(cfg),index:-1,correct:0,answers:[],attempt:S.transitionAttempts[cfg.id]};
   document.getElementById("transition").classList.remove("hide");
   renderTransitionIntro(!!retry);
+  syncTransitionSession("intro");
   return true;
 }
 function renderTransitionIntro(retry){
@@ -173,12 +179,14 @@ function renderTransitionQuestion(){
   document.getElementById("transitionBody").innerHTML='<div class="transitionPanel question"><div class="transitionKicker">'+q.source+' · '+TRANSITION.cfg.title+'</div>'+ 
     '<div class="transitionQuestion">'+q.q+'</div><div class="transitionOptions">'+q.o.map((x,i)=>'<button data-answer="'+i+'"><i>'+String.fromCharCode(65+i)+'</i><span>'+x+'</span></button>').join("")+'</div></div>';
   document.querySelectorAll("#transitionBody [data-answer]").forEach(btn=>btn.onclick=()=>answerTransition(+btn.dataset.answer));
+  syncTransitionSession("question");
 }
 function answerTransition(answer){
   const q=TRANSITION.questions[TRANSITION.index],buttons=document.querySelectorAll("#transitionBody [data-answer]");
   buttons.forEach(x=>{x.disabled=true;if(+x.dataset.answer===q.a)x.classList.add("correct")});
   if(answer===q.a)TRANSITION.correct++;else buttons[answer].classList.add("wrong");
   TRANSITION.answers.push(answer);TRANSITION.index++;
+  syncTransitionSession(TRANSITION.index>=TRANSITION.questions.length?"result":"question");
   setTimeout(renderTransitionQuestion,360);
 }
 function transitionScore(){
@@ -204,20 +212,25 @@ function renderTransitionResult(){
     '<div class="transitionBreakdown">'+rows+'</div>'+actions+'</div>';
   if(pass)document.getElementById("transitionPass").onclick=passTransition;
   else document.querySelectorAll("#transitionBody [data-path]").forEach(btn=>btn.onclick=()=>chooseTransitionPath(btn.dataset.path));
+  syncTransitionSession("result");
 }
 function addTransitionTime(months){
   S.months+=months;S.age=18+Math.floor(S.months/12);
 }
 function passTransition(){
   const cfg=TRANSITION.cfg,score=TRANSITION.score.total;
+  addJournal("exam",cfg.title+" geçildi",score+" puan · "+TRANSITION.attempt+". deneme");
   S.flags.add("gecis_"+cfg.id);
   S.st.sic=Math.min(100,S.st.sic+(score>=85?4:2));
   if(score>=85)S.st.lid=Math.min(100,S.st.lid+3);
+  S.transitionSession=null;
   document.getElementById("transition").classList.add("hide");
   completePromotion("Geçiş Sınavı",cfg.pass+" "+PROMO[RANKS[S.r+1].t]);
 }
 function chooseTransitionPath(path){
   const cfg=TRANSITION.cfg;
+  const names={wait:"Aynı rütbede bekleme",retry:"Yeniden değerlendirme",specialty:"Uzmanlık değişimi",admin:"İdari görev",retire:"Erken emeklilik"};
+  addJournal("critical",cfg.title+" · "+names[path],"Geçiş değerlendirmesi başarısız oldu; kariyer yönü seçildi.");
   S.st.sic=Math.max(0,S.st.sic-2);S.st.ruh=Math.max(0,S.st.ruh-2);
   if(path==="retry"){
     addTransitionTime(6);beginTransitionExam(true);return;
@@ -240,22 +253,39 @@ function chooseTransitionPath(path){
 }
 function closeTransitionToGame(){
   document.getElementById("transition").classList.add("hide");
+  S.transitionSession=null;
   paintHUD();buildGauges();nextCard();
 }
-function showTransitionSpecialties(){
+function showTransitionSpecialties(restoring){
   document.getElementById("transition").classList.add("hide");
   const screen=document.getElementById("specialty");
   document.getElementById("specialtyCareer").textContent="Kariyer Yönlendirme";
   document.getElementById("specialtyTitle").textContent="Yeni Uzmanlık Seç";
   document.getElementById("specialtyLead").textContent="Yeni uzmanlığın bundan sonraki olay ve terfi ağırlıklarını değiştirir. Geçiş sınavına daha sonra yeniden girebilirsin.";
+  if(!restoring)persistGame("specialtyReassign","specialty-reassignment");
   renderSpecialtyOptions(S.f,spec=>{
-    const old=S.specialty;
+    const old=S.specialty,oldSpec=getSpecialty(S.f,old);
     if(old)S.flags.delete("uz_"+old);
     S.specialty=spec.id;S.flags.add("uz_"+spec.id);S.st.tek=Math.min(100,S.st.tek+2);
     S.cards=Math.max(0,RANKS[S.r].cards-3);
+    S.transitionSession=null;
+    addJournal("specialty","Uzmanlık değişti",(oldSpec?oldSpec.name+" → ":"")+spec.name);
     screen.classList.add("hide");paintHUD();nextCard();
   },S.specialty);
   screen.classList.remove("hide");
+  persistGame("specialtyReassign",restoring?"resume-specialty":"specialty-reassignment");
+}
+function restoreTransitionSession(){
+  const saved=S.transitionSession;if(!saved)return false;
+  const configs=TRANSITION_EXAMS[S.career]||{};
+  const cfg=Object.values(configs).find(item=>item.id===saved.cfgId)||transitionConfig(S);
+  if(!cfg)return false;
+  TRANSITION={cfg,questions:saved.questions||[],index:Number(saved.index),correct:Number(saved.correct)||0,answers:saved.answers||[],attempt:Number(saved.attempt)||1,score:saved.score||null,pass:saved.pass};
+  locked=true;document.getElementById("transition").classList.remove("hide");
+  if(saved.phase==="intro")renderTransitionIntro(TRANSITION.attempt>1);
+  else if(saved.phase==="result"||TRANSITION.index>=TRANSITION.questions.length)renderTransitionResult();
+  else renderTransitionQuestion();
+  return true;
 }
 function finishAdminCareer(){
   const title=S.career==="nco"?"İdari Hizmet Ustalığı":"Karargâh Hizmeti";
