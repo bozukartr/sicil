@@ -68,7 +68,7 @@ function newGame(force,career,examProfile,specialtyId){
   const flags=new Set();
   if(profile.grade&&profile.grade!=="legacy")flags.add("sinav_"+profile.grade);
   if(specialty)flags.add("uz_"+specialty.id);
-  S={f:force,career,specialty:specialty?specialty.id:null,track:"command",transitionAttempts:{},exam:profile,examScore:profile.total||0,r:0,cards:0,months:0,age:18,flags,hist:[],grace:0,ended:false,
+  S={f:force,career,specialty:specialty?specialty.id:null,track:"command",transitionAttempts:{},transitionQuestionHistory:{},exam:profile,examScore:profile.total||0,r:0,cards:0,months:0,age:18,flags,hist:[],grace:0,ended:false,
      warnCd:{},seen:new Set(RANKS[0].vis),
      st:initialStats(career,profile,specialty)};
   document.getElementById("exam").classList.add("hide");

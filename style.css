@@ -254,6 +254,9 @@ h1 small{display:block;font-size:10px;letter-spacing:.2em;font-weight:500;color:
   text-transform:uppercase;cursor:pointer;transition:background .12s,border-color .12s,transform .12s}
 .reactionPad.ready{border-color:#a7c977;background:rgba(111,147,73,.28);color:#dcebc8;box-shadow:0 0 34px rgba(111,147,73,.2)}
 .reactionPad.early{border-color:var(--oxide);background:rgba(168,60,41,.18);color:#e7aa9d}
+.reactionPad.identify{font-size:11px}
+.reactionPad.target{border-color:var(--oxide);background:rgba(168,60,41,.22);color:#f0b09e;box-shadow:0 0 34px rgba(168,60,41,.18)}
+.reactionPad.friend{border-color:#7895ad;background:rgba(75,104,128,.2);color:#bdd2e1;box-shadow:0 0 34px rgba(75,104,128,.15)}
 .reactionPad:active{transform:scale(.975)}
 .memoryDisplay{height:112px;margin:24px 0 18px;border:1px solid rgba(222,216,195,.12);border-radius:8px;
   display:grid;place-items:center;background:rgba(9,11,5,.36);font-size:42px;color:var(--brass)}
@@ -262,6 +265,20 @@ h1 small{display:block;font-size:10px;letter-spacing:.2em;font-weight:500;color:
   background:rgba(222,216,195,.035);color:var(--paper);font-size:21px;cursor:pointer}
 .logicBtn{min-height:74px;padding:8px;font-family:var(--mono);font-size:15px}
 .memoryBtn:active,.logicBtn:active{border-color:var(--brass);background:rgba(201,163,73,.1)}
+.memoryRoute{width:232px;height:232px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:8px;
+  border:1px solid rgba(222,216,195,.12);border-radius:10px;background:rgba(9,11,5,.28)}
+.memoryRoute i,.memoryRoute button{border:1px solid rgba(222,216,195,.13);border-radius:6px;background:rgba(222,216,195,.035)}
+.memoryRoute i{transition:background .12s,border-color .12s,box-shadow .12s}
+.memoryRoute i.on{border-color:var(--brass);background:rgba(201,163,73,.35);box-shadow:0 0 18px rgba(201,163,73,.2)}
+.memoryRoute.input button{cursor:pointer}
+.memoryRoute.input button:active{border-color:var(--brass);background:rgba(201,163,73,.18)}
+.codeDisplay{width:100%;min-height:116px;margin:auto 0;display:grid;place-items:center;border:1px solid rgba(222,216,195,.13);border-radius:9px;
+  background:rgba(9,11,5,.3);color:var(--brass);font-family:var(--mono);font-size:31px;font-weight:700;letter-spacing:.18em}
+.codeDisplay.compact{min-height:76px;margin:17px 0;font-size:22px}
+.numberGrid{width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:auto}
+.numberGrid button{min-height:55px;border:1px solid rgba(222,216,195,.16);border-radius:6px;background:rgba(222,216,195,.035);
+  color:var(--paper);font-family:var(--mono);font-size:15px;cursor:pointer}
+.numberGrid button:active{border-color:var(--brass);background:rgba(201,163,73,.12)}
 .examResult{margin:auto 0;text-align:center}
 .examResult .scoreRing{width:116px;height:116px;margin:0 auto 20px;border:2px solid;border-radius:50%;
   display:grid;place-items:center;font-family:var(--mono);font-size:26px;font-weight:700}
