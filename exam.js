@@ -5,8 +5,13 @@ const examEl=document.getElementById("exam"),examBody=document.getElementById("e
       examTrack=document.getElementById("examTrack");
 let EXAM=null;
 const EXAM_LABELS=["01 · Tepki","02 · Hafıza","03 · Muhakeme","Sonuç"];
-const REACTION_VARIANTS={signal:"Sinyal Tepkisi",identify:"Dost–Tehdit Ayrımı"};
-const MEMORY_VARIANTS={symbols:"İşaret Dizisi",grid:"Rota Hafızası",code:"Kod Hafızası"};
+const REACTION_VARIANTS={signal:"Sinyal Tepkisi",identify:"Dost–Tehdit Ayrımı",hold:"Süre Kontrolü"};
+const MEMORY_VARIANTS={symbols:"İşaret Dizisi",grid:"Rota Hafızası",code:"Kod Hafızası",positions:"Mevzi Hafızası"};
+const MINI_GAME_POOL=[
+  ...Object.entries(REACTION_VARIANTS).map(([id,name])=>({id:"reaction_"+id,name,stage:"reaction"})),
+  ...Object.entries(MEMORY_VARIANTS).map(([id,name])=>({id:"memory_"+id,name,stage:"memory"})),
+  {id:"logic_mixed",name:"Karma Muhakeme",stage:"logic"}
+];
 function shuffledExam(items){
   const out=items.slice();
   for(let i=out.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[out[i],out[j]]=[out[j],out[i]]}
@@ -26,23 +31,26 @@ function examIntro(kicker,glyph,title,copy,button,action){
 }
 function beginExam(force){
   locked=true;
-  const reactionMode=Math.random()<.5?"signal":"identify";
-  const memoryMode=["symbols","grid","code"][(Math.random()*3)|0];
+  const reactionModes=Object.keys(REACTION_VARIANTS),memoryModes=Object.keys(MEMORY_VARIANTS);
+  const reactionMode=reactionModes[(Math.random()*reactionModes.length)|0];
+  const memoryMode=memoryModes[(Math.random()*memoryModes.length)|0];
   EXAM={force,stage:0,score:0,timer:0,reactionRound:0,reactionPoints:0,memoryCorrect:0,logicCorrect:0,
     reactionMode,memoryMode,logicQuestions:sampleQuestions(LOGIC_Q,5),variants:{reaction:REACTION_VARIANTS[reactionMode],memory:MEMORY_VARIANTS[memoryMode],logic:"Karma Muhakeme"}};
   examEl.classList.remove("hide");
   showReactionIntro();
 }
 function showReactionIntro(){
-  const identify=EXAM.reactionMode==="identify";
-  examIntro("Aday Seçmeleri · 1/3",identify?"◉":"◎",REACTION_VARIANTS[EXAM.reactionMode],identify
-    ?"Üç taramada yalnızca HEDEF koduna dokun. DOST kodunda bekle; erken veya yanlış temas puan kaybettirir."
-    :"Sinyal yeşile döndüğü anda dokun. Erken dokunuş puan kaybettirir; üç turun ortalaması siciline işlenir.","Testi başlat",startReactionRound);
+  const mode=EXAM.reactionMode;
+  const copy=mode==="identify"?"Üç taramada yalnızca HEDEF koduna dokun. DOST kodunda bekle; erken veya yanlış temas puan kaybettirir."
+    :mode==="hold"?"Gösterilen süreyi zihninden say. Düğmeye basılı tut ve hedef süreye ulaştığını düşündüğün anda bırak; üç turun toplamı değerlendirilir."
+    :"Sinyal yeşile döndüğü anda dokun. Erken dokunuş puan kaybettirir; üç turun ortalaması siciline işlenir.";
+  examIntro("Aday Seçmeleri · 1/3",mode==="identify"?"◉":mode==="hold"?"◌":"◎",REACTION_VARIANTS[mode],copy,"Testi başlat",startReactionRound);
 }
 function startReactionRound(){
   if(EXAM.reactionRound>=3){
     EXAM.score+=EXAM.reactionPoints;EXAM.stage=1;showMemoryIntro();return;
   }
+  if(EXAM.reactionMode==="hold"){startHoldReactionRound();return}
   if(EXAM.reactionMode==="identify"){startIdentifyReactionRound();return}
   startSignalReactionRound();
 }
@@ -87,14 +95,36 @@ function startIdentifyReactionRound(){
     finish(Math.max(2,Math.min(12,Math.round(12-Math.max(0,ms-220)/70))),Math.round(ms)+" MS");
   };
 }
+function startHoldReactionRound(){
+  examMeta(0);const round=EXAM.reactionRound+1,target=Math.round((650+Math.random()*500)/50)*50;
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Süre · Tur '+round+'/3</div>'+ 
+    '<div class="roundLabel">Hedef · '+(target/1000).toFixed(2)+' saniye</div><button class="reactionPad hold" id="reactionPad"><span>BASILI TUT</span></button></div>';
+  const pad=document.getElementById("reactionPad"),label=pad.querySelector("span");let holding=false,done=false,started=0;
+  pad.style.setProperty("--hold-duration",target+"ms");EXAM.holdTarget=target;
+  const finish=duration=>{
+    if(done)return;done=true;holding=false;clearTimeout(EXAM.timer);pad.classList.remove("holding");
+    const diff=Math.abs(duration-target),points=diff<=100?12:diff<=200?10:diff<=320?7:diff<=450?4:2;
+    EXAM.reactionPoints+=points;EXAM.reactionRound++;label.textContent=Math.round(duration)+" MS";
+    examScore.textContent=Math.round(EXAM.score+EXAM.reactionPoints)+" PUAN";setTimeout(startReactionRound,720);
+  };
+  pad.onpointerdown=e=>{
+    if(done||holding)return;e.preventDefault();if(e.pointerId!=null&&pad.setPointerCapture)pad.setPointerCapture(e.pointerId);
+    holding=true;started=performance.now();pad.classList.add("holding");label.textContent="BIRAK";
+    EXAM.timer=setTimeout(()=>finish(performance.now()-started),2200);
+  };
+  pad.onpointerup=e=>{if(!holding||done)return;e.preventDefault();finish(performance.now()-started)};
+  pad.onpointercancel=()=>{if(holding&&!done)finish(performance.now()-started)};
+}
 function showMemoryIntro(){
   const mode=EXAM.memoryMode,title=MEMORY_VARIANTS[mode];
   const copy=mode==="grid"?"Beş hücre sırayla aydınlanacak. Rota bittikten sonra aynı hücreleri aynı sırayla seç."
     :mode==="code"?"Beş haneli görev kodunu aklında tut. Kod kapandıktan sonra rakamları aynı sırayla gir."
+    :mode==="positions"?"On altı hücreden beşi aynı anda işaretlenecek. Görüntü kapandıktan sonra beş mevziyi sırasız olarak seç."
     :"Beş işaret sırayla gösterilecek. Dizi bittikten sonra aynı sırayı dokunarak tekrar et.";
-  examIntro("Aday Seçmeleri · 2/3",mode==="grid"?"▦":mode==="code"?"#":"◇",title,copy,mode==="code"?"Kodu göster":"Diziyi göster",startMemory);
+  examIntro("Aday Seçmeleri · 2/3",mode==="grid"?"▦":mode==="code"?"#":mode==="positions"?"⊞":"◇",title,copy,mode==="code"?"Kodu göster":mode==="positions"?"Mevzileri göster":"Diziyi göster",startMemory);
 }
 function startMemory(){
+  if(EXAM.memoryMode==="positions"){startPositionMemory();return}
   if(EXAM.memoryMode==="grid"){startGridMemory();return}
   if(EXAM.memoryMode==="code"){startCodeMemory();return}
   startSymbolMemory();
@@ -152,6 +182,21 @@ function startCodeMemory(){
 function renderCodeMemoryInput(){
   examBody.innerHTML='<div class="examPanel"><div class="examKicker">Kod · '+(EXAM.memoryInput+1)+'/5</div><div class="codeDisplay compact">'+"• ".repeat(EXAM.memoryInput)+"_"+'</div><div class="numberGrid">'+Array.from({length:10},(_,i)=>'<button data-number="'+i+'">'+i+'</button>').join("")+'</div></div>';
   examBody.querySelectorAll("[data-number]").forEach(btn=>btn.onclick=()=>acceptMemory(+btn.dataset.number,renderCodeMemoryInput));
+}
+function startPositionMemory(){
+  EXAM.memorySeq=shuffledExam(Array.from({length:16},(_,i)=>i)).slice(0,5);EXAM.memorySelections=[];EXAM.memoryInput=0;EXAM.memoryCorrect=0;examMeta(1);
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Mevzi Hafızası</div><div class="positionGrid preview">'+Array.from({length:16},(_,i)=>'<i class="'+(EXAM.memorySeq.indexOf(i)>=0?"on":"")+'"></i>').join("")+'</div><p class="examCopy">İşaretli beş mevziyi aklında tut.</p></div>';
+  EXAM.timer=setTimeout(renderPositionMemoryInput,2300);
+}
+function renderPositionMemoryInput(){
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker" id="positionKicker">Mevzi · 0/5</div><div class="positionGrid input">'+Array.from({length:16},(_,i)=>'<button data-position="'+i+'"></button>').join("")+'</div></div>';
+  examBody.querySelectorAll("[data-position]").forEach(btn=>btn.onclick=()=>{
+    const value=+btn.dataset.position;if(EXAM.memorySelections.indexOf(value)>=0)return;
+    EXAM.memorySelections.push(value);EXAM.memoryInput++;btn.classList.add("selected");
+    if(EXAM.memorySeq.indexOf(value)>=0)EXAM.memoryCorrect++;
+    document.getElementById("positionKicker").textContent="Mevzi · "+EXAM.memoryInput+"/5";
+    if(EXAM.memoryInput>=5)finishMemoryStage();
+  });
 }
 const LOGIC_Q=[
  {id:"buyuk_1",c:"Sayısal",q:"Hangisi daha büyüktür?",o:["17 + 8","4 × 6"],a:0},
