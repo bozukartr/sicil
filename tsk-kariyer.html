@@ -15,7 +15,7 @@
       <div class="idt"><div class="rankname" id="rankName">Harbiyeli</div><div class="sub" id="forceName"></div></div>
       <div class="rgt">
         <div class="clock"><span id="mAge"></span><br><span id="mSrv"></span></div>
-        <button id="fileBtn" aria-label="Sicil dosyası">⊞</button>
+        <button id="fileBtn" aria-label="Sicil dosyasını aç"><span class="fi" aria-hidden="true">▤</span><span class="fl">Sicil</span></button>
       </div>
     </div>
     <div id="pips"></div>
@@ -32,6 +32,7 @@
       </div>
       <div class="cbody"><div id="text"></div></div>
     </div>
+    <div id="decisionFeedback" role="status" aria-live="polite"></div>
   </div>
   <div id="choices">
     <button class="ch" id="chL"><span class="k">◀ SOL</span><span id="chLt"></span></button>
@@ -248,6 +249,7 @@ function paintGauges(){
     g.name.textContent=STATS[k].s;g.val.textContent=v;
     g.fill.style.transform="scaleX("+Math.max(0,Math.min(100,v))/100+")";
     g.root.classList.toggle("low",v<25);g.root.classList.toggle("high",v>85);
+    g.root.setAttribute("aria-label",STATS[k].n+" "+v+(v<25?" kritik":v>85?" üstün":""));
   });
 }
 function preview(fx){
@@ -275,8 +277,11 @@ function paintHUD(){
     if(i<done)el.className="on";else if(i===done)el.className="now";
     pips.appendChild(el);
   }
-  const sp=document.createElement("span");
-  sp.textContent=S.r>=RANKS.length-1?"görev süresi":"terfi dönemi";
+  const sp=document.createElement("span"),remaining=Math.max(0,R.cards-S.cards);
+  sp.textContent=S.r>=RANKS.length-1
+    ?S.cards+"/"+R.cards+" · görev"
+    :remaining?S.cards+"/"+R.cards+" · terfiye "+remaining:S.cards+"/"+R.cards+" · değerlendirme";
+  pips.setAttribute("aria-label",sp.textContent);
   pips.appendChild(sp);
 }
 
@@ -303,13 +308,13 @@ function pick(){
 const cardA=document.getElementById("cardA"),
       stampL=document.getElementById("stampL"),stampR=document.getElementById("stampR"),
       chL=document.getElementById("chL"),chR=document.getElementById("chR"),
-      txtEl=document.getElementById("text");
+      txtEl=document.getElementById("text"),decisionFeedback=document.getElementById("decisionFeedback");
 function fitText(){
   txtEl.style.fontSize="";txtEl.style.lineHeight="";
-  const box=txtEl.parentElement;let s=15,guard=0;
-  while(txtEl.scrollHeight>box.clientHeight-1&&s>10.6&&guard++<32){
-    s-=.45;txtEl.style.fontSize=s.toFixed(2)+"px";
-    txtEl.style.lineHeight=s<12.6?"1.42":"1.53";
+  const box=txtEl.parentElement;let s=16,guard=0;
+  while(txtEl.scrollHeight>box.clientHeight-1&&s>12.4&&guard++<32){
+    s-=.4;txtEl.style.fontSize=s.toFixed(2)+"px";
+    txtEl.style.lineHeight=s<13.4?"1.42":"1.52";
   }
 }
 function nextCard(){
@@ -328,12 +333,15 @@ function nextCard(){
   cardA.classList.remove("fly");cardA.style.opacity="1";cardA.style.transform="translate3d(0,0,0)";
   stampL.style.opacity=0;stampR.style.opacity=0;
   chL.classList.remove("hot");chR.classList.remove("hot");
+  decisionFeedback.classList.remove("on");
   clearPreview();locked=false;
   requestAnimationFrame(fitText);
 }
 function decide(right){
   if(locked)return;locked=true;
   const fx=resolve(right?ev.ra:ev.la,S.r);
+  decisionFeedback.textContent=ev.warn?"Geçmiş kayıt güncellendi":"Karar dosyaya işlendi";
+  decisionFeedback.classList.remove("on");void decisionFeedback.offsetWidth;decisionFeedback.classList.add("on");
   cardA.classList.add("fly");
   cardA.style.transform="translate3d("+(right?1:-1)*(window.innerWidth*1.2)+"px,"+(dx*.1)+"px,0) rotate("+(right?24:-24)+"deg)";
   cardA.style.opacity="0";
@@ -375,12 +383,12 @@ function apply(fx){
   paintGauges();paintHUD();
   vis.forEach((k,i)=>{if(fx.st[k]){gEls[i].root.classList.remove("bump");void gEls[i].root.offsetWidth;gEls[i].root.classList.add("bump")}});
   setTimeout(()=>{
-    clearPreview();
+    clearPreview();decisionFeedback.classList.remove("on");
     if(fx.end){const m=ENDINGS[fx.end];finish(fx.end,m?m[0]:"Dosya kapandı",m?m[1]:"");return}
     if(checkExtremes())return;
     if(S.cards>=RANKS[S.r].cards){tryPromote();return}
     nextCard();
-  },320);
+  },520);
 }
 const EXTREME={
  dis:"Yüksek Disiplin Kurulu hakkındaki tutanakları bir bütün olarak değerlendirdi. TSK ile ilişiğin kesildi.",
