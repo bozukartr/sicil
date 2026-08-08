@@ -81,7 +81,7 @@ function newGame(force,career,examProfile,specialtyId){
   const flags=new Set();
   if(profile.grade&&profile.grade!=="legacy")flags.add("sinav_"+profile.grade);
   if(specialty)flags.add("uz_"+specialty.id);
-  S={f:force,career,specialty:specialty?specialty.id:null,track:"command",transitionAttempts:{},transitionQuestionHistory:{},exam:profile,examScore:profile.total||0,r:0,cards:0,months:0,age:18,flags,hist:[],journal:[],grace:0,ended:false,
+  S={f:force,career,specialty:specialty?specialty.id:null,track:"command",transitionAttempts:{},transitionQuestionHistory:{},exam:profile,examScore:profile.total||0,r:0,cards:0,totalDecisions:0,months:0,age:18,flags,hist:[],eventCounts:{},pendingConsequences:[],traits:{},traitMilestones:{},journal:[],grace:0,ended:false,
      warnCd:{},seen:new Set(RANKS[0].vis),
      st:initialStats(career,profile,specialty)};
   const grade=({ustun:"Üstün başarı",basarili:"Başarılı",sinirda:"Sınırda kabul",saha:"Saha ataması"}[profile.grade]||"Aday değerlendirmesi");
@@ -94,7 +94,8 @@ function newGame(force,career,examProfile,specialtyId){
 }
 function E(tags,force,who,role,place,text,lt,la,rt,ra,opt){
   POOL.push({tg:tags.split(" "),fo:force,who,role,place,text,lt,la,rt,ra,
-    req:opt&&opt.req,no:opt&&opt.no,w:(opt&&opt.w)||1,pri:(opt&&opt.pri)||0});
+    req:opt&&opt.req,no:opt&&opt.no,lreq:opt&&opt.lreq,rreq:opt&&opt.rreq,
+    lneed:opt&&opt.lneed,rneed:opt&&opt.rneed,w:(opt&&opt.w)||1,pri:(opt&&opt.pri)||0});
 }
 
 let gEls=[];
@@ -154,6 +155,7 @@ function paintHUD(){
     :remaining?S.cards+"/"+R.cards+" · terfiye "+remaining:S.cards+"/"+R.cards+" · değerlendirme";
   pips.setAttribute("aria-label",sp.textContent);
   pips.appendChild(sp);
+  if(typeof renderTraitStrip==="function")renderTraitStrip();
 }
 
 function pick(){
@@ -162,16 +164,24 @@ function pick(){
     return (e.tg.indexOf(t)>=0||e.tg.indexOf("*")>=0)&&(e.fo==="*"||e.fo.indexOf(S.f)>=0)
       &&(!e.req||e.req.split(",").every(f=>S.flags.has(f)))
       &&(!e.no||!e.no.split(",").some(f=>S.flags.has(f)))};
-  let best=[],bp=-1;
-  for(let i=0;i<POOL.length;i++){
-    if(!fit(i)||S.hist.indexOf(i)>=0)continue;
-    const e=POOL[i];
-    if(e.pri>bp){bp=e.pri;best=[]}
-    if(e.pri===bp)for(let w=0;w<e.w;w++)best.push(i);
-  }
-  if(!best.length){S.hist.length=0;for(let i=0;i<POOL.length;i++)if(fit(i))best.push(i)}
+  const candidates=()=>{
+    let best=[],bp=-1;
+    for(let i=0;i<POOL.length;i++){
+      if(!fit(i)||S.hist.indexOf(i)>=0)continue;
+      const e=POOL[i];
+      if(e.pri>bp){bp=e.pri;best=[]}
+      if(e.pri===bp)best.push(i);
+    }
+    return best;
+  };
+  let best=candidates();
+  if(!best.length){S.hist.length=0;best=candidates()}
   if(!best.length)return null;
-  const id=best[(Math.random()*best.length)|0];
+  S.eventCounts=S.eventCounts||{};
+  const weights=best.map(id=>(POOL[id].w||1)/(1+(S.eventCounts[id]||0)*.65));
+  let roll=Math.random()*weights.reduce((a,b)=>a+b,0),id=best[best.length-1];
+  for(let i=0;i<best.length;i++){roll-=weights[i];if(roll<=0){id=best[i];break}}
+  S.eventCounts[id]=(S.eventCounts[id]||0)+1;
   S.hist.push(id);if(S.hist.length>80)S.hist.shift();
   return POOL[id];
 }
@@ -201,6 +211,10 @@ function renderCard(event){
   cardA.classList.remove("fly");cardA.style.opacity="1";cardA.style.transform="translate3d(0,0,0)";
   stampL.style.opacity=0;stampR.style.opacity=0;
   chL.classList.remove("hot");chR.classList.remove("hot");
+  const leftOpen=choiceAvailable("left",ev),rightOpen=choiceAvailable("right",ev);
+  chL.disabled=!leftOpen;chR.disabled=!rightOpen;
+  chL.dataset.locked=leftOpen?"":(ev.lneed||"Karar profili gerekli");
+  chR.dataset.locked=rightOpen?"":(ev.rneed||"Karar profili gerekli");
   decisionFeedback.classList.remove("on");
   clearPreview();locked=false;
   requestAnimationFrame(fitText);
@@ -208,14 +222,19 @@ function renderCard(event){
 function nextCard(){
   const src=warnPick()||pick();
   if(!src){finish("bos","Dosya tamamlandı","Kayıtlar burada sona eriyor.");return}
-  const event=Math.random()<.5?src:{who:src.who,role:src.role,place:src.place,text:src.text,warn:src.warn,
-    lt:src.rt,la:src.ra,rt:src.lt,ra:src.la};
+  const event=Math.random()<.5?src:{...src,lt:src.rt,la:src.ra,rt:src.lt,ra:src.la,
+    lreq:src.rreq,rreq:src.lreq,lneed:src.rneed,rneed:src.lneed};
   renderCard(event);persistGame("card","new-card");
 }
+function choiceAvailable(side,event){
+  const req=side==="left"?event.lreq:event.rreq;
+  return !req||req.split(",").every(flag=>S.flags.has(flag));
+}
 function decide(right){
-  if(locked)return;locked=true;
-  const fx=resolve(right?ev.ra:ev.la,S.r);
+  if(locked||!choiceAvailable(right?"right":"left",ev))return;locked=true;
+  const rawEffect=right?ev.ra:ev.la,fx=resolve(rawEffect,S.r);
   addJournal(ev.warn?"critical":"decision",right?ev.rt:ev.lt,ev.who+" · "+ev.role);
+  if(typeof updateTraitProfile==="function")updateTraitProfile(rawEffect);
   S.pendingEvent=null;
   decisionFeedback.textContent=ev.warn?"Geçmiş kayıt güncellendi":"Karar dosyaya işlendi";
   decisionFeedback.classList.remove("on");void decisionFeedback.offsetWidth;decisionFeedback.classList.add("on");
@@ -256,7 +275,8 @@ function apply(fx){
       S.st[k]=Math.max(DRIFT_TO,S.st[k]-.3);
   for(const k in S.warnCd)if(S.warnCd[k]>0)S.warnCd[k]--;
   fx.add.forEach(f=>S.flags.add(f));fx.del.forEach(f=>S.flags.delete(f));
-  S.months+=fx.t||4;S.age=18+Math.floor(S.months/12);S.cards++;
+  S.months+=fx.t||4;S.age=18+Math.floor(S.months/12);S.cards++;S.totalDecisions=(S.totalDecisions||0)+1;
+  scheduleConsequences(fx.later||[]);activateDueConsequences();
   paintGauges();paintHUD();
   persistGame("resolving","decision-applied");
   vis.forEach((k,i)=>{if(fx.st[k]){gEls[i].root.classList.remove("bump");void gEls[i].root.offsetWidth;gEls[i].root.classList.add("bump")}});
@@ -267,6 +287,25 @@ function apply(fx){
     if(S.cards>=RANKS[S.r].cards){tryPromote();return}
     nextCard();
   },520);
+}
+function scheduleConsequences(items){
+  S.pendingConsequences=S.pendingConsequences||[];
+  items.forEach(item=>{
+    if(!item||!item.flag||S.pendingConsequences.some(x=>x.flag===item.flag)||S.flags.has(item.flag))return;
+    S.pendingConsequences.push({flag:item.flag,dueDecision:S.totalDecisions+Math.max(1,item.delay||1)});
+  });
+}
+function activateDueConsequences(){
+  S.pendingConsequences=S.pendingConsequences||[];
+  const waiting=[];
+  S.pendingConsequences.forEach(item=>{
+    if(item.dueDecision<=S.totalDecisions){
+      S.flags.add(item.flag);
+      const label=typeof CHAIN_LABELS!=="undefined"&&CHAIN_LABELS[item.flag]||"Geçmiş karar yeniden gündemde";
+      addJournal("consequence",label,"Daha önce verdiğin bir karar yeni bir dosya olarak geri döndü.");
+    }else waiting.push(item);
+  });
+  S.pendingConsequences=waiting;
 }
 const EXTREME={
  dis:"Yüksek Disiplin Kurulu hakkındaki tutanakları bir bütün olarak değerlendirdi. TSK ile ilişiğin kesildi.",
@@ -380,6 +419,7 @@ document.getElementById("promoBtn").onclick=()=>{
 };
 function retire(){
   const s=S.st;
+  if(typeof finishTraitCareer==="function"&&finishTraitCareer(S))return;
   if(typeof finishSpecialtyCareer==="function"&&finishSpecialtyCareer(S))return;
   if(S.career==="nco"){
     if(s.ast>=75&&s.lid>=68&&s.iti>=65)
@@ -416,6 +456,7 @@ function finish(id,title,text){
   const hon=KEYS.filter(k=>S.st[k]>=88);
   document.getElementById("endNote").textContent=hon.length?"Dosyaya işlenen üstünlük — "+hon.map(k=>STATS[k].n).join(" · "):"";
   document.getElementById("end").classList.remove("hide");
+  if(typeof renderEndTraits==="function")renderEndTraits();
   archiveCareer(S,{id,title,text});
 }
 function renderJournal(){
@@ -456,6 +497,7 @@ function openFile(){
   const specialty=typeof getSpecialty==="function"?getSpecialty(S.f,S.specialty):null;
   document.getElementById("fileNote").textContent=
     "Aday sınavı: "+(S.exam?S.exam.total:"—")+" puan · "+grade+". Uzmanlık: "+(specialty?specialty.name:"kayıt yok")+". Kariyer yolu: "+(S.track==="admin"?"idari görev":"aktif komuta")+". Bu rütbede sicilinde yalnızca dört unsur ölçülüyor. Daha önce ölçüldüğün unsurlar için yaklaşık bir kanaatin var; hiç ölçülmediklerin hakkında hiçbir fikrin yok — ama onlar işlemeye devam ediyor.";
+  if(typeof renderTraitFile==="function")renderTraitFile();
   document.getElementById("file").classList.remove("hide");
   setFileTab("stats");
 }
@@ -478,6 +520,8 @@ function refreshResumePanel(){
 function resumeSavedGame(){
   const restored=loadActiveState();if(!restored){refreshResumePanel();return false}
   S=restored;S.ended=false;RANKS=S.career==="nco"?NCO_RANKS:OFFICER_RANKS;
+  if(typeof syncTraitFlags==="function")syncTraitFlags(S);
+  activateDueConsequences();
   ["start","exam","specialty","transition","end","promo","file"].forEach(id=>document.getElementById(id).classList.add("hide"));
   buildGauges();paintHUD();
   if(S.resumeScreen==="promo"&&S.resumeData){showPromo(S.resumeData.top,S.resumeData.rank,S.resumeData.note,true);return true}
@@ -501,12 +545,12 @@ function onMove(e){
     const a=Math.min(1,Math.abs(dx)/90);
     stampL.style.opacity=dx<-8?a:0;stampR.style.opacity=dx>8?a:0;
     chL.classList.toggle("hot",dx<-18);chR.classList.toggle("hot",dx>18);
-    if(Math.abs(dx)>20)preview(resolve(dx>0?ev.ra:ev.la,S.r));else clearPreview();
+    if(Math.abs(dx)>20&&choiceAvailable(dx>0?"right":"left",ev))preview(resolve(dx>0?ev.ra:ev.la,S.r));else clearPreview();
   });
 }
 function onUp(){
   if(!dragging)return;dragging=false;
-  if(Math.abs(dx)>Math.min(100,window.innerWidth*.23))decide(dx>0);
+  if(Math.abs(dx)>Math.min(100,window.innerWidth*.23)&&choiceAvailable(dx>0?"right":"left",ev))decide(dx>0);
   else{
     cardA.classList.add("snap");cardA.style.transform="translate3d(0,0,0)";
     stampL.style.opacity=0;stampR.style.opacity=0;
@@ -519,14 +563,14 @@ window.addEventListener("pointerup",onUp,{passive:true});
 window.addEventListener("pointercancel",onUp,{passive:true});
 [[chL,false],[chR,true]].forEach(function(a){
   const el=a[0],right=a[1];
-  el.addEventListener("pointerdown",()=>{if(!locked){el.classList.add("hot");preview(resolve(right?ev.ra:ev.la,S.r))}},{passive:true});
+  el.addEventListener("pointerdown",()=>{if(!locked&&!el.disabled){el.classList.add("hot");preview(resolve(right?ev.ra:ev.la,S.r))}},{passive:true});
   el.addEventListener("pointerleave",()=>{el.classList.remove("hot");if(!locked)clearPreview()},{passive:true});
   el.addEventListener("click",()=>{dx=right?100:-100;decide(right)});
 });
 window.addEventListener("keydown",e=>{
   if(locked)return;
-  if(e.key==="ArrowLeft"){dx=-100;decide(false)}
-  if(e.key==="ArrowRight"){dx=100;decide(true)}
+  if(e.key==="ArrowLeft"&&!chL.disabled){dx=-100;decide(false)}
+  if(e.key==="ArrowRight"&&!chR.disabled){dx=100;decide(true)}
 });
 window.addEventListener("resize",()=>{if(!locked)requestAnimationFrame(fitText)});
 document.addEventListener("touchmove",e=>{
