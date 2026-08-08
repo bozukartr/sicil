@@ -53,21 +53,22 @@ function finishSpecialtyCareer(state){
   finish("uz_"+spec.id,spec.ending[0],spec.ending[1]);
   return true;
 }
-function showSpecialtySelect(force,profile){
-  const screen=document.getElementById("specialty"),list=document.getElementById("specialtyList");
-  document.getElementById("specialtyCareer").textContent=profile.career==="nco"?"Saha Kariyeri":"Subay Kariyeri";
-  document.getElementById("specialtyTitle").textContent=profile.career==="nco"?"Branşını Seç":"Sınıfını Seç";
-  document.getElementById("specialtyLead").textContent="Uzmanlığın ilk sicilini, özel olaylarını ve terfide ağırlık kazanacak ölçütleri belirler.";
-  list.innerHTML="";
-  specialtyList(force).forEach(spec=>{
+function renderSpecialtyOptions(force,onChoose,excludeId){
+  const list=document.getElementById("specialtyList");list.innerHTML="";
+  specialtyList(force).filter(spec=>spec.id!==excludeId).forEach(spec=>{
     const b=document.createElement("button");b.className="specialtyCard";
     const focus=Object.keys(spec.weights).slice(0,3).map(k=>STATS[k].s).join(" · ");
     const mods=Object.entries(spec.modifiers).filter(x=>x[1]).map(([k,v])=>'<i class="'+(v>0?"up":"down")+'">'+STATS[k].s+' '+(v>0?"+":"")+v+'</i>').join("");
     b.innerHTML='<span class="specialtyGlyph">'+spec.glyph+'</span><span class="specialtyText"><b>'+spec.name+'</b><em>'+spec.desc+'</em><small>'+focus+'</small><span class="specialtyMods">'+mods+'</span></span>';
-    b.setAttribute("aria-label",spec.name+" uzmanlığını seç");
-    b.onclick=()=>newGame(force,profile.career,profile,spec.id);
-    list.appendChild(b);
+    b.setAttribute("aria-label",spec.name+" uzmanlığını seç");b.onclick=()=>onChoose(spec);list.appendChild(b);
   });
+}
+function showSpecialtySelect(force,profile){
+  const screen=document.getElementById("specialty");
+  document.getElementById("specialtyCareer").textContent=profile.career==="nco"?"Saha Kariyeri":"Subay Kariyeri";
+  document.getElementById("specialtyTitle").textContent=profile.career==="nco"?"Branşını Seç":"Sınıfını Seç";
+  document.getElementById("specialtyLead").textContent="Uzmanlığın ilk sicilini, özel olaylarını ve terfide ağırlık kazanacak ölçütleri belirler.";
+  renderSpecialtyOptions(force,spec=>newGame(force,profile.career,profile,spec.id));
   document.getElementById("exam").classList.add("hide");
   screen.classList.remove("hide");
 }
