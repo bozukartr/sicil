@@ -12,13 +12,17 @@
   <div id="hud">
     <div class="tag">
       <div id="insBox"></div>
-      <div class="idt"><div class="rankname" id="rankName">Harbiyeli</div><div class="sub" id="forceName"></div></div>
-      <div class="rgt">
-        <div class="clock"><span id="mAge"></span><br><span id="mSrv"></span></div>
-        <button id="fileBtn" aria-label="Sicil dosyasını aç"><span class="fi" aria-hidden="true">▤</span><span class="fl">Sicil</span></button>
+      <div class="idt">
+        <div class="careerBadge" id="careerBadge">Subay Kariyeri</div>
+        <div class="rankname" id="rankName">Harbiyeli</div>
+        <div class="sub" id="forceName"></div>
       </div>
+      <button id="fileBtn" aria-label="Sicil dosyasını aç"><span class="fi" aria-hidden="true">▤</span><span class="fl">Sicil</span></button>
     </div>
-    <div id="pips"></div>
+    <div class="hudmeta">
+      <div class="clock"><span id="mAge"></span><i></i><span id="mSrv"></span></div>
+      <div id="pips"></div>
+    </div>
   </div>
   <div id="gauges"></div>
   <div id="stage">
@@ -56,10 +60,18 @@
     <button class="btn p" id="promoBtn">Göreve devam</button>
   </div>
 
+  <div class="screen hide" id="exam">
+    <div class="examShell">
+      <div class="examTop"><span id="examStep">Aday Seçmeleri</span><b id="examScore">0 PUAN</b></div>
+      <div class="examTrack" id="examTrack"></div>
+      <div id="examBody"></div>
+    </div>
+  </div>
+
   <div class="screen" id="start">
-    <div class="eyebrow">Personel Başkanlığı · Sicil Dosyası</div>
-    <h1>Sicil<small>bir subayın otuz beş yılı</small></h1>
-    <p class="lead">Her kart bir karar, her karar dosyana işler. Rütben yükseldikçe seni ölçen dört ölçüt değişir — ama ölçülmediğin yıllarda ihmal ettiklerin peşini bırakmaz.</p>
+    <div class="eyebrow">Personel Temin · Aday Dosyası</div>
+    <h1>Sicil<small>kariyerin sınavla başlar</small></h1>
+    <p class="lead">Kuvvetini seç, üç aşamalı aday sınavına gir. Başarı Harp Okulu yolunu açar; başarısızlık kariyerini er olarak sahadan başlatır.</p>
     <div class="forces" id="forceList"></div>
   </div>
 
@@ -89,7 +101,7 @@ const STATS={
 };
 const KEYS=Object.keys(STATS);
 
-const RANKS=[
+const OFFICER_RANKS=[
  {t:"hb",n:{k:"Harbiyeli",d:"Deniz Harbiyeli",h:"Hava Harbiyeli"},cards:11,vis:["dis","fiz","tek","ruh"],need:48,ins:{cadet:1}},
  {t:"tg",n:{k:"Teğmen",d:"Teğmen",h:"Teğmen"},cards:9,vis:["dis","ast","fiz","sic"],need:46,ins:{bar:2}},
  {t:"ut",n:{k:"Üsteğmen",d:"Üsteğmen",h:"Üsteğmen"},cards:10,vis:["dis","ast","lid","sic"],need:48,ins:{bar:3}},
@@ -102,6 +114,20 @@ const RANKS=[
  {t:"g3",n:{k:"Korgeneral",d:"Koramiral",h:"Korgeneral"},cards:8,vis:["iti","kar","ope","ruh"],need:53,ins:{star:3,gen:1}},
  {t:"g4",n:{k:"Orgeneral",d:"Oramiral",h:"Orgeneral"},cards:14,vis:["iti","kar","ope","ail"],need:999,ins:{star:4,gen:1}}
 ];
+const NCO_RANKS=[
+ {t:"er", n:{k:"Er",d:"Er",h:"Er"},cards:6,vis:["dis","fiz","ruh","tek"],need:43,ins:{}},
+ {t:"ob", n:{k:"Onbaşı",d:"Onbaşı",h:"Onbaşı"},cards:6,vis:["dis","ast","fiz","tek"],need:44,ins:{chev:1}},
+ {t:"cv", n:{k:"Çavuş",d:"Çavuş",h:"Çavuş"},cards:7,vis:["dis","ast","lid","sic"],need:45,ins:{chev:2}},
+ {t:"uo", n:{k:"Uzman Onbaşı",d:"Uzman Onbaşı",h:"Uzman Onbaşı"},cards:7,vis:["tek","ope","fiz","sic"],need:46,ins:{chev:1,bar:1}},
+ {t:"uc", n:{k:"Uzman Çavuş",d:"Uzman Çavuş",h:"Uzman Çavuş"},cards:8,vis:["ast","lid","ope","sic"],need:47,ins:{chev:2,bar:1}},
+ {t:"ac", n:{k:"Astsubay Çavuş",d:"Astsubay Çavuş",h:"Astsubay Çavuş"},cards:8,vis:["dis","ast","tek","sic"],need:48,ins:{bar:1,star:1}},
+ {t:"akc",n:{k:"Astsubay Kıdemli Çavuş",d:"Astsubay Kıdemli Çavuş",h:"Astsubay Kıdemli Çavuş"},cards:8,vis:["lid","ast","loj","sic"],need:49,ins:{bar:2,star:1}},
+ {t:"au", n:{k:"Astsubay Üstçavuş",d:"Astsubay Üstçavuş",h:"Astsubay Üstçavuş"},cards:8,vis:["lid","ope","loj","ruh"],need:50,ins:{bar:3,star:1}},
+ {t:"aku",n:{k:"Astsubay Kıdemli Üstçavuş",d:"Astsubay Kıdemli Üstçavuş",h:"Astsubay Kıdemli Üstçavuş"},cards:8,vis:["iti","lid","sic","ail"],need:51,ins:{bar:4,star:1}},
+ {t:"ab", n:{k:"Astsubay Başçavuş",d:"Astsubay Başçavuş",h:"Astsubay Başçavuş"},cards:9,vis:["iti","ast","loj","sic"],need:52,ins:{star:2,laurel:1}},
+ {t:"akb",n:{k:"Astsubay Kıdemli Başçavuş",d:"Astsubay Kıdemli Başçavuş",h:"Astsubay Kıdemli Başçavuş"},cards:10,vis:["iti","lid","ruh","ail"],need:999,ins:{star:3,laurel:1}}
+];
+let RANKS=OFFICER_RANKS;
 const FORCE={k:"Kara Kuvvetleri",d:"Deniz Kuvvetleri",h:"Hava Kuvvetleri"};
 const BOARD={k:"#333a1f",d:"#1a2340",h:"#25324a"};
 
@@ -144,6 +170,10 @@ const RW={
  g3:{dis:.9,sic:.9,ast:.8,fiz:.4,ruh:1.1,tek:.8,ope:1.1,lid:1,loj:.9,kar:1.3,iti:1.5,ail:1.1},
  g4:{dis:.9,sic:.8,ast:.8,fiz:.4,ruh:1.1,tek:.8,ope:1.1,lid:1,loj:.9,kar:1.2,iti:1.5,ail:1.1}
 };
+Object.assign(RW,{
+ er:RW.hb,ob:RW.hb,cv:RW.tg,uo:RW.tg,uc:RW.ut,
+ ac:RW.ut,akc:RW.yz,au:RW.bb,aku:RW.yb,ab:RW.al,akb:RW.g1
+});
 const rawCache=new Map(),resCache=new Map();
 function parseRaw(s){
   if(rawCache.has(s))return rawCache.get(s);
@@ -164,7 +194,7 @@ function parseRaw(s){
   rawCache.set(s,o);return o;
 }
 function resolve(s,r){
-  const key=r+"|"+s;
+  const key=RANKS[r].t+"|"+s;
   if(resCache.has(key))return resCache.get(key);
   const raw=parseRaw(s),W=RW[RANKS[r].t],st={};
   for(const k in raw.tag){
@@ -194,6 +224,13 @@ function insSVG(r,f){
   if(c.cadet){
     g.push('<rect x="14.4" y="8" width="5.2" height="28" rx="1.2" fill="#a83c29" stroke="rgba(224,189,99,.55)" stroke-width=".7"/>');
   }
+  if(c.chev){
+    const n=c.chev,y0=18-(n-1)*6;
+    for(let i=0;i<n;i++){
+      const y=y0+i*7;
+      g.push('<path d="M7 '+y+' L17 '+(y+5)+' L27 '+y+'" fill="none" stroke="#e0bd63" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>');
+    }
+  }
   if(c.bar){
     const n=c.bar,gap=5.7,y0=36-(n-1)*gap;
     for(let i=0;i<n;i++) g.push('<rect x="6.5" y="'+(y0+i*gap-1.6).toFixed(1)+'" width="21" height="3.1" rx="1.1" fill="#e0bd63"/>');
@@ -220,10 +257,12 @@ function insSVG(r,f){
 /* ---- durum ---- */
 let S,ev,dragging=false,x0=0,y0=0,dx=0,raf=0,locked=true,POOL=[];
 const HIDDEN_FLOOR=11;
-function newGame(force){
-  S={f:force,r:0,cards:0,months:0,age:18,flags:new Set(),hist:[],grace:0,ended:false,
+function newGame(force,career,examScore){
+  RANKS=career==="nco"?NCO_RANKS:OFFICER_RANKS;
+  S={f:force,career:career||"officer",examScore:examScore||0,r:0,cards:0,months:0,age:18,flags:new Set(),hist:[],grace:0,ended:false,
      warnCd:{},seen:new Set(RANKS[0].vis),
-     st:{dis:56,sic:50,ast:50,fiz:62,ruh:60,tek:48,ope:45,lid:45,loj:45,kar:38,iti:46,ail:62}};
+     st:{dis:56,sic:50,ast:50,fiz:62,ruh:60,tek:48,ope:45,lid:45,loj:45,kar:career==="nco"?32:38,iti:46,ail:62}};
+  document.getElementById("exam").classList.add("hide");
   buildGauges();paintHUD();nextCard();
 }
 function E(tags,force,who,role,place,text,lt,la,rt,ra,opt){
@@ -265,6 +304,7 @@ function clearPreview(){gEls.forEach(g=>{g.d.className="gd";g.d.textContent=""})
 
 function paintHUD(){
   const R=RANKS[S.r];
+  document.getElementById("careerBadge").textContent=S.career==="nco"?"Saha Kariyeri":"Subay Kariyeri";
   document.getElementById("rankName").textContent=R.n[S.f];
   document.getElementById("forceName").textContent=FORCE[S.f];
   document.getElementById("insBox").innerHTML=insSVG(S.r,S.f);
@@ -419,7 +459,17 @@ const PROMO={
  g1:"Generalliğe/amiralliğe yükseldin. Kararların artık binlerce kişiyi ilgilendiriyor.",
  g2:"Tümen/donanma seviyesi. Hata payı iyice daraldı, tanıklar çoğaldı.",
  g3:"Ordu/kuvvet komutanlığı yolundasın. Her cümlen tutanağa geçiyor.",
- g4:"En üst rütbe. Bundan sonrası kariyer değil, geride bırakacağın iz meselesi."
+ g4:"En üst rütbe. Bundan sonrası kariyer değil, geride bırakacağın iz meselesi.",
+ ob:"Takımın seni artık yalnız bir er olarak görmüyor; sorumluluk almaya başladın.",
+ cv:"Emir almak kadar emir vermenin de ağırlığını taşıyacağın dönem.",
+ uo:"Mesleği seçtin. Geçici görev değil, profesyonel askerlik yılları başlıyor.",
+ uc:"Tim tecrüben arttı; yeni gelen personelin ilk baktığı kişi artık sensin.",
+ ac:"Astsubay sınıfına geçtin. Sahadaki tecrübeyi kurumun hafızasına taşıyacaksın.",
+ akc:"Kıdemin arttıkça hatalar yalnız sana değil, yetiştirdiğin personele de yazılıyor.",
+ au:"Birliğin günlük düzeninde subaylarla personel arasındaki ana bağlardan birisin.",
+ aku:"Tecrüben karar masasında daha fazla ağırlık taşıyor; sessiz kalman da bir karar.",
+ ab:"Birliğin en deneyimli isimlerindensin. Genç personel senden meslek kadar karakter öğreniyor.",
+ akb:"Astsubaylığın en üst kıdemi. Bundan sonrası bıraktığın usul, yetiştirdiğin insan ve kurumsal hafıza."
 };
 function tryPromote(){
   const R=RANKS[S.r];
@@ -482,6 +532,16 @@ document.getElementById("promoBtn").onclick=()=>{
 };
 function retire(){
   const s=S.st;
+  if(S.career==="nco"){
+    if(s.ast>=75&&s.lid>=68&&s.iti>=65)
+      finish("usta","Birliğin Hafızası","Astsubay Kıdemli Başçavuş olarak emekli oldun. Yetiştirdiğin personel farklı birliklere dağıldı; usulün ve sözlerin senden sonra da yaşamaya devam etti.");
+    else if(s.ope>=72&&s.tek>=68)
+      finish("sahausta","Sahanın Ustası","Son içtimada adın rütbenden önce tecrübenle anıldı. Üniformayı bıraktın, anlattığın dersler birliklerde kaldı.");
+    else if(s.ail>=72)
+      finish("ncohuzur","Onurlu Emeklilik","Astsubay Kıdemli Başçavuş olarak görevini tamamladın. Nizamiyeden çıktığında bu kez evde seni bekleyen hayatı ertelemedin.");
+    else finish("ncoemekli","Astsubay Kıdemli Başçavuş","Uzun bir saha kariyerinin ardından üniformanı astın. Sicil dosyan kapandı; yetiştirdiğin insanlar görevde kaldı.");
+    return;
+  }
   if(s.iti>=75&&s.kar>=70&&s.sic>=65)
     finish("gnkur","Genelkurmay Başkanı","En üst makama kadar geldin. Otuz beş yılın sonunda devir teslim konuşmanda sesin bir an titredi; kimse fark etmedi.");
   else if(s.ope>=75&&s.lid>=65)
@@ -565,6 +625,112 @@ window.addEventListener("resize",()=>{if(!locked)requestAnimationFrame(fitText)}
 document.addEventListener("touchmove",e=>{
   if(!e.target.closest||!e.target.closest(".screen,#file"))e.preventDefault();
 },{passive:false});
+
+const examEl=document.getElementById("exam"),examBody=document.getElementById("examBody"),
+      examStep=document.getElementById("examStep"),examScore=document.getElementById("examScore"),
+      examTrack=document.getElementById("examTrack");
+let EXAM=null;
+const EXAM_LABELS=["01 · Tepki","02 · Hafıza","03 · Muhakeme","Sonuç"];
+function examMeta(stage){
+  examStep.textContent=EXAM_LABELS[stage];
+  examScore.textContent=Math.round(EXAM.score)+" PUAN";
+  examTrack.innerHTML=[0,1,2].map(i=>'<i class="'+(stage>i?"done":stage===i?"now":"")+'"></i>').join("");
+}
+function examIntro(kicker,glyph,title,copy,button,action){
+  examMeta(EXAM.stage);
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">'+kicker+'</div><div class="examGlyph">'+glyph+'</div>'+ 
+    '<h2 class="examTitle">'+title+'</h2><p class="examCopy">'+copy+'</p><button class="examAction" id="examAction">'+button+'</button></div>';
+  document.getElementById("examAction").onclick=action;
+}
+function beginExam(force){
+  locked=true;
+  EXAM={force,stage:0,score:0,timer:0,reactionRound:0,reactionPoints:0,memoryCorrect:0,logicCorrect:0};
+  examEl.classList.remove("hide");
+  examIntro("Aday Seçmeleri · 1/3","◎","Tepki Kontrolü","Sinyal yeşile döndüğü anda dokun. Erken dokunuş puan kaybettirir; üç turun ortalaması siciline işlenir.","Testi başlat",startReactionRound);
+}
+function startReactionRound(){
+  if(EXAM.reactionRound>=3){
+    EXAM.score+=EXAM.reactionPoints;EXAM.stage=1;showMemoryIntro();return;
+  }
+  examMeta(0);
+  const round=EXAM.reactionRound+1;
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Tepki · Tur '+round+'/3</div>'+ 
+    '<div class="roundLabel">Sinyali bekle</div><button class="reactionPad" id="reactionPad">BEKLE</button></div>';
+  const pad=document.getElementById("reactionPad");let armed=false,done=false,started=0;
+  EXAM.timer=setTimeout(()=>{if(done)return;armed=true;started=performance.now();pad.classList.add("ready");pad.textContent="ŞİMDİ"},750+Math.random()*1100);
+  pad.onclick=()=>{
+    if(done)return;done=true;clearTimeout(EXAM.timer);
+    if(!armed){pad.classList.add("early");pad.textContent="ERKEN";EXAM.reactionPoints+=2}
+    else{
+      const ms=performance.now()-started;
+      EXAM.reactionPoints+=Math.max(2,Math.min(12,Math.round(12-Math.max(0,ms-220)/70)));
+      pad.textContent=Math.round(ms)+" MS";
+    }
+    EXAM.reactionRound++;examScore.textContent=Math.round(EXAM.score+EXAM.reactionPoints)+" PUAN";
+    setTimeout(startReactionRound,620);
+  };
+}
+function showMemoryIntro(){
+  examIntro("Aday Seçmeleri · 2/3","◇","Kısa Süreli Hafıza","Beş işaret sırayla gösterilecek. Dizi bittikten sonra aynı sırayı dokunarak tekrar et.","Diziyi göster",startMemory);
+}
+function startMemory(){
+  const symbols=["▲","■","●","◆"],seq=Array.from({length:5},()=>symbols[(Math.random()*symbols.length)|0]);
+  EXAM.memorySeq=seq;EXAM.memoryInput=0;EXAM.memoryCorrect=0;examMeta(1);
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Hafıza Dizisi</div><div class="memoryDisplay" id="memoryDisplay">•</div>'+ 
+    '<p class="examCopy">İşaretleri sırasıyla aklında tut.</p></div>';
+  const display=document.getElementById("memoryDisplay");let i=0;
+  const reveal=()=>{
+    if(i>=seq.length){display.textContent="?";setTimeout(renderMemoryInput,420);return}
+    display.textContent=seq[i++];EXAM.timer=setTimeout(()=>{display.textContent="·";EXAM.timer=setTimeout(reveal,190)},620);
+  };
+  EXAM.timer=setTimeout(reveal,450);
+}
+function renderMemoryInput(){
+  const symbols=["▲","■","●","◆"];
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Hafıza · '+(EXAM.memoryInput+1)+'/5</div>'+ 
+    '<div class="memoryDisplay" id="memoryDisplay">?</div><div class="memoryGrid">'+symbols.map(s=>'<button class="memoryBtn">'+s+'</button>').join("")+'</div></div>';
+  examBody.querySelectorAll(".memoryBtn").forEach(btn=>btn.onclick=()=>{
+    if(btn.textContent===EXAM.memorySeq[EXAM.memoryInput])EXAM.memoryCorrect++;
+    document.getElementById("memoryDisplay").textContent=btn.textContent;EXAM.memoryInput++;
+    if(EXAM.memoryInput>=EXAM.memorySeq.length){
+      EXAM.score+=EXAM.memoryCorrect*7;examScore.textContent=EXAM.score+" PUAN";EXAM.stage=2;setTimeout(showLogicIntro,380);
+    }else setTimeout(renderMemoryInput,170);
+  });
+}
+const LOGIC_Q=[
+ {q:"Hangisi daha büyük?",a:"17 + 8",av:25,b:"4 × 6",bv:24},
+ {q:"Hangisi hedefe daha yakın?",a:"100 − 37",av:63,b:"8 × 8",bv:64,target:65},
+ {q:"Hangisi daha küçüktür?",a:"7 × 7",av:49,b:"60 − 8",bv:52,small:1},
+ {q:"Hangisi daha büyük?",a:"36 ÷ 3",av:12,b:"5 + 8",bv:13},
+ {q:"Hangisi daha küçüktür?",a:"9 × 4",av:36,b:"50 − 11",bv:39,small:1}
+];
+function showLogicIntro(){
+  examIntro("Aday Seçmeleri · 3/3","∴","Muhakeme","Beş kısa karşılaştırmayı mümkün olduğunca doğru tamamla. Süreden önce doğruluk değerlendirilecek.","Soruları başlat",()=>{EXAM.logicIndex=0;EXAM.logicCorrect=0;renderLogic()});
+}
+function renderLogic(){
+  if(EXAM.logicIndex>=LOGIC_Q.length){EXAM.score+=EXAM.logicCorrect*6;showExamResult();return}
+  examMeta(2);const q=LOGIC_Q[EXAM.logicIndex];
+  examBody.innerHTML='<div class="examPanel"><div class="examKicker">Muhakeme · '+(EXAM.logicIndex+1)+'/5</div>'+ 
+    '<div class="examGlyph">?</div><h2 class="examTitle">'+q.q+'</h2><div class="logicGrid"><button class="logicBtn" data-side="a">'+q.a+'</button>'+ 
+    '<button class="logicBtn" data-side="b">'+q.b+'</button></div></div>';
+  examBody.querySelectorAll(".logicBtn").forEach(btn=>btn.onclick=()=>{
+    const correct=q.target!=null
+      ?(Math.abs(q.av-q.target)<Math.abs(q.bv-q.target)?"a":"b")
+      :q.small?(q.av<q.bv?"a":"b"):(q.av>q.bv?"a":"b");
+    if(btn.dataset.side===correct)EXAM.logicCorrect++;
+    EXAM.logicIndex++;setTimeout(renderLogic,220);
+  });
+}
+function showExamResult(){
+  EXAM.stage=3;examMeta(3);const pass=EXAM.score>=60;
+  examTrack.querySelectorAll("i").forEach(i=>i.className="done");
+  examBody.innerHTML='<div class="examPanel"><div class="examResult '+(pass?"pass":"fail")+'"><div class="scoreRing">'+EXAM.score+'</div>'+ 
+    '<h2>'+(pass?"Harp Okuluna Kabul":"Saha Birliğine Atama")+'</h2><p>'+(pass
+      ?"Aday sınavını geçtin. Kariyerin Harbiyeli olarak başlayacak ve subay rütbelerinde ilerleyecek."
+      :"Aday sınavı barajını geçemedin. Kariyerin Er olarak başlayacak; tecrüben seni Astsubay Kıdemli Başçavuşluğa kadar taşıyabilir.")+'</p></div>'+ 
+    '<button class="examAction" id="examAction">Kariyere başla</button></div>';
+  document.getElementById("examAction").onclick=()=>newGame(EXAM.force,pass?"officer":"nco",EXAM.score);
+}
 (function(){
   const list=document.getElementById("forceList");
   const nm={k:"Kara Harp Okulu",d:"Deniz Harp Okulu",h:"Hava Harp Okulu"};
@@ -572,7 +738,7 @@ document.addEventListener("touchmove",e=>{
   ["k","d","h"].forEach(f=>{
     const b=document.createElement("button");b.className="fbtn";
     b.innerHTML=insSVG(3,f)+'<div><b>'+nm[f]+'</b><i>'+desc[f]+'</i></div>';
-    b.onclick=()=>{document.getElementById("start").classList.add("hide");newGame(f)};
+    b.onclick=()=>{document.getElementById("start").classList.add("hide");beginExam(f)};
     list.appendChild(b);
   });
 })();
@@ -1782,13 +1948,138 @@ E("g4","*","Ailen","İlk sabah","Ev · Mutfak",
 "Emeklilik sonrası ilk sabah. Alarm kurmadın ve yine saat 05.30'da uyandın; ne yapacağını bilmiyorsun.",
 "Yürüyüşe çıktım","dinlenme fiz+4","Sofrada oturdum","aile destek");
 
+/* ================= SAHA KARİYERİ · ER / UZMAN / ASTSUBAY ================= */
+E("er ob cv","*","Takım Çavuşu","İlk gece nöbeti","Acemi Birliği · Nizamiye",
+"Nöbet arkadaşın ayakta uyuyor. Bildirirsen ceza alacak; sustuğunda nöbet yerinin sorumluluğu ikinize ait.",
+"Uyandırıp sustum","koruma dis-3","Amire bildirdim","kural dogruluk ast-3");
+E("er ob cv","*","Devre Arkadaşın","Eksik teçhizat","Koğuş · Dolap Sırası",
+"Dağıtılan teçhizatta bir parça eksik. Yan dolaptaki kullanılmayan parçayı alırsan sayım kapanacak.",
+"Parçayı aldım","ortbas loj-4","Eksiği yazdırdım","dogruluk duzen");
+E("er ob cv","*","Eğitim Çavuşu","Koşu parkuru","Eğitim Alanı",
+"Takımın sonundaki arkadaşın nefesi kesildi. Onu beklersen kendi derecen ve takım sıralaması düşecek.",
+"Tempomu korudum","tempo ast-5","Yanında kaldım","koruma moral fiz-3");
+E("er ob cv","*","Silah Arkadaşın","Atış öncesi","Atış Poligonu",
+"Arkadaşının nişangâhında sorun var ve sıra size geldi. Sorunu söylerse tüm takım bekleyecek.",
+"Atışa devam ettik","pasif risk","Atışı durdurdum","kural sahiplen");
+E("er ob cv","*","Bölük Yazıcısı","İzin çizelgesi","Bölük · Yazıhane",
+"Bayram izni için tek boş yer kaldı. Senin ailen yakın, arkadaşının ailesi ülkenin öbür ucunda.",
+"İzni kullandım","aile ast-5","Hakkımı ona verdim","feragat moral");
+E("er ob cv","*","Kıdemli Er","Yeni gelenler","Koğuş",
+"Yeni gelenlere sert davranmanın düzeni hızlı kurduğunu söylüyorlar. Senden de aynı tavrı bekliyorlar.",
+"Ben de sertleştim","sertlik","Yanlarına oturdum","mentor moral dis-2");
+E("er ob cv","*","Takım Komutanı","Onbaşı seçimi","Bölük · İçtima Alanı",
+"Takıma bir onbaşı seçilecek. Çok konuşmayan ama güvenilir birisin; öne çıkmazsan başka biri seçilecek.",
+"Geri planda kaldım","geriplan","Göreve talip oldum","gorunur insiyatif");
+E("er ob cv","*","Nöbetçi Astsubay","Kayıp mühimmat","Kışla · Depo",
+"Sayımda bir mühimmat eksik çıktı. Eksik senin vardiyandan önce oluşmuş olabilir ama defterde son imza senin.",
+"Önceki vardiyayı suçladım","yikma sic+3","Sorumluluğu aldım","sahiplen dogruluk");
+E("er ob cv","*","Köy Muhtarı","Sel yardımı","Görev Bölgesi",
+"Birliğin yakınındaki köyü su bastı. Yardıma gitmek ertesi günkü eğitimi aksatacak.",
+"Eğitime hazırlandım","gorev iti-4","Yardıma gittim","temsil moral fiz-3");
+E("er ob cv","*","Bölük Astsubayı","Çavuşluk değerlendirmesi","Bölük · Büro",
+"Değerlendirme formunda arkadaşlarının hatalarını yazman isteniyor. Form gizli, sonuçları terfilerini etkileyecek.",
+"Her şeyi yazdım","kural ast-6","Yalnız ciddi olanları yazdım","esnek dogruluk");
+
+E("uo uc","*","Tim Komutanı","Sözleşme yenileme","Personel Şubesi",
+"Profesyonel kadroya geçmek uzun görevler ve daha az aile zamanı demek. Önünde imzalanmayı bekleyen sözleşme var.",
+"İmzalamadım","aile kar-3","İmzaladım","gorev ozveri");
+E("uo uc","*","Yeni Katılan Er","İlk eğitim","Tim Odası",
+"Yeni er aynı hatayı üçüncü kez yapıyor. Bağırmak hızlı, yeniden göstermek ise bütün akşamını alacak.",
+"Sertçe uyardım","sertlik","Baştan öğrettim","mentor ozveri");
+E("uo uc","*","Muhabereci","Arızalı telsiz","Arazi · Kontrol Noktası",
+"Yedek telsizin bataryası zayıf. Göreve çıkmak mümkün ama bağlantının kesilme riski var.",
+"Göreve çıktım","risk ope+4","Değişim istedim","ihtiyat loj-3");
+E("uo uc","*","Tim Arkadaşın","Yorgunluk","Geçici Üs Bölgesi",
+"Arkadaşın dört gecedir doğru düzgün uyumadı ve devriye sırası onda. Yerine geçersen sen de dinlenemeyeceksin.",
+"Sırasını tuttum","feragat destek","Kendi nöbetine gitti","kural ast-5");
+E("uo uc","*","Bölük Komutanı","Zor görev","Brifing Çadırı",
+"Tecrübeli personel olarak riskli keşif görevine gönüllü arıyor. Kimse gözünü kaldırmıyor.",
+"Sessiz kaldım","geriplan pasif","Gönüllü oldum","insiyatif risk");
+E("uo uc","*","İkmal Astsubayı","Kışlık malzeme","Depo",
+"Kaliteli bot sayısı sınırlı. Kendi numaranı ayırabilir veya en çok arazide kalan ere verebilirsin.",
+"Kendime ayırdım","menfaat ast-4","Ere verdim","koruma feragat");
+E("uo uc","*","Eşin","Yeni tayin","Telefon",
+"Yeni görev yerinde lojman yok ve tayini kabul etmek aile düzenini yeniden bozacak.",
+"Tayini reddettim","aile sic-4","Göreve gittim","gorev ail-8");
+E("uo uc","*","Kurs Komutanı","Uzmanlık kursu","Sınıf Okulu",
+"Kursun son sınavına hazırlanmak için izin günlerini kullanman gerekiyor. Başarı yeni bir uzmanlık kapısı açacak.",
+"İzin yaptım","dinlenme tek-4","Çalıştım","ogrenme ozveri");
+E("uo uc","*","Takım Subayı","Hatalı koordinat","Harekât Merkezi",
+"Emirdeki koordinatın yanlış olduğunu fark ettin. Subay senden kıdemsiz ama karar onun imzasını taşıyor.",
+"Emri uyguladım","itaat ope-5","Yanlışı söyledim","direnc dogruluk");
+E("uo uc","*","Sağlık Memuru","Eski sakatlık","Revir",
+"Dizindeki sakatlık yeniden başladı. Rapor alırsan timin personel eksiği büyüyecek.",
+"Sakladım","sakla fiz-6","Rapor aldım","destek dinlenme");
+
+E("ac akc au","*","Bölük Astsubayı","Nöbet çizelgesi","Bölük · Büro",
+"İki personelin ailevi mazereti aynı haftaya denk geldi. İkisine de izin verirsen kalan ekip ağır yük taşıyacak.",
+"İzinleri reddettim","kural harcama","Yükü paylaştırdım","esnek koruma loj-3");
+E("ac akc au","*","Genç Teğmen","İlk arazi görevi","Bölük · Brifing",
+"Yeni teğmenin planında sahada çalışmayacak bir ayrıntı var. Herkesin içinde düzeltmek otoritesini zedeleyebilir.",
+"Toplantıda söyledim","dogruluk ast-3","Sonra yalnız konuştum","mentor mesafe");
+E("ac akc au","*","İkmal Personeli","Sayım farkı","Depo",
+"Yıllardır devreden küçük bir sayım farkı buldun. Düzeltmek geçmiş dönemlerin tamamını incelemek demek.",
+"Devrettim","savsakla","Sayımı açtım","duzen ozveri");
+E("ac akc au","*","Emrindeki Çavuş","Disiplin olayı","Bölük",
+"Başarılı bir çavuş öfkeyle yeni bir ere vurdu. Resmî işlem timin düzenini sarsacak.",
+"Aramızda çözdüm","ortbas","Tutanak tuttum","kural dogruluk ast-4");
+E("ac akc au","*","Kursiyerler","Ders saati","Eğitim Merkezi",
+"Programdaki konu eski ve sahada artık farklı uygulanıyor. Müfredattan çıkmak denetimde sorun olabilir.",
+"Kitabı anlattım","itaat ihmal","Sahadakini öğrettim","insiyatif ogrenme");
+E("ac akc au","*","Ailen","Hafta sonu","Lojman",
+"Çocuğunun gösterisi, birliğin gönüllü hazırlık çalışmasıyla aynı saatte. Çalışmaya sen olmadan da devam edilebilir.",
+"Birlikte kaldım","gorev ail-8","Gösteriye gittim","aile sic-3");
+E("ac akc au","*","Harekât Subayı","Personel seçimi","Karargâh",
+"Zor göreve en tecrübeli personeli göndermek başarı şansını artıracak ama aynı kişileri sürekli yıpratacak.",
+"En iyileri seçtim","tempo harcama","Görevi paylaştırdım","koruma ope-4");
+E("ac akc au","*","Denetleme Heyeti","Hazırlık raporu","Bölük",
+"Hazırlık oranı hedefin altında. Birkaç kalemi iyimser yazarsan birlik denetimi geçecek.",
+"Rakamı yükselttim","ortbas sic+4","Gerçeği yazdım","dogruluk ope-4");
+E("ac akc au","*","Genç Astsubay","Meslek tavsiyesi","Kantin",
+"Genç astsubay senden yol göstermeni istiyor. Onu yetiştirmek kendi hazırlık zamanından götürecek.",
+"Kaynak verdim","mesafe tek+2","Yanıma aldım","mentor ozveri");
+E("ac akc au","*","Birlik Komutanı","Başarı takdiri","Tören Alanı",
+"Başarılı faaliyetin takdiri sana verilecek; işin büyük bölümünü hazırlayan ekip törende anılmayacak.",
+"Takdiri aldım","gorunur ast-5","Ekibi öne çıkardım","sahiplen moral");
+
+E("aku ab akb","*","Birlik Komutanı","Devir teslim","Karargâh",
+"Yeni komutan birliğin yıllardır çalışan düzenini hızlıca değiştirmek istiyor. Tecrübene güveniyor ama itiraz beklemiyor.",
+"Uyum sağladım","itaat kapali","Riskleri anlattım","direnc dogruluk");
+E("aku ab akb","*","Personel Temsilcileri","Ortak talep","Toplantı Salonu",
+"Personelin özlük talebi makul ama üst makama taşımak seni 'sorun çıkaran' kişi yapabilir.",
+"Dosyayı kapattım","pasif ast-6","Üst makama taşıdım","koruma insiyatif");
+E("aku ab akb","*","Tedarikçi","Emeklilik teklifi","Şehir · Restoran",
+"Bir tedarikçi emeklilik sonrası iş teklif ediyor. Karşılığında bugün yalnızca tanışıklığınızı sürdürmeni istiyor.",
+"Görüşmeyi sürdürdüm","yolsuz menfaat","Teklifi reddettim","durust mesafe");
+E("aku ab akb","*","Kaza İnceleme Heyeti","Bakım kaydı","Birlik · Hangar",
+"Kazaya karışan aracın bakım eksiği aylar önce rapor edilmiş. Rapor senin masandan geçmiş ama kaynak ayrılmamış.",
+"Kaynak yoktu dedim","yikma loj-5","Payımı kabul ettim","sahiplen dogruluk");
+E("aku ab akb","*","Eğitim Şube","Yeni talimname","Karargâh",
+"Yeni talimname sahadaki tecrübeyi dikkate almıyor. Yazılı görüş vermek aylar sürecek bir tartışma başlatabilir.",
+"Sessiz kaldım","geriplan ihmal","Görüş yazdım","ogrenme direnc");
+E("aku ab akb","*","Genç Bölük Komutanı","Kriz","Bölük",
+"Genç komutan kritik anda senden karar istiyor. Kararı sen verirsen onu kurtarır ama gelişmesini geciktirirsin.",
+"Kararı ben verdim","sahiplen lid-3","Seçenekleri anlattım","mentor lid+5");
+E("aku ab akb","*","Eski Silah Arkadaşın","Veda","Telefon",
+"Yıllarca birlikte görev yaptığın arkadaşın ağır hasta. Ziyaret, önemli bir denetim hazırlığıyla aynı güne denk geliyor.",
+"Denetimde kaldım","gorev ruh-4","Ziyarete gittim","aile destek sic-3");
+E("aku ab akb","*","Kuvvet Astsubayı","Kurumsal hafıza","Karargâh",
+"Emekliliğe yaklaşırken yılların saha notlarını eğitim arşivine dönüştürmen isteniyor. Aylar sürecek ve adı başkasına yazılabilir.",
+"Notları kendime sakladım","menfaat tek-4","Arşivi hazırladım","mentor ogrenme ozveri");
+E("aku ab akb","*","Tören Subayı","Son içtima","Tören Alanı",
+"Son büyük içtimanda konuşma hakkın var. Personel senden başarı hikâyesi değil, dürüst bir meslek özeti bekliyor.",
+"Resmî metni okudum","kural temsil","Bedelleri de anlattım","seffaf mentor");
+E("akb","*","Ailen","Emeklilik sabahı","Ev · Mutfak",
+"Astsubay Kıdemli Başçavuş olarak son görevin bitti. Sabah yine erkenden uyandın; ilk kez senden emir bekleyen kimse yok.",
+"Birliği aradım","gorev ail-3","Sofrada kaldım","aile dinlenme");
+
 /* ==========================================================================
    UYUYAN UNSUR — görünmeyen bir unsur kritik seviyeye inerse
    ilerleyen rütbede karşına bir dosya olarak çıkar
 ========================================================================== */
 const WARN={
 dis:[["Disiplin Subayı","Geçmişten · Disiplin","Kışla · Personel Şubesi",
- "Genç subaylık yıllarından biriken uyarı yazıları dosyanda bir sayfayı doldurmuş. Üst makam açıklama istiyor.",
+ "Kariyerinin ilk yıllarından biriken uyarı yazıları dosyanda bir sayfayı doldurmuş. Üst makam açıklama istiyor.",
  "Eski defter dedim","pasif dis-4","Tek tek yanıt yazdım","duzen dogruluk dis+14"],
  ["Personel Başkanlığı","Geçmişten · Disiplin","Ankara · Personel Başkanlığı",
  "Terfi dosyanda yirmi yıl önceki disiplin notları hâlâ duruyor ve bu dönemki değerlendirmede yeniden okundu.",
@@ -1796,7 +2087,7 @@ dis:[["Disiplin Subayı","Geçmişten · Disiplin","Kışla · Personel Şubesi"
 sic:[["Sicil Amirin","Geçmişten · Sicil","Kışla · Komutanlık",
  "\"Son üç kanaat notun ortalamanın altında. Bu gidişle listeye giremezsin, farkında mısın?\"",
  "Aldırmadım","pasif sic-4","Toparlanmak için çalıştım","ozveri ogrenme sic+14"],
- ["Şûra Sekretaryası","Geçmişten · Sicil","Ankara · Şûra",
+ ["Personel Sekretaryası","Geçmişten · Sicil","Ankara · Personel",
  "Dosyanın sicil bölümü belirgin şekilde zayıf. Düzeltme için hem çalışma hem birkaç görüşme gerekiyor.",
  "Reddettim","mesafe sic-5","Süreci yürüttüm","iliski ozveri sic+15"]],
 ast:[["Bölük Astsubayı","Geçmişten · Ast Bağı","Kışla · Bölük",
@@ -1809,7 +2100,7 @@ fiz:[["Askerî Tabip","Geçmişten · Fizik","Askerî Hastane · Poliklinik",
  "Yıllardır ihmal ettiğin sakatlık büyümüş ve rapor bu kez terfi dosyana işlenecek.",
  "Ertelemeye devam ettim","sakla fiz-4","Tedaviye başladım","destek dinlenme fiz+14"],
  ["Sağlık Kurulu","Geçmişten · Fizik","GATA · Sağlık Kurulu",
- "Harbiyede zorladığın diz artık tören yürüyüşünde bile sorun çıkarıyor ve kurul durumu kayda geçirdi.",
+ "İlk eğitim yıllarında zorladığın diz artık tören yürüyüşünde bile sorun çıkarıyor ve kurul durumu kayda geçirdi.",
  "Sakladım","sakla fiz-5","Ameliyat oldum","destek dinlenme fiz+15 t6"]],
 ruh:[["Eşin","Geçmişten · Dayanım","Lojman · Mutfak",
  "\"Sen artık burada değilsin. Kaç aydır doğru düzgün uyudun, hatırlıyor musun?\"",
@@ -1820,7 +2111,7 @@ ruh:[["Eşin","Geçmişten · Dayanım","Lojman · Mutfak",
 tek:[["Sınıf Okulu","Geçmişten · Mesleki","Sınıf Okulu · Eğitim",
  "Alanındaki doktrin değişti ve sen eski yöntemle kaldın. Astların bunu fark etti, sana söylemiyorlar.",
  "Böyle devam ettim","ihmal ast-4","Kursa yazıldım","ogrenme tek+14"],
- ["Genç Kurmay","Geçmişten · Mesleki","Ankara · Toplantı Salonu",
+ ["Genç Personel","Geçmişten · Mesleki","Ankara · Toplantı Salonu",
  "Toplantıda bilmediğin bir sistemden söz edildi ve sustuğun herkes tarafından anlaşıldı.",
  "Konuyu geçtim","ihmal iti-4","Öğrenmek için zaman ayırdım","ogrenme tek+15"]],
 ope:[["Harekât Başkanlığı","Geçmişten · Harekât","Tugay · Harekât Şubesi",
@@ -1829,7 +2120,7 @@ ope:[["Harekât Başkanlığı","Geçmişten · Harekât","Tugay · Harekât Şu
  ["Denetleme Kurulu","Geçmişten · Harekât","Karargâh · Denetim",
  "Sorumluluğundaki birliklerin hazırlık seviyesi kabul edilebilir eşiğin altında ve gerekçe istiyorlar.",
  "Gerekçe yazdım","pasif ope-5","Sahaya indim","tempo ozveri ope+15"]],
-lid:[["Emrindeki Subaylar","Geçmişten · Liderlik","Kışla · Karargâh",
+lid:[["Emrindeki Personel","Geçmişten · Liderlik","Kışla · Karargâh",
  "Kararlarını kimse sahiplenmiyor; herkes emri alıp uyguluyor ve hiçbir şey söylemiyor.",
  "Emirle yönettim","sertlik lid-4","Onlarla oturdum","mentor moral lid+14"],
  ["Ast Komutanlar","Geçmişten · Liderlik","Karargâh · Toplantı",
