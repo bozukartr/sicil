@@ -68,7 +68,7 @@ function newGame(force,career,examProfile,specialtyId){
   const flags=new Set();
   if(profile.grade&&profile.grade!=="legacy")flags.add("sinav_"+profile.grade);
   if(specialty)flags.add("uz_"+specialty.id);
-  S={f:force,career,specialty:specialty?specialty.id:null,exam:profile,examScore:profile.total||0,r:0,cards:0,months:0,age:18,flags,hist:[],grace:0,ended:false,
+  S={f:force,career,specialty:specialty?specialty.id:null,track:"command",transitionAttempts:{},exam:profile,examScore:profile.total||0,r:0,cards:0,months:0,age:18,flags,hist:[],grace:0,ended:false,
      warnCd:{},seen:new Set(RANKS[0].vis),
      st:initialStats(career,profile,specialty)};
   document.getElementById("exam").classList.add("hide");
@@ -115,12 +115,12 @@ function clearPreview(){gEls.forEach(g=>{g.d.className="gd";g.d.textContent=""})
 function paintHUD(){
   const R=RANKS[S.r];
   const specialty=typeof getSpecialty==="function"?getSpecialty(S.f,S.specialty):null;
-  document.getElementById("careerBadge").textContent=S.career==="nco"?"Saha Kariyeri":"Subay Kariyeri";
+  document.getElementById("careerBadge").textContent=S.track==="admin"?"İdari Görev":S.career==="nco"?"Saha Kariyeri":"Subay Kariyeri";
   document.getElementById("rankName").textContent=R.n[S.f];
   document.getElementById("forceName").textContent=FORCE[S.f];
   const specialtyBadge=document.getElementById("specialtyBadge");
-  specialtyBadge.textContent=specialty?specialty.glyph+" "+specialty.name:"";
-  specialtyBadge.classList.toggle("hide",!specialty);
+  specialtyBadge.textContent=S.track==="admin"?"▤ Karargâh":specialty?specialty.glyph+" "+specialty.name:"";
+  specialtyBadge.classList.toggle("hide",!specialty&&S.track!=="admin");
   document.getElementById("insBox").innerHTML=insSVG(S.r,S.f);
   document.getElementById("mAge").textContent=S.age+" yaş";
   document.getElementById("mSrv").innerHTML="<b>"+(Math.floor(S.months/12)+1)+".</b> hizmet yılı";
@@ -287,18 +287,23 @@ const PROMO={
 };
 function tryPromote(){
   const R=RANKS[S.r];
+  if(S.track==="admin"&&S.transitionCeiling===S.r){finishAdminCareer();return}
   if(S.r>=RANKS.length-1){retire();return}
   const vAvg=R.vis.reduce((a,k)=>a+S.st[k],0)/4;
   const aAvg=KEYS.reduce((a,k)=>a+S.st[k],0)/KEYS.length;
   const sAvg=typeof specialtyScore==="function"?specialtyScore(S):vAvg;
   if(vAvg*.65+aAvg*.1+sAvg*.25>=R.need&&S.st.dis>=18&&S.st.sic>=18){
-    S.r++;S.cards=0;S.grace=0;
-    RANKS[S.r].vis.forEach(k=>S.seen.add(k));
-    showPromo("Terfi",RANKS[S.r].n[S.f],PROMO[RANKS[S.r].t]);
+    if(typeof shouldRunTransition==="function"&&shouldRunTransition(S)){beginTransitionExam();return}
+    completePromotion();
   }else if(S.grace<1){
     S.grace++;S.cards=Math.max(0,R.cards-4);
     showPromo("Bekleme",R.n[S.f],"Terfi listesine giremedin. Bir devre daha bekleyeceksin; bu kez değerlendirme daha sert olacak.");
   }else ceiling(R);
+}
+function completePromotion(top,note){
+  S.r++;S.cards=0;S.grace=0;
+  RANKS[S.r].vis.forEach(k=>S.seen.add(k));
+  showPromo(top||"Terfi",RANKS[S.r].n[S.f],note||PROMO[RANKS[S.r].t]);
 }
 function ceiling(R){
   let weak=R.vis[0];R.vis.forEach(k=>{if(S.st[k]<S.st[weak])weak=k});
@@ -396,7 +401,7 @@ function openFile(){
   const grade=S.exam?({ustun:"üstün başarı",basarili:"başarılı",sinirda:"sınırda kabul",saha:"saha ataması"}[S.exam.grade]||S.exam.grade):"kayıt yok";
   const specialty=typeof getSpecialty==="function"?getSpecialty(S.f,S.specialty):null;
   document.getElementById("fileNote").textContent=
-    "Aday sınavı: "+(S.exam?S.exam.total:"—")+" puan · "+grade+". Uzmanlık: "+(specialty?specialty.name:"kayıt yok")+". Bu rütbede sicilinde yalnızca dört unsur ölçülüyor. Daha önce ölçüldüğün unsurlar için yaklaşık bir kanaatin var; hiç ölçülmediklerin hakkında hiçbir fikrin yok — ama onlar işlemeye devam ediyor.";
+    "Aday sınavı: "+(S.exam?S.exam.total:"—")+" puan · "+grade+". Uzmanlık: "+(specialty?specialty.name:"kayıt yok")+". Kariyer yolu: "+(S.track==="admin"?"idari görev":"aktif komuta")+". Bu rütbede sicilinde yalnızca dört unsur ölçülüyor. Daha önce ölçüldüğün unsurlar için yaklaşık bir kanaatin var; hiç ölçülmediklerin hakkında hiçbir fikrin yok — ama onlar işlemeye devam ediyor.";
   document.getElementById("file").classList.remove("hide");
 }
 document.getElementById("fileBtn").onclick=openFile;
