@@ -95,15 +95,45 @@ function renderLogic(){
     EXAM.logicIndex++;setTimeout(renderLogic,220);
   });
 }
+function buildExamProfile(exam){
+  const clamp=(v,min,max)=>Math.max(min,Math.min(max,Math.round(v||0)));
+  const scaled=(value,max,delta)=>Math.round((value/max-.5)*delta*2);
+  const reaction=clamp(exam.reactionPoints,0,36);
+  const memory=clamp(exam.memoryCorrect*7,0,35);
+  const logic=clamp(exam.logicCorrect*6,0,30);
+  const total=reaction+memory+logic;
+  const grade=total>=85?"ustun":total>=70?"basarili":total>=60?"sinirda":"saha";
+  const modifiers={
+    fiz:scaled(reaction,36,6),ruh:scaled(reaction,36,4),ope:scaled(reaction,36,3),
+    tek:scaled(memory,35,6),dis:scaled(memory,35,4),
+    lid:scaled(logic,30,6),sic:scaled(logic,30,4)
+  };
+  if(grade==="ustun"){
+    modifiers.sic+=2;modifiers.ruh+=2;modifiers.tek+=2;
+  }
+  return {reaction,memory,logic,total,grade,career:total>=60?"officer":"nco",modifiers};
+}
 function showExamResult(){
-  EXAM.stage=3;examMeta(3);const pass=EXAM.score>=60;
+  const profile=buildExamProfile(EXAM);EXAM.profile=profile;EXAM.score=profile.total;EXAM.stage=3;examMeta(3);
+  const pass=profile.career==="officer";
+  const title=profile.grade==="ustun"?"Üstün Başarıyla Kabul":profile.grade==="sinirda"?"Sınırda Kabul":pass?"Harp Okuluna Kabul":"Saha Birliğine Atama";
+  const copy=profile.grade==="ustun"
+    ?"Aday sınavında üstün başarı gösterdin. Harbiyeli kariyerine güçlü bir başlangıç profiliyle giriyorsun."
+    :profile.grade==="sinirda"
+      ?"Barajı sınırlı farkla geçtin. Harbiyeli olarak başlayacaksın; sınavdaki güçlü ve zayıf yönlerin ilk siciline yansıyacak."
+      :pass
+        ?"Aday sınavını geçtin. Kariyerin Harbiyeli olarak başlayacak ve bölüm sonuçların ilk sicil değerlerini belirleyecek."
+        :"Aday sınavı barajını geçemedin. Kariyerin Er olarak başlayacak; sınavdaki güçlü yönlerin saha siciline aktarılacak.";
+  const rows=[
+    ["Tepki",profile.reaction,36],["Hafıza",profile.memory,35],["Muhakeme",profile.logic,30]
+  ].map(x=>'<div class="examMetric"><span>'+x[0]+'</span><b>'+x[1]+' / '+x[2]+'</b><i><em style="width:'+Math.round(x[1]/x[2]*100)+'%"></em></i></div>').join("");
+  const mods=Object.entries(profile.modifiers).filter(x=>x[1]).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,6)
+    .map(x=>'<span class="'+(x[1]>0?"up":"down")+'">'+STATS[x[0]].s+' '+(x[1]>0?"+":"")+x[1]+'</span>').join("");
   examTrack.querySelectorAll("i").forEach(i=>i.className="done");
-  examBody.innerHTML='<div class="examPanel"><div class="examResult '+(pass?"pass":"fail")+'"><div class="scoreRing">'+EXAM.score+'</div>'+ 
-    '<h2>'+(pass?"Harp Okuluna Kabul":"Saha Birliğine Atama")+'</h2><p>'+(pass
-      ?"Aday sınavını geçtin. Kariyerin Harbiyeli olarak başlayacak ve subay rütbelerinde ilerleyecek."
-      :"Aday sınavı barajını geçemedin. Kariyerin Er olarak başlayacak; tecrüben seni Astsubay Kıdemli Başçavuşluğa kadar taşıyabilir.")+'</p></div>'+ 
+  examBody.innerHTML='<div class="examPanel resultPanel"><div class="examResult '+(pass?"pass":"fail")+' '+profile.grade+'"><div class="scoreRing">'+profile.total+'</div>'+ 
+    '<h2>'+title+'</h2><p>'+copy+'</p><div class="examBreakdown">'+rows+'</div><div class="examMods"><small>Başlangıç sicili</small>'+mods+'</div></div>'+ 
     '<button class="examAction" id="examAction">Kariyere başla</button></div>';
-  document.getElementById("examAction").onclick=()=>newGame(EXAM.force,pass?"officer":"nco",EXAM.score);
+  document.getElementById("examAction").onclick=()=>newGame(EXAM.force,profile.career,profile);
 }
 (function(){
   const list=document.getElementById("forceList");
