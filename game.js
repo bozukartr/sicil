@@ -156,6 +156,31 @@ function paintHUD(){
   pips.setAttribute("aria-label",sp.textContent);
   pips.appendChild(sp);
   if(typeof renderTraitStrip==="function")renderTraitStrip();
+  renderCareerProgress();
+}
+
+/* Görev ilerlemesi bir terfi garantisi değildir; değerlendirme kuralları korunur. */
+function renderCareerProgress(){
+  const rank=RANKS[S.r],next=RANKS[S.r+1];
+  const terminal=!next||(S.track==="admin"&&S.transitionCeiling===S.r);
+  const progress=Math.min(100,Math.round(S.cards/rank.cards*100));
+  document.getElementById("app").dataset.force=S.f;
+  document.getElementById("nextRank").textContent=terminal?"Görev tamamlama":next.n[S.f];
+  document.getElementById("progressCount").textContent=progress+"%";
+  const track=document.getElementById("promotionTrack");
+  track.setAttribute("aria-valuenow",progress);
+  track.setAttribute("aria-valuetext",S.cards+" / "+rank.cards+" görev tamamlandı");
+  track.firstElementChild.style.width=progress+"%";
+  document.getElementById("progressNote").textContent=S.grace
+    ?"Ek değerlendirme dönemi · "+Math.max(0,rank.cards-S.cards)+" karar kaldı"
+    :terminal?"Son görev dönemi":Math.max(0,rank.cards-S.cards)+" karar sonra değerlendirme";
+}
+function renderCareerPath(){
+  const path=document.getElementById("careerPath");
+  path.innerHTML=RANKS.map((rank,i)=>{
+    const state=i<S.r?"complete":i===S.r?"current":"upcoming";
+    return '<li class="'+state+'"'+(i===S.r?' aria-current="step"':'')+'><span class="pathIns" aria-hidden="true">'+insSVG(i,S.f)+'</span><span><b>'+rank.n[S.f]+'</b><small>'+(i<S.r?"Tamamlandı":i===S.r?"Mevcut rütbe":S.track==="admin"&&i>S.transitionCeiling?"İdari görev tavanı":"Kariyer hedefi")+'</small></span><em>'+(i<S.r?"✓":String(i+1).padStart(2,"0"))+'</em></li>';
+  }).join("");
 }
 
 function pick(){
@@ -200,6 +225,9 @@ function fitText(){
 }
 function renderCard(event){
   ev=event;
+  document.getElementById("cardNumber").textContent="DOSYA / "+String((S.totalDecisions||0)+1).padStart(3,"0");
+  document.getElementById("cardStatus").textContent=ev.warn?"KRİTİK GELİŞME":"KARAR BEKLİYOR";
+  document.getElementById("speakerAvatar").textContent=ev.who.split(/\s+/).slice(0,2).map(part=>part[0]).join("").toLocaleUpperCase("tr");
   document.getElementById("who").textContent=ev.who;
   document.getElementById("role").textContent=ev.role;
   document.getElementById("place").textContent=ev.place||"";
@@ -217,6 +245,9 @@ function renderCard(event){
   chR.dataset.locked=rightOpen?"":(ev.rneed||"Karar profili gerekli");
   decisionFeedback.classList.remove("on");
   clearPreview();locked=false;
+  if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches&&cardA.animate){
+    cardA.animate([{opacity:0,translate:"0 12px"},{opacity:1,translate:"0 0"}],{duration:320,easing:"cubic-bezier(.2,.8,.2,1)"});
+  }
   requestAnimationFrame(fitText);
 }
 function nextCard(){
@@ -231,7 +262,7 @@ function choiceAvailable(side,event){
   return !req||req.split(",").every(flag=>S.flags.has(flag));
 }
 function decide(right){
-  if(locked||!choiceAvailable(right?"right":"left",ev))return;locked=true;
+  if(locked||!document.getElementById("file").classList.contains("hide")||!choiceAvailable(right?"right":"left",ev))return;locked=true;
   const rawEffect=right?ev.ra:ev.la,fx=resolve(rawEffect,S.r);
   addJournal(ev.warn?"critical":"decision",right?ev.rt:ev.lt,ev.who+" · "+ev.role);
   if(typeof updateTraitProfile==="function")updateTraitProfile(rawEffect);
@@ -410,8 +441,11 @@ function showPromo(top,rank,note){
       return '<span class="nx '+cls+'">'+STATS[k].s+'</span>';
     }).join("");
   document.getElementById("promoIns").innerHTML=insSVG(S.r,S.f);
+  document.getElementById("promo").classList.toggle("waiting",top==="Bekleme");
   buildGauges();paintHUD();
   document.getElementById("promo").classList.remove("hide");
+  locked=true;
+  document.getElementById("promoBtn").focus({preventScroll:true});
   persistGame("promo",restoring?"resume-promotion":"promotion");
 }
 document.getElementById("promoBtn").onclick=()=>{
@@ -483,6 +517,8 @@ function setFileTab(tab){
   if(journal)renderJournal();
 }
 function openFile(){
+  if(!S)return;
+  renderCareerPath();
   const vis=RANKS[S.r].vis,rows=document.getElementById("fileRows");rows.innerHTML="";
   KEYS.forEach(k=>{
     const act=vis.indexOf(k)>=0,seen=S.seen.has(k),v=Math.round(S.st[k]);
@@ -500,9 +536,15 @@ function openFile(){
   if(typeof renderTraitFile==="function")renderTraitFile();
   document.getElementById("file").classList.remove("hide");
   setFileTab("stats");
+  document.getElementById("fileClose").focus({preventScroll:true});
 }
 document.getElementById("fileBtn").onclick=openFile;
-document.getElementById("fileClose").onclick=()=>document.getElementById("file").classList.add("hide");
+document.getElementById("careerPathBtn").onclick=openFile;
+function closeFile(){
+  document.getElementById("file").classList.add("hide");
+  document.getElementById("fileBtn").focus({preventScroll:true});
+}
+document.getElementById("fileClose").onclick=closeFile;
 document.getElementById("fileStatsTab").onclick=()=>setFileTab("stats");
 document.getElementById("fileJournalTab").onclick=()=>setFileTab("journal");
 
@@ -560,7 +602,7 @@ function onUp(){
 cardA.addEventListener("pointerdown",onDown,{passive:true});
 window.addEventListener("pointermove",onMove,{passive:true});
 window.addEventListener("pointerup",onUp,{passive:true});
-window.addEventListener("pointercancel",onUp,{passive:true});
+window.addEventListener("pointercancel",()=>{dx=0;onUp()},{passive:true});
 [[chL,false],[chR,true]].forEach(function(a){
   const el=a[0],right=a[1];
   el.addEventListener("pointerdown",()=>{if(!locked&&!el.disabled){el.classList.add("hot");preview(resolve(right?ev.ra:ev.la,S.r))}},{passive:true});
@@ -568,13 +610,24 @@ window.addEventListener("pointercancel",onUp,{passive:true});
   el.addEventListener("click",()=>{dx=right?100:-100;decide(right)});
 });
 window.addEventListener("keydown",e=>{
+  if(!document.getElementById("file").classList.contains("hide")){
+    if(e.key==="Escape")closeFile();
+    if(e.key==="Tab"){
+      const controls=[...document.querySelectorAll("#file button")].filter(el=>el.getClientRects().length);
+      const first=controls[0],last=controls[controls.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+    }
+    return;
+  }
   if(locked)return;
   if(e.key==="ArrowLeft"&&!chL.disabled){dx=-100;decide(false)}
   if(e.key==="ArrowRight"&&!chR.disabled){dx=100;decide(true)}
 });
 window.addEventListener("resize",()=>{if(!locked)requestAnimationFrame(fitText)});
 document.addEventListener("touchmove",e=>{
-  if(!e.target.closest||!e.target.closest(".screen,#file"))e.preventDefault();
+  if(window.matchMedia("(max-height: 620px)").matches)return;
+  if(!e.target.closest||!e.target.closest(".screen,#file,#promo,.cbody"))e.preventDefault();
 },{passive:false});
 
 document.getElementById("again").onclick=()=>{

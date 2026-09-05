@@ -2,13 +2,15 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0d07">
 <title>SİCİL — Askerî Kariyer Dosyası</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="command.css">
 </head>
 <body>
 <div id="app">
+  <header class="commandBar"><span class="wordmark">SİCİL<span> / KOMUTA</span></span><span class="liveStatus"><i></i> AKTİF DOSYA</span></header>
   <div id="hud">
     <div class="tag">
       <div id="insBox"></div>
@@ -24,14 +26,21 @@
       <div id="pips"></div>
     </div>
     <div id="traitStrip" class="hide" aria-label="Karar profili"></div>
+    <div id="careerProgress" class="careerProgress">
+      <div class="progressHeading"><span>SONRAKİ RÜTBE</span><strong id="nextRank"></strong><b id="progressCount"></b></div>
+      <div id="promotionTrack" class="promotionTrack" role="progressbar" aria-label="Rütbe görev ilerlemesi" aria-valuemin="0" aria-valuemax="100"><i></i></div>
+      <div class="progressFooter"><span id="progressNote"></span><button id="careerPathBtn" type="button">Rütbe yolu ↗</button></div>
+    </div>
   </div>
   <div id="gauges"></div>
   <div id="stage">
     <div class="card" id="cardB"></div>
     <div class="card" id="cardA">
+      <div class="dossierLine"><span id="cardNumber">DOSYA / 001</span><span id="cardStatus">KARAR BEKLİYOR</span></div>
       <div class="stamp l" id="stampL"></div>
       <div class="stamp r" id="stampR"></div>
       <div class="chead">
+        <div id="speakerAvatar" class="speakerAvatar" aria-hidden="true"></div>
         <div class="l"><div class="who" id="who"></div><div class="role" id="role"></div></div>
         <div class="place" id="place"></div>
       </div>
@@ -45,13 +54,15 @@
   </div>
   <div id="hint">kaydır ya da dokun</div>
 
-  <div id="file" class="hide">
-    <h2>Sicil Dosyası</h2>
+  <div id="file" class="hide" role="dialog" aria-modal="true" aria-labelledby="fileTitle">
+    <h2 id="fileTitle">Sicil Dosyası</h2>
     <div class="fileTabs" role="tablist" aria-label="Dosya bölümleri">
       <button class="on" id="fileStatsTab" role="tab" aria-selected="true">Sicil</button>
       <button id="fileJournalTab" role="tab" aria-selected="false">Kariyer Günlüğü</button>
     </div>
     <div id="fileStatsPanel">
+      <div class="careerPathHeading">Rütbe yolculuğu</div>
+      <ol id="careerPath" aria-label="Kariyer rütbeleri"></ol>
       <div id="fileTraits"></div>
       <div id="fileRows"></div>
       <div class="note" id="fileNote"></div>
@@ -61,6 +72,7 @@
   </div>
 
   <div id="promo" class="hide">
+    <div class="ceremonyOrbit" aria-hidden="true"></div>
     <div id="promoIns"></div>
     <div class="eyebrow" id="promoTop">Terfi</div>
     <div id="promoRank"></div>
@@ -94,10 +106,13 @@
   </div>
 
   <div class="screen" id="start">
+    <div class="startMast"><span>SİCİL / KARİYER SİMÜLASYONU</span><span>01 — BAŞLANGIÇ</span></div>
+    <div class="heroSeal" aria-hidden="true"><svg viewBox="0 0 100 110"><path d="M50 5 88 20v36c0 23-20 39-38 49C32 95 12 79 12 56V20Z"/><path d="m50 23 6 15 16 1-12 11 4 16-14-9-14 9 4-16-12-11 16-1Z"/><path d="m30 75 20 12 20-12M30 84l20 12 20-12"/></svg></div>
     <div class="eyebrow">Personel Temin · Aday Dosyası</div>
-    <h1>Sicil<small>kariyerin sınavla başlar</small></h1>
+    <h1>Sicil<small>Her karar bir iz bırakır.</small></h1>
     <p class="lead">Kuvvetini seç, üç aşamalı aday sınavına gir. Başarı Harp Okulu yolunu açar; başarısızlık kariyerini er olarak sahadan başlatır.</p>
     <div class="forces" id="forceList"></div>
+    <div class="startFooter"><span>01 / Kuvvet seç</span><span>02 / Sınava gir</span><span>03 / İz bırak</span></div>
     <div class="resumePanel hide" id="resumePanel">
       <div class="resumeMark">↻</div>
       <div class="resumeKicker">Kayıtlı Kariyer</div>
