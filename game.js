@@ -249,6 +249,7 @@ function renderCard(event){
     cardA.animate([{opacity:0,translate:"0 12px"},{opacity:1,translate:"0 0"}],{duration:320,easing:"cubic-bezier(.2,.8,.2,1)"});
   }
   requestAnimationFrame(fitText);
+  if(window.SicilWorld)window.SicilWorld.onCard();
 }
 function nextCard(){
   const src=warnPick()||pick();
@@ -262,6 +263,7 @@ function choiceAvailable(side,event){
   return !req||req.split(",").every(flag=>S.flags.has(flag));
 }
 function decide(right){
+  if(window.SicilWorld&&window.SicilWorld.active&&!window.SicilWorld.dialogue)return;
   if(locked||!document.getElementById("file").classList.contains("hide")||!choiceAvailable(right?"right":"left",ev))return;locked=true;
   const rawEffect=right?ev.ra:ev.la,fx=resolve(rawEffect,S.r);
   addJournal(ev.warn?"critical":"decision",right?ev.rt:ev.lt,ev.who+" · "+ev.role);
@@ -274,6 +276,7 @@ function decide(right){
   cardA.style.opacity="0";
   if(navigator.vibrate)navigator.vibrate(10);
   apply(fx);
+  if(window.SicilWorld)window.SicilWorld.onDecision();
 }
 /* azalan verim: 90'dan 95'e çıkmak, 40'tan 45'e çıkmaktan çok daha zor */
 function gainScale(v){return Math.max(.18,Math.min(1,(100-v)/74))}
@@ -620,6 +623,7 @@ window.addEventListener("keydown",e=>{
     }
     return;
   }
+  if(window.SicilWorld&&window.SicilWorld.active&&!window.SicilWorld.dialogue)return;
   if(locked)return;
   if(e.key==="ArrowLeft"&&!chL.disabled){dx=-100;decide(false)}
   if(e.key==="ArrowRight"&&!chR.disabled){dx=100;decide(true)}
@@ -627,7 +631,7 @@ window.addEventListener("keydown",e=>{
 window.addEventListener("resize",()=>{if(!locked)requestAnimationFrame(fitText)});
 document.addEventListener("touchmove",e=>{
   if(window.matchMedia("(max-height: 620px)").matches)return;
-  if(!e.target.closest||!e.target.closest(".screen,#file,#promo,.cbody"))e.preventDefault();
+  if(!e.target.closest||!e.target.closest(".screen,#file,#promo,.cbody,#world"))e.preventDefault();
 },{passive:false});
 
 document.getElementById("again").onclick=()=>{
