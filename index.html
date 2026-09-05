@@ -7,6 +7,7 @@
 <title>SİCİL — Askerî Kariyer Dosyası</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="command.css">
+<link rel="stylesheet" href="world.css">
 </head>
 <body>
 <div id="app">
@@ -33,6 +34,24 @@
     </div>
   </div>
   <div id="gauges"></div>
+  <section id="world" class="hide" aria-label="Kışla keşfi">
+    <div class="worldTop"><div><span class="worldKicker">BİRLİK YERLEŞKESİ</span><b id="worldLocation">Kışla</b></div><button id="worldMapBtn" type="button" aria-pressed="false">Harita</button></div>
+    <div class="worldViewport" id="worldViewport">
+      <svg id="worldScene" viewBox="0 0 960 800" role="img" aria-label="Karakterin, görev işaretleri ve kışla binaları" xmlns="http://www.w3.org/2000/svg">
+        <g id="worldTerrain"></g><g id="worldRoute"></g><g id="worldNpcs"></g><g id="worldMarker"></g><g id="worldPlayer"></g><g id="worldCargo" visibility="hidden" aria-hidden="true"><rect x="-12" y="-18" width="24" height="18" rx="2" fill="#94744b" stroke="#efcf88" stroke-width="2"/><path d="m-10-16 20 14M10-16-10-2" stroke="#dbbb7b" stroke-width="2"/></g>
+      </svg>
+      <div id="worldToast" role="status" aria-live="polite"></div>
+      <div class="worldGuide" id="worldGuide">Yürümek için haritaya dokun veya yön kontrolünü kullan.</div>
+    </div>
+    <div class="worldQuest"><div><span id="questType">AKTİF GÖREV</span><b id="questTitle"></b><small id="questDetail"></small></div><button id="worldRouteBtn" type="button">Hedefe yürü ↗</button></div>
+    <div class="worldControls">
+      <div id="worldStick" role="group" aria-label="Hareket kontrolü"><span id="stickKnob" aria-hidden="true"></span><span class="stickArrows" aria-hidden="true">✥</span></div>
+      <div class="worldActionStack"><button id="worldInteract" type="button">Etkileşime gir</button><button id="worldSideTask" type="button" class="hide">Yan görev</button><button id="worldCancelTask" type="button" class="hide">Görevi bırak</button></div>
+      <span class="worldKeyboard">WASD / OKLAR<br>E · ETKİLEŞİM</span>
+    </div>
+  </section>
+  <section id="encounter" aria-label="Karar görüşmesi">
+    <button id="leaveEncounter" type="button">← Kışlaya dön</button>
   <div id="stage">
     <div class="card" id="cardB"></div>
     <div class="card" id="cardA">
@@ -53,6 +72,7 @@
     <button class="ch" id="chR"><span class="k">SAĞ ▶</span><span id="chRt"></span></button>
   </div>
   <div id="hint">kaydır ya da dokun</div>
+  </section>
 
   <div id="file" class="hide" role="dialog" aria-modal="true" aria-labelledby="fileTitle">
     <h2 id="fileTitle">Sicil Dosyası</h2>
@@ -109,8 +129,8 @@
     <div class="startMast"><span>SİCİL / KARİYER SİMÜLASYONU</span><span>01 — BAŞLANGIÇ</span></div>
     <div class="heroSeal" aria-hidden="true"><svg viewBox="0 0 100 110"><path d="M50 5 88 20v36c0 23-20 39-38 49C32 95 12 79 12 56V20Z"/><path d="m50 23 6 15 16 1-12 11 4 16-14-9-14 9 4-16-12-11 16-1Z"/><path d="m30 75 20 12 20-12M30 84l20 12 20-12"/></svg></div>
     <div class="eyebrow">Personel Temin · Aday Dosyası</div>
-    <h1>Sicil<small>Her karar bir iz bırakır.</small></h1>
-    <p class="lead">Kuvvetini seç, üç aşamalı aday sınavına gir. Başarı Harp Okulu yolunu açar; başarısızlık kariyerini er olarak sahadan başlatır.</p>
+    <h1>Sicil<small>Bir kariyer. Yaşayan bir kışla.</small></h1>
+    <p class="lead">Kuvvetini seç, sınavı geç ve birliğine katıl. Kışlayı keşfet, görevleri sahada tamamla; kararlarınla rütbeni ve sicilini şekillendir.</p>
     <div class="forces" id="forceList"></div>
     <div class="startFooter"><span>01 / Kuvvet seç</span><span>02 / Sınava gir</span><span>03 / İz bırak</span></div>
     <div class="resumePanel hide" id="resumePanel">
@@ -151,5 +171,8 @@
 <script src="events-officer.js"></script>
 <script src="events-field.js"></script>
 <script src="events-phase5.js"></script>
+<script src="world-core.js"></script>
+<script src="world-art.js"></script>
+<script src="world.js"></script>
 </body>
 </html>
