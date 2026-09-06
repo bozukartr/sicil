@@ -12,7 +12,7 @@ function boot(withWorld=false){
       classList:{add:(...a)=>a.forEach(x=>classes.add(x)),remove:(...a)=>a.forEach(x=>classes.delete(x)),contains:x=>classes.has(x),toggle(x,on){on=on===undefined?!classes.has(x):on;on?classes.add(x):classes.delete(x);return on}},
       appendChild(el){this.children.push(el);return el},append(...els){this.children.push(...els)},
       setAttribute(k,v){this.attributes[k]=String(v)},getAttribute(k){return this.attributes[k]},
-      events:{},addEventListener(name,fn){this.events[name]=fn},getBoundingClientRect(){return {width:390,height:340,left:0,top:0}},setPointerCapture(){},querySelector(){return element()},querySelectorAll(){return []},
+      events:{},addEventListener(name,fn){this.events[name]=fn},getBoundingClientRect(){return {width:390,height:340,left:0,top:0}},captured:null,setPointerCapture(id){this.captured=id},hasPointerCapture(id){return this.captured===id},releasePointerCapture(id){if(this.captured===id)this.captured=null},querySelector(){return element()},querySelectorAll(){return []},
       getClientRects(){return [{}]},focus(){document.activeElement=this}};
     Object.defineProperty(node,'firstElementChild',{get(){return this.children[0]||(this.children[0]=element())}});
     return node;
@@ -28,7 +28,7 @@ function boot(withWorld=false){
   const context=vm.createContext({document,window,navigator:{},console,setTimeout:fn=>timers.push(fn),clearTimeout(){},performance:{now:()=>clock},requestAnimationFrame:fn=>{frames.push(fn);return frames.length},cancelAnimationFrame(){}});
   const run=code=>vm.runInContext(code,context);
   for(const file of ['ranks.js','storage.js','game.js','progression.js','specialties.js','transitions.js','events-officer.js','events-field.js','events-phase5.js'])run(fs.readFileSync(path.join(root,file),'utf8'));
-  if(withWorld)for(const file of ['world-core.js','world-art.js','world.js'])run(fs.readFileSync(path.join(root,file),'utf8'));
+  if(withWorld)for(const file of ['world-core.js','world-art.js','touch-control.js','duty-core.js','world.js'])run(fs.readFileSync(path.join(root,file),'utf8'));
   function tick(ms=16){clock+=ms;for(const fn of frames.splice(0))fn(clock)}
   return {run,nodes,listeners,timers,tick};
 }
