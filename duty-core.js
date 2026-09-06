@@ -3,16 +3,16 @@
   'use strict';
   const roster=['training','supply','patrol'];
   const steps=[
-    {x:190,y:315,title:'Güne hazırlan',label:'Koğuş dolabından üniformanı kuşan',action:'Üniformayı kuşan',time:'06.00'},
+    {x:430,y:160,area:'barracks',title:'Güne hazırlan',label:'Koğuş dolabından üniformanı kuşan',action:'Üniformayı kuşan',time:'06.00'},
     {x:480,y:430,title:'Sabah içtiması',label:'İçtima meydanında birliğe katıl',action:'İçtimaya katıl',time:'06.30'},
     {x:488,y:268,title:'Görev emri',label:'Komutandan bugünün görevini al',action:'Görevi al',time:'07.00'},
-    {x:775,y:657,title:'Teçhizat teslimi',label:'İkmalden telsiz ve saha çantanı al',action:'Teçhizatı al',time:'08.00'},
+    {x:370,y:305,area:'supply',title:'Teçhizat teslimi',label:'İkmalden telsiz ve saha çantanı al',action:'Teçhizatı al',time:'08.00'},
     null,
     {x:488,y:268,title:'Gün sonu değerlendirmesi',label:'Sahada yaptıklarını komutana raporla',action:'Rapor ver',time:'17.00'},
-    {x:190,y:315,title:'İstirahat',label:'Koğuşa dön; dinlenerek yeni güne başla',action:'Dinlen ve yeni gün',time:'21.00'}
+    {x:195,y:345,area:'barracks',title:'İstirahat',label:'Koğuşa dön; dinlenerek yeni güne başla',action:'Dinlen ve yeni gün',time:'21.00'}
   ];
   function restore(raw,legacy){
-    const r=raw&&typeof raw==='object'?raw:{},old=!raw&&legacy?.mission;
+    const r=raw&&typeof raw==='object'?raw:{},old=!raw&&roster.includes(legacy?.mission?.id)?legacy.mission:null;
     const day=Number.isSafeInteger(r.day)&&r.day>0?r.day:1;
     let phase=Number.isInteger(r.phase)&&r.phase>=0&&r.phase<=6?r.phase:0;
     const missionKey=roster.includes(r.missionKey)?r.missionKey:old?old.id:roster[(day-1)%3];
@@ -33,7 +33,7 @@
     return {...p,title:m.title,action:d.missionKey==='supply'?(d.fieldStep?'Teslim et':'Sandığı al'):'Noktayı tamamla',time:'10.00',label:p.label};
   }
   function act(d,pos){
-    if(C.distance(pos,target(d))>46)return null;
+    if(C.areaOf(pos)!==C.areaOf(target(d))||C.distance(pos,target(d))>46)return null;
     if(d.phase===0){d.uniform=true;d.phase=1;return {kind:'step',text:'Üniforman hazır. Sabah içtimasına katıl.'}}
     if(d.phase===1){d.phase=2;return {kind:'step',text:'İçtima tamamlandı. Komutan seni bekliyor.'}}
     if(d.phase===2){d.phase=3;return {kind:'step',text:C.missions[d.missionKey].title+' görevi verildi. Önce teçhizatını al.'}}

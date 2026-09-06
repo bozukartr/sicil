@@ -9,13 +9,16 @@ test('buildings block movement and diagonal speed is normalized',()=>{
   assert.ok(Math.abs(C.distance(straight,{x:480,y:430})-C.distance(diagonal,{x:480,y:430}))<.00001);
   assert.ok(C.distance(C.move({x:480,y:430},1,0,10),{x:480,y:430})<8);
 });
-test('every NPC and mission checkpoint has a navigable collision-free route',()=>{
+test('every NPC and mission checkpoint has a navigable collision-free route across areas',()=>{
   const targets=[...C.stations,...Object.values(C.missions).flatMap(m=>m.steps)];
   for(const from of [{x:480,y:430},...C.stations])for(const target of targets){
-    const route=C.route(from,target);assert.ok(route.length,JSON.stringify({from,target}));
-    for(const point of route)assert.ok(C.walkable(point.x,point.y));
-    let p={...from};for(const point of route){let guard=0;while(C.distance(p,point)>4&&guard++<500){const d=C.distance(p,point);p=C.move(p,(point.x-p.x)/d,(point.y-p.y)/d,1/60)}assert.ok(guard<500,'route stuck near '+JSON.stringify(point))}
-    assert.ok(C.distance(p,target)<5);
+    let p={...from},guard=0;
+    while(guard++<4){
+      const goal=C.waypoint(p,target),route=C.route(p,goal);assert.ok(route.length,JSON.stringify({p,target,goal}));
+      for(const point of route){assert.ok(C.walkable(point.x,point.y,p.area));let movement=0;while(C.distance(p,point)>4&&movement++<500){const d=C.distance(p,point);p=C.move(p,(point.x-p.x)/d,(point.y-p.y)/d,1/60)}assert.ok(movement<500,'route stuck '+JSON.stringify({p,point}))}
+      if(goal.portal){p=C.travel(p,goal.portal);assert.ok(p)}else break;
+    }
+    assert.ok(guard<=4);assert.equal(C.areaOf(p),C.areaOf(target));assert.ok(C.distance(p,target)<5);
   }
 });
 test('legacy and malformed world saves recover safely',()=>{

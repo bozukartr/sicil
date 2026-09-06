@@ -28,7 +28,7 @@ function boot(withWorld=false){
   const context=vm.createContext({document,window,navigator:{},console,setTimeout:fn=>timers.push(fn),clearTimeout(){},performance:{now:()=>clock},requestAnimationFrame:fn=>{frames.push(fn);return frames.length},cancelAnimationFrame(){}});
   const run=code=>vm.runInContext(code,context);
   for(const file of ['ranks.js','storage.js','game.js','progression.js','specialties.js','transitions.js','events-officer.js','events-field.js','events-phase5.js'])run(fs.readFileSync(path.join(root,file),'utf8'));
-  if(withWorld)for(const file of ['world-core.js','world-art.js','touch-control.js','duty-core.js','world.js'])run(fs.readFileSync(path.join(root,file),'utf8'));
+  if(withWorld)for(const file of ['world-core.js','world-art.js','touch-control.js','duty-core.js','relationships.js','world.js'])run(fs.readFileSync(path.join(root,file),'utf8'));
   function tick(ms=16){clock+=ms;for(const fn of frames.splice(0))fn(clock)}
   return {run,nodes,listeners,timers,tick};
 }

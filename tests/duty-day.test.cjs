@@ -2,7 +2,14 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const D=require('../duty-core.js'),C=require('../world-core.js'),T=require('../touch-control.js');
 const {boot}=require('./game-harness.cjs');
-function atObjective(h){h.run('Object.assign(S.world, {x:window.SicilDuty.target(S.duty).x,y:window.SicilDuty.target(S.duty).y})');h.nodes.get('worldInteract').onclick()}
+function atObjective(h){
+  let guard=0;
+  while(h.run('window.SicilWorldCore.areaOf(S.world)!==window.SicilWorldCore.areaOf(window.SicilDuty.target(S.duty))')&&guard++<4){
+    h.run('Object.assign(S.world,window.SicilWorldCore.waypoint(S.world,window.SicilDuty.target(S.duty)))');h.nodes.get('worldInteract').onclick();
+    if(h.run('locked'))return;
+  }
+  h.run('Object.assign(S.world,{x:window.SicilDuty.target(S.duty).x,y:window.SicilDuty.target(S.duty).y,area:window.SicilDuty.target(S.duty).area||"yard"})');h.nodes.get('worldInteract').onclick();
+}
 function completeToReport(h){let guard=0;while(h.run('S.duty.phase')!==6&&guard++<20)atObjective(h);assert.ok(guard<20)}
 const pointer=(id,x,y,type='touch')=>({pointerId:id,clientX:x,clientY:y,pointerType:type,preventDefault(){}});
 test('floating stick has a dead zone, analog strength, normalized diagonal and trailing center',()=>{
@@ -51,8 +58,8 @@ test('duty loop advances only through nearby world actions, never card choices',
 });
 test('all stages in all three duty assignments are reachable',()=>{
   for(const missionKey of ['training','supply','patrol']){
-    const d=D.restore({missionKey}),pos={x:480,y:430};let guard=0;
-    while(d.day===1&&guard++<20){const goal=D.target(d);assert.ok(C.route(pos,goal).length,goal.title);Object.assign(pos,{x:goal.x,y:goal.y});assert.ok(D.act(d,pos))}
+    const d=D.restore({missionKey});let pos={x:480,y:430,area:'yard'},guard=0;
+    while(d.day===1&&guard++<40){const goal=C.waypoint(pos,D.target(d));assert.ok(C.route(pos,goal).length,goal.title);Object.assign(pos,{x:goal.x,y:goal.y});if(goal.portal)pos=C.travel(pos,goal.portal);else assert.ok(D.act(d,pos))}
     assert.equal(d.day,2);
   }
 });

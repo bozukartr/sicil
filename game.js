@@ -523,6 +523,7 @@ function setFileTab(tab){
 function openFile(){
   if(!S)return;
   renderCareerPath();
+  if(window.SicilWorld?.renderContacts)window.SicilWorld.renderContacts();
   const vis=RANKS[S.r].vis,rows=document.getElementById("fileRows");rows.innerHTML="";
   KEYS.forEach(k=>{
     const act=vis.indexOf(k)>=0,seen=S.seen.has(k),v=Math.round(S.st[k]);
