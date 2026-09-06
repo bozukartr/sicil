@@ -50,7 +50,13 @@
     <div class="worldControls">
       <span class="freeMoveHint">Sol alana basılı tut<br>Parmağını kaydırarak yürü</span>
       <div class="worldActionStack"><button id="worldInteract" type="button">Etkileşime gir</button></div>
+      <div class="worldSecondaryActions"><button id="worldDoorBtn" class="hide" type="button">Gir</button><button id="worldTalkBtn" class="hide" type="button">Konuş</button></div>
       <span class="worldKeyboard">WASD / OKLAR<br>E · ETKİLEŞİM</span>
+    </div>
+    <div id="socialPanel" class="hide" role="dialog" aria-modal="true" aria-labelledby="socialName">
+      <span id="socialRole"></span><h3 id="socialName"></h3>
+      <div class="socialTrust"><span id="socialTrustLabel"></span><meter id="socialTrustMeter" min="0" max="100" value="40" aria-label="Güven düzeyi"></meter></div>
+      <p id="socialLine"></p><button id="socialHelp" type="button">Destek iste · +10 enerji</button><button id="socialClose" type="button">Görüşürüz</button>
     </div>
   </section>
   <section id="encounter" aria-label="Karar görüşmesi">
@@ -87,6 +93,7 @@
       <div class="careerPathHeading">Rütbe yolculuğu</div>
       <ol id="careerPath" aria-label="Kariyer rütbeleri"></ol>
       <div id="fileTraits"></div>
+      <div id="fileContacts" aria-label="Birlikteki ilişkiler"></div>
       <div id="fileRows"></div>
       <div class="note" id="fileNote"></div>
     </div>
@@ -178,6 +185,7 @@
 <script src="world-art.js"></script>
 <script src="touch-control.js"></script>
 <script src="duty-core.js"></script>
+<script src="relationships.js"></script>
 <script src="world.js"></script>
 </body>
 </html>
