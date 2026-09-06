@@ -172,8 +172,8 @@ function renderCareerProgress(){
   track.setAttribute("aria-valuetext",S.cards+" / "+rank.cards+" görev tamamlandı");
   track.firstElementChild.style.width=progress+"%";
   document.getElementById("progressNote").textContent=S.grace
-    ?"Ek değerlendirme dönemi · "+Math.max(0,rank.cards-S.cards)+" karar kaldı"
-    :terminal?"Son görev dönemi":Math.max(0,rank.cards-S.cards)+" karar sonra değerlendirme";
+    ?"Ek değerlendirme dönemi · "+Math.max(0,rank.cards-S.cards)+(S.duty?" görev günü kaldı":" karar kaldı")
+    :terminal?"Son görev dönemi":Math.max(0,rank.cards-S.cards)+(S.duty?" görev günü sonra değerlendirme":" karar sonra değerlendirme");
 }
 function renderCareerPath(){
   const path=document.getElementById("careerPath");
@@ -252,6 +252,7 @@ function renderCard(event){
   if(window.SicilWorld)window.SicilWorld.onCard();
 }
 function nextCard(){
+  if(window.SicilWorld){ev=null;window.SicilWorld.onCard();persistGame("card","duty-day");return}
   const src=warnPick()||pick();
   if(!src){finish("bos","Dosya tamamlandı","Kayıtlar burada sona eriyor.");return}
   const event=Math.random()<.5?src:{...src,lt:src.rt,la:src.ra,rt:src.lt,ra:src.la,
@@ -276,7 +277,7 @@ function decide(right){
   cardA.style.opacity="0";
   if(navigator.vibrate)navigator.vibrate(10);
   apply(fx);
-  if(window.SicilWorld)window.SicilWorld.onDecision();
+  if(window.SicilWorld?.onDecision)window.SicilWorld.onDecision();
 }
 /* azalan verim: 90'dan 95'e çıkmak, 40'tan 45'e çıkmaktan çok daha zor */
 function gainScale(v){return Math.max(.18,Math.min(1,(100-v)/74))}
@@ -572,6 +573,10 @@ function resumeSavedGame(){
   if(S.resumeScreen==="promo"&&S.resumeData){showPromo(S.resumeData.top,S.resumeData.rank,S.resumeData.note,true);return true}
   if(S.resumeScreen==="transition"&&typeof restoreTransitionSession==="function"&&restoreTransitionSession())return true;
   if(S.resumeScreen==="specialtyReassign"&&typeof showTransitionSpecialties==="function"){showTransitionSpecialties(true);return true}
+  if(S.resumeScreen==="resolving"&&S.duty){
+    if(checkExtremes())return true;
+    if(S.cards>=RANKS[S.r].cards){tryPromote();return true}
+  }
   if(S.resumeScreen==="card"&&S.pendingEvent){renderCard(S.pendingEvent);persistGame("card","resume-card");return true}
   nextCard();return true;
 }
